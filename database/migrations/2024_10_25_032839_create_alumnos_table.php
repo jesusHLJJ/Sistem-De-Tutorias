@@ -15,21 +15,22 @@ return new class extends Migration
             $table->id('id_alumno');
 
             $table->foreignId('id_grupo')
+                ->nullable()
                 ->constrained('grupos', 'id_grupo');
 
             $table->foreignId('id_carrera')
+                ->nullable()
                 ->constrained('carreras', 'id_carrera');
 
             $table->foreignId('user_id')
-                ->nullable()
                 ->constrained()
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->string('matricula', 50)->unique();
-            $table->string('nombre', 50);
-            $table->string('ap_paterno', 50);
-            $table->string('ap_materno', 50);
+            $table->string('matricula', 50)->unique()->nullable();
+            $table->string('nombre', 50)->nullable();
+            $table->string('ap_paterno', 50)->nullable();
+            $table->string('ap_materno', 50)->nullable();
             $table->string('telefono', 10)->nullable();
             $table->string('estatus_canalizacion', 20)->nullable();
 

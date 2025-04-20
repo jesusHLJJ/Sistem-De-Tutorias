@@ -10,7 +10,7 @@ class LoginController extends Controller
 {
     public function show()
     {
-        return view('welcome');
+        return view('auth.login');
     }
 
     public function login(LoginRequest $request)
@@ -32,10 +32,20 @@ class LoginController extends Controller
     protected function redirectByRole($roleId)
     {
         return match ($roleId) {
-            /*1 => redirect()->route('admin.dashboard'), // Admin
+            1 => redirect()->route('admin.dashboard'), // Admin
             2 => redirect()->route('maestro.dashboard'), // Maestro
-            3 => redirect()->route('alumno.dashboard'), // Alumno*/
+            3 => redirect()->route('alumno.dashboard'), // Alumno
             default => redirect('/home'),
         };
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout(); // Cierra la sesión
+
+        $request->session()->invalidate(); // Invalida la sesión
+        $request->session()->regenerateToken(); // Regenera el token CSRF
+
+        return redirect('/'); // Redirige a la página principal
     }
 }
