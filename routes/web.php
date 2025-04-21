@@ -14,7 +14,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterController::class, 'show'])->name('register.show');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.auth');
 
-Route::get('/login', [LoginController::class, 'show'])->name('login.show');
+Route::get('/login', [LoginController::class, 'show'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.auth');
 
-Route::get('/alumno', [AlumnoController::class, 'show'])->name('alumno.dashboard');
+Route::middleware(['auth', 'role:3'])->group(function () {
+    Route::get('/alumno', [AlumnoController::class, 'show'])->name('alumno.dashboard');
+});

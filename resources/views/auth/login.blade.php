@@ -10,7 +10,8 @@
 
 <body>
     <div class="formulario">
-        <form action="">
+        <form action="/login" method="POST">
+            @csrf
             <div class="elemento">
                 <label for="email">Email: </label>
                 <input type="email" name="email" id="">
