@@ -21,13 +21,27 @@ class CheckRole
             return redirect()->route('login');
         }
 
-        // 2. Procesar los roles correctamente
-        $roles = collect(func_get_args())->slice(2)->toArray();
+        // Obtener el rol del usuario
+        $userRole = Auth::user()->role_id;
 
-        // 3. Verificar si el rol del usuario está autorizado
-        if (!in_array(Auth::user()->role_id, $roles)) {
-            abort(403, 'Acceso no autorizado para tu rol');
+        // Verificar si el usuario tiene un rol permitido
+        if (!in_array($userRole, $roles)) {
+            // Redirigir a la ruta correspondiente según su rol
+            return $this->silentRedirect($userRole);
         }
+
         return $next($request);
+    }
+
+    protected function silentRedirect($roleId)
+    {
+        $route = match ($roleId) {
+            1 => 'admin.dashboard',
+            2 => 'maestro.dashboard',
+            3 => 'alumno.dashboard',
+            default => 'home',
+        };
+
+        return redirect()->route($route);
     }
 }

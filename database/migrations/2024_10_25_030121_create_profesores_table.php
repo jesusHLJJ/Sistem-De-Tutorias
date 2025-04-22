@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id('id_profesor');
 
             $table->foreignId('id_carrera')
-                ->constrained('carreras', 'id_carrera');
+                ->constrained('carreras', 'id_carrera')
+                ->nullable();
 
             $table->foreignId('user_id')
                 ->nullable()

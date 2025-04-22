@@ -10,20 +10,51 @@
 
 <body>
     <div class="formulario">
-        <form action="/login" method="POST">
+        <form method="POST" action="/login">
             @csrf
-            <div class="elemento">
-                <label for="email">Email: </label>
-                <input type="email" name="email" id="">
+
+            @if (session('status'))
+                <div class="alert alert-info">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            @if (session('session_expired'))
+                <div class="alert alert-warning">
+                    {{ session('session_expired') }}
+                </div>
+            @endif
+
+            <div class="form-group">
+                <label for="login">Matrícula o Correo Electrónico</label>
+                <input id="login" type="text" class="form-control @error('login') is-invalid @enderror"
+                    name="login" value="{{ old('login') }}" required autofocus>
+
+                @error('login')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </div>
 
-            <div class="elemento">
-                <label for="password">Contraseña: </label>
-                <input type="password" name="password" id="">
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
+                    name="password" required autocomplete="current-password">
+
+                @error('password')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </div>
 
-            <input type="submit" value="INGRESAR">
+
+            <button type="submit" class="btn btn-primary">
+                Iniciar Sesión
+            </button>
         </form>
+        <p class="parrafo">No tienes una cuenta, prueba <a href="/register">Registrarte</a></p>
     </div>
 </body>
 

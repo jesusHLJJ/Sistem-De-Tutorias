@@ -22,8 +22,17 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required',
-            'password' => 'required'
+            'login' => 'required|string', // Campo único que puede ser email o matrícula
+            'password' => 'required|string'
+        ];
+    }
+
+    // Opcional: Personalizar los mensajes de error
+    public function messages()
+    {
+        return [
+            'login.required' => 'El campo de matrícula o correo electrónico es obligatorio',
+            'password.required' => 'La contraseña es obligatoria',
         ];
     }
 }

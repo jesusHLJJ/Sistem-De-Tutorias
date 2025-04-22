@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>DASHBOARD</title>
+    <title>REGISTRO DE MAESTROS</title>
 </head>
 
 <body>
@@ -13,21 +13,18 @@
         <nav class="nevegacion">
             <ul class="lista">
                 <li class="elemento-lista">
-                    <a href="{{ route('admin.registros') }}">MAESTROS</a>
+                    <a href="{{ route('admin.dashboard') }}">DASHBOARD</a>
                 </li>
 
                 <li class="elemento-lista">
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button type="submit" class="btn btn-danger">Cerrar Sesión
-                        </button>
+                        <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
                     </form>
                 </li>
             </ul>
         </nav>
     </div>
-
-    <h1>ADMIN</h1>
 </body>
 
 </html>

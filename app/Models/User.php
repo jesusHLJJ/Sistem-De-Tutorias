@@ -45,13 +45,18 @@ class User extends Authenticatable
         ];
     }
 
-    public function setPasswordAttribute($value)
+    /*public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
-    }
+    }*/
 
     public function alumno()
     {
         return $this->hasOne(Alumno::class);
+    }
+
+    public function maestro()
+    {
+        return $this->hasOne(Profesor::class);
     }
 }

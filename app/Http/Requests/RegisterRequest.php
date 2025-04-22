@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
@@ -21,10 +22,16 @@ class RegisterRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'email' => 'required | unique:users,email',
-            'password' => 'required | min:8',
-            'password_confirmation' => 'required | same:password',
+        $rules = [
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8|confirmed',
         ];
+
+        // Solo requerir matrícula si no es el primer usuario (admin)
+        if (User::count() > 0) {
+            $rules['matricula'] = 'required|unique:alumnos,matricula';
+        }
+
+        return $rules;
     }
 }
