@@ -20,4 +20,9 @@ class AlumnoController extends Controller
             'rol' => $user->role_id
         ]);
     }
+
+    public function fichaidentificacion()
+    {
+        return view('alumno.fichaidentificacion'); // Blade: resources/views/alumno/perfil.blade.php
+    }
 }

@@ -9,6 +9,8 @@
 </head>
 
 <body>
+    <a href="{{ route('alumno.fichaidentificacion') }}">Ir a mi perfil</a>
+
     <form action="{{ route('logout') }}" method="POST">
         @csrf
         <button type="submit" class="btn btn-danger">
@@ -50,6 +52,8 @@
         @if (auth()->user()->alumno)
             <pre>{{ print_r(auth()->user()->alumno->toArray(), true) }}</pre>
         @endif
+
+        
     </div>
 </body>
 

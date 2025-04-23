@@ -11,7 +11,8 @@
 
 <body>
     <div class="formulario">
-        <form action="/register" method="POST">
+    <form action="{{ route('register') }}" method="POST">
+
             @csrf
 
             @if ($showMatriculaField ?? User::count() > 0)
@@ -39,7 +40,8 @@
 
             <input type="submit" value="REGISTRARSE">
         </form>
-        <p class="parrafo">Ya tienes una cuenta? <a href="/login">Inicia Sesión</a></p>
+        <p class="parrafo">Ya tienes una cuenta? <a href="{{ route('login') }}">Inicia Sesión</a>
+        </p>
     </div>
 </body>
 

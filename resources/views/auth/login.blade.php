@@ -10,7 +10,8 @@
 
 <body>
     <div class="formulario">
-        <form method="POST" action="/login">
+    <form method="POST" action="{{ route('login') }}">
+
             @csrf
 
             @if (session('status'))
@@ -54,7 +55,8 @@
                 Iniciar Sesión
             </button>
         </form>
-        <p class="parrafo">No tienes una cuenta, prueba <a href="/register">Registrarte</a></p>
+        <p class="parrafo">No tienes una cuenta, prueba <a href="{{ route('register') }}">Registrarte</a>
+        </p>
     </div>
 </body>
 

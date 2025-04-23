@@ -50,4 +50,5 @@ Route::prefix('alumno')
     ->group(function () {
         Route::get('/', 'show')->name('dashboard');
         // Otras rutas de alumno
+        Route::get('/fichaidentificacion', [AlumnoController::class, 'fichaidentificacion'])->name('alumno.fichaidentificacion');
     });
