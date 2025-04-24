@@ -1,0 +1,219 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-image: url("../multimedia/fondo.jpeg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #f4f4f4;
+    height: auto; /* Cambiado de 100vh a auto */
+    overflow: auto; /* Permitir desplazamiento global */
+    display: flex;
+    flex-direction: column; /* Para que el contenido se expanda hacia abajo */
+    align-items: center;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.logos {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: white;
+}
+
+.logos img {
+    width: 150px;
+    height: 50px;
+    object-fit: contain; /* Evita deformaciones */
+}
+
+.banner {
+    background-color: #006837;
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.banner h1 {
+    color: white;
+    font-size: 2em;
+    margin: 0;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Evita el centrado vertical */
+    padding-top: 20px; 
+    padding-bottom: 20px; /* Espacio inferior adicional */
+    margin-top: 100px; /* Espacio desde el encabezado */
+    margin-bottom: 40px; /* Espacio inferior */
+    overflow-y: auto; /* Permitir desplazamiento */
+    width: 100%;
+}
+
+.formulariocontenedor {
+    width: 80%;
+    max-width: 800px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto; /* Centrado automático */
+    max-height: 80vh; /* Altura máxima para el contenedor */
+    overflow-y: auto; /* Permitir desplazamiento en el contenedor */
+}
+
+.formulariocontenedor h2 {
+    font-size: 28px;
+    color: #006837;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.formulariocontenedor input[type="text"],
+.formulariocontenedor select,
+.formulariocontenedor textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
+.formulariocontenedor select {
+    cursor: pointer;
+}
+
+.formulariocontenedor label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.formulariocontenedor button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    color: #ffffff;
+    background-color: #078326;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.formulariocontenedor button[type="submit"]:hover {
+    background-color: #078326;
+}
+
+.formulariocontenedor table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.formulariocontenedor th,
+.formulariocontenedor td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+.formulariocontenedor th {
+    background-color: #45684b;
+    color: #fff;
+    font-weight: bold;
+}
+
+.formulariocontenedor td {
+    background-color: #f9f9f9;
+}
+
+.formulariocontenedor textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+.mascot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 300px;
+    max-width: 450px;
+}
+
+.mascot img {
+    width: 100%;
+    height: auto;
+    max-width: 450px;
+    filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.5));
+    border-radius: 10px;
+    margin-top: 150px;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+}
+
+footer {
+    background-color: #006837;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: white;
+}
+
+@media (max-width: 768px) {
+    .formulariocontenedor {
+        padding: 15px;
+        width: 90%;
+    }
+
+    .formulariocontenedor h2 {
+        font-size: 24px;
+    }
+
+    .formulariocontenedor input[type="text"],
+    .formulariocontenedor select,
+    .formulariocontenedor textarea {
+        font-size: 14px;
+    }
+
+    .formulariocontenedor button[type="submit"] {
+        font-size: 16px;
+    }
+
+    .formulariocontenedor th,
+    .formulariocontenedor td {
+        font-size: 14px;
+    }
+}

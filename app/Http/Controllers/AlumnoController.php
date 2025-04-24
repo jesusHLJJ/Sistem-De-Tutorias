@@ -23,6 +23,7 @@ class AlumnoController extends Controller
 
     public function fichaidentificacion()
     {
-        return view('alumno.fichaidentificacion'); // Blade: resources/views/alumno/perfil.blade.php
+        $user = Auth::user();
+        return view('alumno.fichaIdenTutorado'); // Blade: resources/views/alumno/perfil.blade.php
     }
 }

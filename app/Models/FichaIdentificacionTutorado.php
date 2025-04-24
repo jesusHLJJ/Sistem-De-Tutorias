@@ -15,9 +15,7 @@ class FichaIdentificacionTutorado extends Model
    // public $timestamps = false;
     // Campos que se pueden llenar automáticamente en la inserción
     protected $fillable = [
-        'id_alumno_tutoria',  // Debe ser el mismo nombre que en la tabla
-        'id_periodo'.
-        'id_carrera',
+        'id_alumno',  // Debe ser el mismo nombre que en la tabla
         'fecha',
     ];
         // Otros campos que quieras insertar

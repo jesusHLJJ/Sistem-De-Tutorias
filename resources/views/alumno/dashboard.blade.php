@@ -9,7 +9,8 @@
 </head>
 
 <body>
-    <a href="{{ route('alumno.fichaidentificacion') }}">Ir a mi perfil</a>
+<a href="{{ route('alumno.fichaidentificacion') }}">Ficha de identificación</a>
+
 
     <form action="{{ route('logout') }}" method="POST">
         @csrf

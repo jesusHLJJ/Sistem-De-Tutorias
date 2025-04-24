@@ -5,6 +5,7 @@ use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MaestroController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\fichaIdenTutoradoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -43,12 +44,12 @@ Route::prefix('maestro')
         // Otras rutas de maestro
     });
 
-Route::prefix('alumno')
+    Route::prefix('alumno')
     ->middleware(['auth', 'role:3'])
     ->name('alumno.')
     ->controller(AlumnoController::class)
     ->group(function () {
         Route::get('/', 'show')->name('dashboard');
-        // Otras rutas de alumno
-        Route::get('/fichaidentificacion', [AlumnoController::class, 'fichaidentificacion'])->name('alumno.fichaidentificacion');
+        Route::get('/ficha-identificacion', [fichaIdenTutoradoController::class, 'index'])->name('fichaidentificacion');
+        Route::post('/identificacion/guardar', [fichaIdenTutoradoController::class, 'guardar'])->name('ficha.guardar');
     });

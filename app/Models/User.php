@@ -55,6 +55,8 @@ class User extends Authenticatable
         return $this->hasOne(Alumno::class);
     }
 
+    
+
     public function maestro()
     {
         return $this->hasOne(Profesor::class);

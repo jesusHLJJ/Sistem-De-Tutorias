@@ -11,6 +11,7 @@ class Carrera extends Model
 
 
     protected $table = 'carreras';
+    protected $primaryKey = 'id_carrera';
 
     protected $fillable = ['carrera']; // Ajusta esto según los campos de tu tabla
 }

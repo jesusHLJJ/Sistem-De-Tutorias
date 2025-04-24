@@ -9,9 +9,10 @@ use App\Models\Ficha_area_familiar;
 use App\Models\Ficha_identificacion_estado_psicofisiologico;
 use Illuminate\Http\Request;
 use App\Models\Alumno;
+use App\Models\Periodos;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Carrera;
 use App\Models\FichaIdentificacionTutorado;
-use App\Models\Periodos;
 use Illuminate\Support\Facades\DB; // Asegúrate de agregar esto
 use Symfony\Component\Console\Input\Input;
 
@@ -20,41 +21,37 @@ class fichaIdenTutoradoController extends Controller
 
     public function index()
     {
-        // Suponiendo que quieres el primer alumno para la prueba
-        $alumno = Alumno::find(1);
-        $carreras = Carrera::all();
-        $periodo = Periodos::all();
+        $user = Auth::user();
+    $alumno = $user->alumno;
+    
+    if (!$alumno) {
+        abort(404, 'Alumno no encontrado');
+    }
 
-        // Obtener la ficha existente, si la hay
-        $ficha = FichaIdentificacionTutorado::where('id_alumno_tutoria', $alumno->id_alumno_tutoria)->first();
+    $carreras = Carrera::all();
+    $periodo = Periodos::all();
+    
+    // Obtener la ficha existente, si la hay
+    $ficha = FichaIdentificacionTutorado::where('id_alumno', $alumno->id_alumno_tutoria)->first();
 
-        // Si hay una ficha, cargar los datos correspondientes
-        $ficha_psicofisiologica = $ficha ? Ficha_identificacion_estado_psicofisiologico::where('id_ficha', $ficha->id_ficha)->first() : null;
+    // Cargar datos relacionados
+    $ficha_psicofisiologica = $ficha ? Ficha_identificacion_estado_psicofisiologico::where('id_ficha', $ficha->id_ficha)->first() : null;
+    $ficha_area_familiar = $ficha ? Ficha_area_familiar::where('id_ficha', $ficha->id_ficha)->first() : null;
+    $ficha_area_social = $ficha ? Area_social::where('id_ficha', $ficha->id_ficha)->first() : null;
+    $ficha_caracteristicas_personales = $ficha ? Caracteristicas_personales::where('id_ficha', $ficha->id_ficha)->first() : null;
+    $ficha_psicopedagogica = $ficha ? Area_psicopedagogica::where('id_ficha', $ficha->id_ficha)->first() : null;
 
-        // Si hay una ficha, cargar los datos correspondientes de ficha_area_familiar
-        $ficha_area_familiar = $ficha ? Ficha_area_familiar::where('id_ficha', $ficha->id_ficha)->first() : null;
-
-        // Si hay una ficha, cargar los datos correspondientes de Area_social
-        $ficha_area_social = $ficha ? Area_social::where('id_ficha', $ficha->id_ficha)->first() : null;
-        $ficha_caracteristicas_personales = $ficha ? Caracteristicas_personales::where('id_ficha', $ficha->id_ficha)->first() : null;
-
-        $ficha_psicopedagogica = $ficha ? Area_psicopedagogica::where('id_ficha', $ficha->id_ficha)->first() : null;
-        //Mandamos modelos a la vistas
-
-        return view(
-            'fichaIdenTutorado',
-            compact(
-                'alumno',
-                'carreras',
-                'periodo',
-                'ficha',
-                'ficha_psicofisiologica',
-                'ficha_area_familiar',
-                'ficha_area_social',
-                'ficha_caracteristicas_personales',
-                'ficha_psicopedagogica'
-            )
-        );
+    return view('alumno.fichaIdenTutorado', compact(
+        'alumno',
+        'carreras',
+        'periodo',
+        'ficha',
+        'ficha_psicofisiologica',
+        'ficha_area_familiar',
+        'ficha_area_social',
+        'ficha_caracteristicas_personales',
+        'ficha_psicopedagogica'
+    ));
     }
     public function guardar(Request $request)
     {
