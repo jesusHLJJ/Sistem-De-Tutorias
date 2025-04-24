@@ -7,7 +7,6 @@
     <title>Formulario de Tutorado</title>
     <link rel="stylesheet" href="{{ asset('css/fomularios.css')}}">
 </head>
-
 <body>
 <header>
         <div class="logos">

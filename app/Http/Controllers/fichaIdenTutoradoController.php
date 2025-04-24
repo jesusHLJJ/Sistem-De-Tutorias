@@ -58,13 +58,12 @@ class fichaIdenTutoradoController extends Controller
 
         // Buscar o crear una ficha para el alumno
         $ficha = FichaIdentificacionTutorado::firstOrNew(
-            ['id_alumno_tutoria' => $request->input('alumno_id')]
+            ['id_alumno' => $request->input('alumno_id')]
         );
 
         // Asignar o actualizar los valores de FichaIdentificacionTutorado
-        $ficha->id_periodo = $request->input('periodo_id');
-        $ficha->id_alumno_tutoria = $request->input('alumno_id');
-        $ficha->id_carrera = $request->input('carrera_id');
+
+        $ficha->id_alumno = $request->input('alumno_id');
         $ficha->fecha = $request->input('fecha');
         $ficha->save();
 
