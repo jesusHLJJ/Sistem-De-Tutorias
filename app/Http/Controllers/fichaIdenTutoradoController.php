@@ -32,7 +32,7 @@ class fichaIdenTutoradoController extends Controller
     $periodo = Periodos::all();
     
     // Obtener la ficha existente, si la hay
-    $ficha = FichaIdentificacionTutorado::where('id_alumno', $alumno->id_alumno_tutoria)->first();
+    $ficha = FichaIdentificacionTutorado::where('id_alumno', $alumno->id_alumno)->first();
 
     // Cargar datos relacionados
     $ficha_psicofisiologica = $ficha ? Ficha_identificacion_estado_psicofisiologico::where('id_ficha', $ficha->id_ficha)->first() : null;
@@ -82,7 +82,7 @@ class fichaIdenTutoradoController extends Controller
         $ficha_1->indicador_psicofisiologico_8 = $request->input('pesadillas');
         $ficha_1->indicador_psicofisiologico_9 = $request->input('incontinencia');
         $ficha_1->indicador_psicofisiologico_10 = $request->input('tartamudeo');
-        $ficha_1->indicador_psicofisiologico_11 = $request->input('miedos');
+        $ficha_1->indicador_psicofisiologico_11 = $request->input('miedo1');
         $ficha_1->save();
 
         // Guardar o actualizar datos en Ficha_area_familiar
@@ -114,30 +114,55 @@ class fichaIdenTutoradoController extends Controller
         // Guardar o actualizar datos en Caracteristicas_personales
         $ficha_4 = Caracteristicas_personales::firstOrNew(['id_ficha' => $id_ficha]);
         $ficha_4->indicador_1 = $request->input('puntual');
+        $ficha_4->observacion_1 = $request->input('observaciones_puntual');
         $ficha_4->indicador_2 = $request->input('timida');
+        $ficha_4->observacion_2 = $request->input('observaciones_timida');
         $ficha_4->indicador_3 = $request->input('alegre');
+        $ficha_4->observacion_3 = $request->input('observaciones_alegre');
         $ficha_4->indicador_4 = $request->input('agresiva');
+        $ficha_4->observacion_4 = $request->input('observaciones_agresiva');
         $ficha_4->indicador_5 = $request->input('abierto');
+        $ficha_4->observacion_5 = $request->input('observaciones_abierto');
         $ficha_4->indicador_6 = $request->input('reflexivo');
+        $ficha_4->observacion_6 = $request->input('observaciones_reflexivo');
         $ficha_4->indicador_7 = $request->input('constante');
+        $ficha_4->observacion_7 = $request->input('observaciones_constante');
         $ficha_4->indicador_8 = $request->input('optimista');
+        $ficha_4->observacion_8 = $request->input('observaciones_optimista');
         $ficha_4->indicador_9 = $request->input('impulsivo');
+        $ficha_4->observacion_9 = $request->input('observaciones_impulsivo');
         $ficha_4->indicador_10 = $request->input('silencioso');
+        $ficha_4->observacion_10 = $request->input('observaciones_silencioso');
         $ficha_4->indicador_11 = $request->input('generoso');
+        $ficha_4->observacion_11 = $request->input('observaciones_generoso');
         $ficha_4->indicador_12 = $request->input('inquieto');
+        $ficha_4->observacion_12 = $request->input('observaciones_inquieto');
         $ficha_4->indicador_13 = $request->input('cambios_humor');
+        $ficha_4->observacion_13 = $request->input('observaciones_cambios_humor');
         $ficha_4->indicador_14 = $request->input('dominante');
+        $ficha_4->observacion_14 = $request->input('observaciones_dominante');
         $ficha_4->indicador_15 = $request->input('egoista');
+        $ficha_4->observacion_15 = $request->input('observaciones_egoista');
         $ficha_4->indicador_16 = $request->input('sumiso');
+        $ficha_4->observacion_16 = $request->input('observaciones_sumiso');
         $ficha_4->indicador_17 = $request->input('confiado_en_si');
+        $ficha_4->observacion_17 = $request->input('observaciones_confiado_en_si');
         $ficha_4->indicador_18 = $request->input('imaginativo');
+        $ficha_4->observacion_18 = $request->input('observaciones_imaginativo');
         $ficha_4->indicador_19 = $request->input('con_iniciativa');
+        $ficha_4->observacion_19 = $request->input('observaciones_con_iniciativa');
         $ficha_4->indicador_20 = $request->input('sociable');
+        $ficha_4->observacion_20 = $request->input('observaciones_sociable');
         $ficha_4->indicador_21 = $request->input('responsable');
+        $ficha_4->observacion_21 = $request->input('observaciones_responsable');
         $ficha_4->indicador_22 = $request->input('perseverante');
+        $ficha_4->observacion_22 = $request->input('observaciones_perseverante');
         $ficha_4->indicador_23 = $request->input('motivado');
+        $ficha_4->observacion_23 = $request->input('observaciones_motivado');
         $ficha_4->indicador_24 = $request->input('activo');
+        $ficha_4->observacion_24 = $request->input('observaciones_activo');
         $ficha_4->indicador_25 = $request->input('independiente');
+        $ficha_4->observacion_25 = $request->input('observaciones_independiente');
         $ficha_4->save();
 
         // Guardar o actualizar datos en Area_psicopedagogica

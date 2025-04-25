@@ -10,6 +10,14 @@
 
 <body>
     <h1>MAESTRO</h1>
+
+    
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-danger">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+        </button>
+    </form>
 </body>
 
 </html>

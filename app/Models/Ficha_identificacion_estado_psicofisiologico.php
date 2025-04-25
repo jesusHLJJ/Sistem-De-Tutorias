@@ -30,4 +30,7 @@ class Ficha_identificacion_estado_psicofisiologico extends Model
         'indicador_psicofisiologico_10',
         'indicador_psicofisiologico_11',
     ];
+
+
+    
 }
