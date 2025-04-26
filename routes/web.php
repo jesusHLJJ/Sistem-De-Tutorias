@@ -35,19 +35,20 @@ Route::prefix('admin')
         Route::delete('/maestros/{maestro}', 'destroyMaestro')->name('maestros.destroy');
     });
 
-Route::prefix('maestro')
+    Route::prefix('maestro')
     ->middleware(['auth', 'role:2'])
     ->name('maestro.')
     ->controller(MaestroController::class)
     ->group(function () {
         Route::get('/', 'show')->name('dashboard');
-        // Otras rutas de maestro
-         // Ruta para mostrar los grupos del maestro
-         Route::get('/grupos', 'grupos')->name('grupos');
-
-         // Ruta para ver los detalles de un grupo específico
-         Route::get('/grupo/{grupo}', 'mostrarGrupo')->name('grupo.show');
+        Route::get('/grupos', 'grupos')->name('grupos');
+        Route::get('/grupo/{grupo}', 'mostrarGrupo')->name('grupo.show');
+        
+        // Ruta para la ficha del alumno, con el nombre 'maestro.ficha_id_profesor'
+        Route::get('/ficha/{id_alumno}', [MaestroController::class, 'ficha'])->name('maestro.ficha_id_profesor');
+        Route::get('/graficar', 'graficar')->name('graficar');
     });
+
 
     Route::prefix('alumno')
     ->middleware(['auth', 'role:3'])

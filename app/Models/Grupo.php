@@ -41,4 +41,10 @@ class Grupo extends Model
             return $this->belongsTo(Profesor::class, 'id_profesor');
         }
 
+        public function alumnos()
+        {
+            // Asegúrate de que la relación está usando la clave correcta
+            return $this->hasMany(Alumno::class, 'id_grupo', 'id_grupo');
+        }
+
 }

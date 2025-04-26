@@ -10,6 +10,7 @@ class Alumno extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'id_alumno';
     protected $fillable = [
         'id_alumno',
         'id_grupo',
@@ -35,7 +36,7 @@ public function getNombreCompletoAttribute()
 
 public function grupo()
 {
-    return $this->belongsTo(Grupo::class, 'id_grupo');
+    return $this->belongsTo(Grupo::class, 'id_grupo');  // Asegúrate de usar 'id_grupo' como el nombre de la columna
 }
 
 public function carrera()
