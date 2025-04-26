@@ -21,4 +21,9 @@ class Profesor extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function grupos()
+{
+    return $this->hasMany(Grupo::class, 'id_profesor', 'id_profesor');
+}
 }

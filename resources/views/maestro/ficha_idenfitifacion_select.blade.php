@@ -1,26 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>DASHBOARD</title>
+    <title>FICHA DE IDENTIFICACION T</title>
 </head>
-
 <body>
-    <h1>MAESTRO</h1>
-
-    <p>Nombre del maestro: {{ $maestro->nombre }}</p>
-    <p>ID Profesor: {{ $maestro->id_profesor }}</p>
-
+    <a href="{{ route('alumno.fichaidentificacion') }}">Ficha de identificación</a>
     <form action="{{ route('logout') }}" method="POST">
         @csrf
         <button type="submit" class="btn btn-danger">
             <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
         </button>
     </form>
-    <a href="{{ route('maestro.grupos') }}">Mis grupos</a>
 </body>
-
 </html>

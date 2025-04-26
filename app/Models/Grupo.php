@@ -35,26 +35,10 @@ class Grupo extends Model
     {
         return $this->belongsTo(Semestres::class, 'id_semestre');
     }
-/*
-    public function turno()
-    {
-        return $this->belongsTo(Turno::class, 'id_turno');
-    }
+        // Relación con el modelo Profesor
+        public function profesor()
+        {
+            return $this->belongsTo(Profesor::class, 'id_profesor');
+        }
 
-    public function profesor()
-    {
-        return $this->belongsTo(Profesor::class, 'id_profesor');
-    }
-
-    public function periodo()
-    {
-        return $this->belongsTo(Periodo::class, 'id_periodo');
-    }
-
-    public function salon()
-    {
-        return $this->belongsTo(Salon::class, 'id_salon');
-    }
-    Conforme se vayan ocupando, vamos creando los modelos    
-    */ 
 }

@@ -42,6 +42,11 @@ Route::prefix('maestro')
     ->group(function () {
         Route::get('/', 'show')->name('dashboard');
         // Otras rutas de maestro
+         // Ruta para mostrar los grupos del maestro
+         Route::get('/grupos', 'grupos')->name('grupos');
+
+         // Ruta para ver los detalles de un grupo específico
+         Route::get('/grupo/{grupo}', 'mostrarGrupo')->name('grupo.show');
     });
 
     Route::prefix('alumno')
