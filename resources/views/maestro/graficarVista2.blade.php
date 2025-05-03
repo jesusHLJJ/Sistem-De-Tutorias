@@ -95,6 +95,7 @@
 
 <body>
     <h1>Gráficos de encuenta de habilidades </h1>
+    <a href="{{ route('maestro.grupos') }}">← Volver a Mis Grupos</a>
 
     <div class="chart-container">
         <div>

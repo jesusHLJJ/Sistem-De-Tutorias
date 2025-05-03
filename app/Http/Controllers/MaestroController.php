@@ -82,6 +82,11 @@ class MaestroController extends Controller
         ));
     }
 
+    public function seleccionarVistaAlumno($id)
+    {
+        $alumno = Alumno::findOrFail($id);
+        return view('maestro.seleccion', compact('alumno'));
+    }
     public function graficar()
     {
         // Recuperar los datos que deseas graficar, por ejemplo, el indicador psicofisiológico 1

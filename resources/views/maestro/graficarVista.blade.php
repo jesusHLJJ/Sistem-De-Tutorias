@@ -75,6 +75,7 @@
 
 <body>
     <h1>Gráficos de ficha de identificacion tutorado</h1>
+    <a href="{{ route('maestro.grupos') }}">← Volver a Mis Grupos</a>
 
     <div class="chart-container">
         <div>

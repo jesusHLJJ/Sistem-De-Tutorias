@@ -39,6 +39,25 @@ class HabilidadesController extends Controller
         ); //Retornamos a las vistas el alumno (para generar el id_alumno_tutoria) y el id_periodo, en este caso mandaremos el 1
     }
 
+    public function verDesdeMaestro($id_alumno)
+    {
+        $alumno = Alumno::findOrFail($id_alumno);
+
+        $organizacion = Encuesta_organizacion_estudio::where('id_alumno', $alumno->id_alumno)->first();
+        $tecnica = Encuesta_tecnicas_estudio::where('id_alumno', $alumno->id_alumno)->first();
+        $motivacion = Encuesta_motivacion_estudio::where('id_alumno', $alumno->id_alumno)->first();
+
+        return view(
+            'maestro.Encuestahabilidades',
+            compact(
+                'alumno',
+                'organizacion',
+                'tecnica',
+                'motivacion'
+            )
+        );
+    }
+
     public function guardar(Request $request)
     {
         // Buscar o crear el registro con la referencia del id_alumno
@@ -405,7 +424,7 @@ class HabilidadesController extends Controller
             ->get();
 
         // Pasar los datos a la vista
-        return view('graficarVista2', compact(
+        return view('maestro.graficarVista2', compact(
             'data',
             'data_1',
             'data_2',

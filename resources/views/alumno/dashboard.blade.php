@@ -11,7 +11,10 @@
 <body>
 <a href="{{ route('alumno.fichaidentificacion') }}">Ficha de identificación</a><br>
 <br>
-<a href="{{ route('alumno.habilidades') }}">Encuesta sobre habilidades</a>
+<a href="{{ route('alumno.habilidades') }}">Encuesta sobre habilidades</a><br>
+
+<a href="{{ route('alumno.solicitudes.lista') }}">Ver mis solicitudes de asesoría</a>
+
 
 
     <form action="{{ route('logout') }}" method="POST">

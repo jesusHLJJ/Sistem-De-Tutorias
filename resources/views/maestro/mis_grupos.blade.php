@@ -21,7 +21,7 @@
     @endif
 
     <a href="{{ route('maestro.tutorias_academicas') }}" class="btn btn-primary">Ir a Mensual tutoria 02</a><br>
-
+    
     <a href="{{ route('maestro.dashboard') }}">← Volver al inicio</a>
 </body>
 </html>
