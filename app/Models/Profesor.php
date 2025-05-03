@@ -23,7 +23,11 @@ class Profesor extends Model
     }
 
     public function grupos()
-{
-    return $this->hasMany(Grupo::class, 'id_profesor', 'id_profesor');
-}
+    {
+        return $this->hasMany(Grupo::class, 'id_profesor', 'id_profesor');
+    }
+    public function carrera()
+    {
+        return $this->belongsTo(Carrera::class, 'id_carrera', 'id_carrera');
+    }
 }

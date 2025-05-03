@@ -9,7 +9,9 @@
 </head>
 
 <body>
-<a href="{{ route('alumno.fichaidentificacion') }}">Ficha de identificación</a>
+<a href="{{ route('alumno.fichaidentificacion') }}">Ficha de identificación</a><br>
+<br>
+<a href="{{ route('alumno.habilidades') }}">Encuesta sobre habilidades</a>
 
 
     <form action="{{ route('logout') }}" method="POST">

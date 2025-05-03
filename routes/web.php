@@ -5,7 +5,9 @@ use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MaestroController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\TutoriasacademicasController;
 use App\Http\Controllers\fichaIdenTutoradoController;
+use App\Http\Controllers\HabilidadesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,6 +35,8 @@ Route::prefix('admin')
         Route::post('/registro', 'storeMaestro')->name('maestros.store');
         Route::put('/maestros/{maestro}', 'updateMaestro')->name('maestros.update');
         Route::delete('/maestros/{maestro}', 'destroyMaestro')->name('maestros.destroy');
+
+
     });
 
     Route::prefix('maestro')
@@ -47,6 +51,10 @@ Route::prefix('admin')
         // Ruta para la ficha del alumno, con el nombre 'maestro.ficha_id_profesor'
         Route::get('/ficha/{id_alumno}', [MaestroController::class, 'ficha'])->name('maestro.ficha_id_profesor');
         Route::get('/graficar', 'graficar')->name('graficar');
+
+        Route::get('/tutorias-academicas', [TutoriasacademicasController::class, 'index'])->name('tutorias_academicas');
+        Route::post('/tutorias-academicas/guardar', [TutoriasacademicasController::class, 'guardar'])->name('guardar_tutorias_academicas');
+
     });
 
 
@@ -58,4 +66,11 @@ Route::prefix('admin')
         Route::get('/', 'show')->name('dashboard');
         Route::get('/ficha-identificacion', [fichaIdenTutoradoController::class, 'index'])->name('fichaidentificacion');
         Route::post('/identificacion/guardar', [fichaIdenTutoradoController::class, 'guardar'])->name('ficha.guardar');
+    
+        Route::get('/encuesta_habilidades', [HabilidadesController::class, 'index'])->name('habilidades');
+        Route::post('/habilidades/guardar', [HabilidadesController::class, 'guardar'])->name('habilidad.guardar');
+        Route::post('/habilidades/guardar2', [HabilidadesController::class, 'guardar2'])->name('habilidad.guardar2');
+        Route::post('/habilidades/guardar3', [HabilidadesController::class, 'guardar3'])->name('habilidad.guardar3');
+        
+
     });
