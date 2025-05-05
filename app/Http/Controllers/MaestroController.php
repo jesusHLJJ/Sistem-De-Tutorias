@@ -83,7 +83,14 @@ class MaestroController extends Controller
         ));
     }
 
-    public function graficar($grupo)
+   
+    public function seleccionarVistaAlumno($id)
+    {
+        $alumno = Alumno::findOrFail($id);
+        return view('maestro.seleccion', compact('alumno'));
+    }
+    
+    public function graficar($grupo)//public function graficar()
     {
 
 

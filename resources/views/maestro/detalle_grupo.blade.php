@@ -16,8 +16,8 @@
         <ul>
             @foreach ($grupo->alumnos as $alumno)
                 <li>
-                    <a href="{{ route('maestro.maestro.ficha_id_profesor', $alumno->id_alumno) }}">
-                        {{ $alumno->nombre }}
+                <a href="{{ route('maestro.alumno.seleccionar', $alumno->id_alumno) }}">
+                {{ $alumno->nombre }}
                     </a>
                 </li>
             @endforeach
@@ -29,7 +29,13 @@
     <h1>El grupo seleccionado es: {{ $grupo->id_grupo }}</h1>
     <h2>La clave del grupo seleccionado es: {{$grupo->clave_grupo}}</h2>
 
-    <a href="{{ route('maestro.graficar', $grupo->clave_grupo) }}" class="btn btn-primary">Graficar</a>
+
+    <br>
+    <br>
+    <a href="{{ route('maestro.graficar', $grupo->clave_grupo) }}" class="btn btn-primary">Graficar ficha de identificacion</a>
+    <br>
+    <br>
+    <a href="{{ route('maestro.graficar2') }}" class="btn btn-primary">Graficar encuesta sobre habilidades</a>
 
 </body>
 
