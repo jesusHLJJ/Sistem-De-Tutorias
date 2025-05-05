@@ -29,4 +29,10 @@ class Ficha_area_familiar extends Model
         'indicador_10',
         'indicador_11',
     ];
+//CODIGO DE PRUEBA//
+    function fichaTutorado(){
+        return $this->belongsTo(FichaIdentificacionTutorado::class, 'id_ficha', 'id_ficha');
+
+    }
+    //CODIGO DE PRUEBA//
 }

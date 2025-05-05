@@ -12,7 +12,7 @@ class Area_social extends Model
     //llave primaria de la tabla
     protected $primaryKey = 'id_area_social';
     //indicamos que desactive el timestamps, para evitar errores.
-   // public $timestamps = false;
+    // public $timestamps = false;
     //campos de la tabla para el llenado. 
     protected $fillable = [
         'id_ficha',
@@ -24,4 +24,11 @@ class Area_social extends Model
         'indicador_6',
         'indicador_7',
     ];
+
+       //CODIGOPRUEBA//
+    function fichaTutorado()
+    {
+        return $this->belongsTo(FichaIdentificacionTutorado::class, 'id_ficha', 'id_ficha');
+    }
+       //CODIGOPRUEBA//
 }

@@ -36,7 +36,7 @@ public function getNombreCompletoAttribute()
 
 public function grupo()
 {
-    return $this->belongsTo(Grupo::class, 'id_grupo');  // Asegúrate de usar 'id_grupo' como el nombre de la columna
+    return $this->belongsTo(Grupo::class, 'id_grupo','id_grupo');  // Asegúrate de usar 'id_grupo' como el nombre de la columna //SE INSERÓ CÓDIGO DE PRUEBA
 }
 
 public function carrera()

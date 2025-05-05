@@ -31,6 +31,13 @@ class Ficha_identificacion_estado_psicofisiologico extends Model
         'indicador_psicofisiologico_11',
     ];
 
+    //CODIGO DEPRUEBA//
+    public function fichaTutorado()
+    {
+        return $this->belongsTo(FichaIdentificacionTutorado::class, 'id_ficha', 'id_ficha');
+    }
+    //CODIGO DEPRUEBA//
 
-    
+
+
 }

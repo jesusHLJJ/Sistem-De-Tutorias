@@ -12,7 +12,7 @@ class Area_psicopedagogica extends Model
     //llave primaria de la tabla
     protected $primaryKey = 'id_area_psicopedagogica';
     //indicamos que desactive el timestamps, para evitar errores.
-   // public $timestamps = false;
+    // public $timestamps = false;
     //campos de la tabla para el llenado. 
     protected $fillable = [
         'id_ficha',
@@ -33,4 +33,11 @@ class Area_psicopedagogica extends Model
         'caracteristicas_personales_4',
         'caracteristicas_personales_5',
     ];
+
+    //CODIGOPRUEBA//
+    function fichaTutorado()
+    {
+        return $this->belongsTo(FichaIdentificacionTutorado::class, 'id_ficha', 'id_ficha');
+    }
+    //CODIGOPRUEBA//
 }

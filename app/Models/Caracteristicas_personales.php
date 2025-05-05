@@ -68,4 +68,11 @@ class Caracteristicas_personales extends Model
         'indicador_25',
         'observacion_25',
     ];
+
+    //CODIGOPRUEBA//
+    function fichaTutorado()
+    {
+        return $this->belongsTo(FichaIdentificacionTutorado::class, 'id_ficha', 'id_ficha');
+    }
+       //CODIGOPRUEBA//
 }

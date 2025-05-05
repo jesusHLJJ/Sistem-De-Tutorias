@@ -12,6 +12,7 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware(['guest'])->group(function () {
@@ -46,7 +47,7 @@ Route::prefix('admin')
         
         // Ruta para la ficha del alumno, con el nombre 'maestro.ficha_id_profesor'
         Route::get('/ficha/{id_alumno}', [MaestroController::class, 'ficha'])->name('maestro.ficha_id_profesor');
-        Route::get('/graficar', 'graficar')->name('graficar');
+        Route::get('/graficar/{grupo}', 'graficar')->name('graficar');
     });
 
 
