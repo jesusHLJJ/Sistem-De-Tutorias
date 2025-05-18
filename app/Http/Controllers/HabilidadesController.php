@@ -19,7 +19,7 @@ class HabilidadesController extends Controller
 
         $user = Auth::user();
         $alumno = $user->alumno;
-        
+
         if (!$alumno) {
             abort(404, 'Alumno no encontrado');
         }
@@ -172,256 +172,658 @@ class HabilidadesController extends Controller
         return redirect()->back()->with('success', 'Datos guardados correctamente');
     }
 
-    public function graficar()
+    public function graficar($grupo)
     {
         // Recuperar los datos que deseas graficar
-        $data = Encuesta_organizacion_estudio::select('pregunta_1_organizacion', DB::raw('count(*) as total'))
+        /* $data = Encuesta_organizacion_estudio::select('pregunta_1_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_1_organizacion')
+            ->get();*/
+        $data = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_1_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_1_organizacion')
             ->get();
 
-        $data_1 = Encuesta_organizacion_estudio::select('pregunta_2_organizacion', DB::raw('count(*) as total'))
+
+        /*$data_1 = Encuesta_organizacion_estudio::select('pregunta_2_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_2_organizacion')
+            ->get();*/
+        $data_1 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_2_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_2_organizacion')
             ->get();
 
-        $data_2 = Encuesta_organizacion_estudio::select('pregunta_3_organizacion', DB::raw('count(*) as total'))
+
+
+        /*$data_2 = Encuesta_organizacion_estudio::select('pregunta_3_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_3_organizacion')
+            ->get();*/
+        $data_2 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_3_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_3_organizacion')
             ->get();
 
-        $data_3 = Encuesta_organizacion_estudio::select('pregunta_4_organizacion', DB::raw('count(*) as total'))
+
+
+        /*$data_3 = Encuesta_organizacion_estudio::select('pregunta_4_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_4_organizacion')
+            ->get();*/
+        $data_3 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_4_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_4_organizacion')
             ->get();
 
-        $data_4 = Encuesta_organizacion_estudio::select('pregunta_5_organizacion', DB::raw('count(*) as total'))
+        /*$data_4 = Encuesta_organizacion_estudio::select('pregunta_5_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_5_organizacion')
+            ->get();*/
+        $data_4 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_5_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_5_organizacion')
             ->get();
 
-        $data_5 = Encuesta_organizacion_estudio::select('pregunta_6_organizacion', DB::raw('count(*) as total'))
+
+        /*$data_5 = Encuesta_organizacion_estudio::select('pregunta_6_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_6_organizacion')
+            ->get();*/
+        $data_5 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_6_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_6_organizacion')
             ->get();
 
-        $data_6 = Encuesta_organizacion_estudio::select('pregunta_7_organizacion', DB::raw('count(*) as total'))
+
+        /*$data_6 = Encuesta_organizacion_estudio::select('pregunta_7_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_7_organizacion')
+            ->get();*/
+        $data_6 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_7_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_7_organizacion')
             ->get();
 
-        $data_7 = Encuesta_organizacion_estudio::select('pregunta_8_organizacion', DB::raw('count(*) as total'))
+
+        /*$data_7 = Encuesta_organizacion_estudio::select('pregunta_8_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_8_organizacion')
+            ->get();*/
+        $data_7 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_8_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_8_organizacion')
             ->get();
 
-        $data_8 = Encuesta_organizacion_estudio::select('pregunta_9_organizacion', DB::raw('count(*) as total'))
+        /*$data_8 = Encuesta_organizacion_estudio::select('pregunta_9_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_9_organizacion')
+            ->get();*/
+        $data_8 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_9_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_9_organizacion')
             ->get();
 
-        $data_9 = Encuesta_organizacion_estudio::select('pregunta_10_organizacion', DB::raw('count(*) as total'))
+
+        /*$data_9 = Encuesta_organizacion_estudio::select('pregunta_10_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_10_organizacion')
+            ->get();*/
+        $data_9 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_10_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_10_organizacion')
             ->get();
 
-        $data_10 = Encuesta_organizacion_estudio::select('pregunta_11_organizacion', DB::raw('count(*) as total'))
+
+        /*$data_10 = Encuesta_organizacion_estudio::select('pregunta_11_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_11_organizacion')
+            ->get();*/
+        $data_10 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_11_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_11_organizacion')
             ->get();
 
 
-        $data_11 = Encuesta_organizacion_estudio::select('pregunta_12_organizacion', DB::raw('count(*) as total'))
+
+        /*$data_11 = Encuesta_organizacion_estudio::select('pregunta_12_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_12_organizacion')
+            ->get();*/
+        $data_11 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_12_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_12_organizacion')
             ->get();
 
 
-        $data_12 = Encuesta_organizacion_estudio::select('pregunta_13_organizacion', DB::raw('count(*) as total'))
+
+
+        /*$data_12 = Encuesta_organizacion_estudio::select('pregunta_13_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_13_organizacion')
+            ->get();*/
+        $data_12 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_13_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_13_organizacion')
             ->get();
 
-        $data_13 = Encuesta_organizacion_estudio::select('pregunta_14_organizacion', DB::raw('count(*) as total'))
+
+        /*$data_13 = Encuesta_organizacion_estudio::select('pregunta_14_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_14_organizacion')
+            ->get();*/
+        $data_13 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_14_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_14_organizacion')
             ->get();
 
 
-
-        $data_14 = Encuesta_organizacion_estudio::select('pregunta_15_organizacion', DB::raw('count(*) as total'))
+        /*$data_14 = Encuesta_organizacion_estudio::select('pregunta_15_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_15_organizacion')
+            ->get();*/
+        $data_14 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_15_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_15_organizacion')
             ->get();
 
-        $data_15 = Encuesta_organizacion_estudio::select('pregunta_16_organizacion', DB::raw('count(*) as total'))
+
+
+        /*$data_15 = Encuesta_organizacion_estudio::select('pregunta_16_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_16_organizacion')
+            ->get();*/
+        $data_15 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_16_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_16_organizacion')
             ->get();
 
-        $data_16 = Encuesta_organizacion_estudio::select('pregunta_17_organizacion', DB::raw('count(*) as total'))
+
+        /*$data_16 = Encuesta_organizacion_estudio::select('pregunta_17_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_17_organizacion')
+            ->get();*/
+        $data_16 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_17_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_17_organizacion')
             ->get();
 
-        $data_17 = Encuesta_organizacion_estudio::select('pregunta_18_organizacion', DB::raw('count(*) as total'))
+
+        /*$data_17 = Encuesta_organizacion_estudio::select('pregunta_18_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_18_organizacion')
+            ->get();*/
+        $data_17 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_18_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_18_organizacion')
             ->get();
 
-        $data_18 = Encuesta_organizacion_estudio::select('pregunta_19_organizacion', DB::raw('count(*) as total'))
+
+
+        /*$data_18 = Encuesta_organizacion_estudio::select('pregunta_19_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_19_organizacion')
+            ->get();*/
+        $data_18 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_19_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_19_organizacion')
             ->get();
 
-        $data_19 = Encuesta_organizacion_estudio::select('pregunta_20_organizacion', DB::raw('count(*) as total'))
+        /*$data_19 = Encuesta_organizacion_estudio::select('pregunta_20_organizacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_20_organizacion')
+            ->get();*/
+        $data_19 = Encuesta_organizacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_organizacion_estudio.pregunta_20_organizacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_organizacion_estudio.pregunta_20_organizacion')
             ->get();
 
         //tecnicas de estudios 
 
-        $data_20 = Encuesta_tecnicas_estudio::select('pregunta_1_tecnica', DB::raw('count(*) as total'))
+        /*$data_20 = Encuesta_tecnicas_estudio::select('pregunta_1_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_1_tecnica')
+            ->get();*/
+        $data_20 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_1_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_1_tecnica')
             ->get();
 
-        $data_21 = Encuesta_tecnicas_estudio::select('pregunta_2_tecnica', DB::raw('count(*) as total'))
+        /*$data_21 = Encuesta_tecnicas_estudio::select('pregunta_2_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_2_tecnica')
+            ->get();*/
+        $data_21 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_2_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_2_tecnica')
             ->get();
 
-        $data_22 = Encuesta_tecnicas_estudio::select('pregunta_3_tecnica', DB::raw('count(*) as total'))
+        /*$data_22 = Encuesta_tecnicas_estudio::select('pregunta_3_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_3_tecnica')
+            ->get();*/
+        $data_22 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_3_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_3_tecnica')
             ->get();
 
-        $data_23 = Encuesta_tecnicas_estudio::select('pregunta_4_tecnica', DB::raw('count(*) as total'))
+
+        /*$data_23 = Encuesta_tecnicas_estudio::select('pregunta_4_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_4_tecnica')
+            ->get();*/
+        $data_23 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_4_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_4_tecnica')
             ->get();
 
-        $data_24 = Encuesta_tecnicas_estudio::select('pregunta_5_tecnica', DB::raw('count(*) as total'))
+
+
+        /*$data_24 = Encuesta_tecnicas_estudio::select('pregunta_5_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_5_tecnica')
+            ->get();*/
+        $data_24 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_5_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_5_tecnica')
             ->get();
 
-        $data_25 = Encuesta_tecnicas_estudio::select('pregunta_6_tecnica', DB::raw('count(*) as total'))
+        /*$data_25 = Encuesta_tecnicas_estudio::select('pregunta_6_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_6_tecnica')
+            ->get();*/
+        $data_25 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_6_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_6_tecnica')
             ->get();
 
-        $data_26 = Encuesta_tecnicas_estudio::select('pregunta_7_tecnica', DB::raw('count(*) as total'))
+        /*$data_26 = Encuesta_tecnicas_estudio::select('pregunta_7_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_7_tecnica')
+            ->get();*/
+        $data_26 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_7_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_7_tecnica')
             ->get();
 
-        $data_27 = Encuesta_tecnicas_estudio::select('pregunta_8_tecnica', DB::raw('count(*) as total'))
+        /*$data_27 = Encuesta_tecnicas_estudio::select('pregunta_8_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_8_tecnica')
+            ->get();*/
+        $data_27 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_8_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_8_tecnica')
             ->get();
 
-        $data_28 = Encuesta_tecnicas_estudio::select('pregunta_9_tecnica', DB::raw('count(*) as total'))
+        /*$data_28 = Encuesta_tecnicas_estudio::select('pregunta_9_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_9_tecnica')
+            ->get();*/
+        $data_28 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_9_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_9_tecnica')
             ->get();
 
-        $data_29 = Encuesta_tecnicas_estudio::select('pregunta_10_tecnica', DB::raw('count(*) as total'))
+        /*$data_29 = Encuesta_tecnicas_estudio::select('pregunta_10_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_10_tecnica')
+            ->get();*/
+        $data_29 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_10_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_10_tecnica')
             ->get();
 
-        $data_30 = Encuesta_tecnicas_estudio::select('pregunta_11_tecnica', DB::raw('count(*) as total'))
+
+        /*$data_30 = Encuesta_tecnicas_estudio::select('pregunta_11_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_11_tecnica')
+            ->get();*/
+        $data_30 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_11_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_11_tecnica')
             ->get();
 
-        $data_31 = Encuesta_tecnicas_estudio::select('pregunta_12_tecnica', DB::raw('count(*) as total'))
+
+        /*$data_31 = Encuesta_tecnicas_estudio::select('pregunta_12_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_12_tecnica')
+            ->get();*/
+        $data_31 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_12_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_12_tecnica')
             ->get();
 
-        $data_32 = Encuesta_tecnicas_estudio::select('pregunta_13_tecnica', DB::raw('count(*) as total'))
+        /*$data_32 = Encuesta_tecnicas_estudio::select('pregunta_13_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_13_tecnica')
+            ->get();*/
+        $data_32 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_13_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_13_tecnica')
             ->get();
 
-        $data_33 = Encuesta_tecnicas_estudio::select('pregunta_14_tecnica', DB::raw('count(*) as total'))
+        /*$data_33 = Encuesta_tecnicas_estudio::select('pregunta_14_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_14_tecnica')
+            ->get();*/
+        $data_33 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_14_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_14_tecnica')
             ->get();
 
-        $data_34 = Encuesta_tecnicas_estudio::select('pregunta_15_tecnica', DB::raw('count(*) as total'))
+        /*$data_34 = Encuesta_tecnicas_estudio::select('pregunta_15_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_15_tecnica')
+            ->get();*/
+        $data_34 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_15_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_15_tecnica')
             ->get();
 
-        $data_35 = Encuesta_tecnicas_estudio::select('pregunta_16_tecnica', DB::raw('count(*) as total'))
+        /*$data_35 = Encuesta_tecnicas_estudio::select('pregunta_16_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_16_tecnica')
+            ->get();*/
+        $data_35 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_16_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_16_tecnica')
             ->get();
 
-        $data_36 = Encuesta_tecnicas_estudio::select('pregunta_17_tecnica', DB::raw('count(*) as total'))
+        /*$data_36 = Encuesta_tecnicas_estudio::select('pregunta_17_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_17_tecnica')
+            ->get();*/
+        $data_36 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_17_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_17_tecnica')
             ->get();
 
-        $data_37 = Encuesta_tecnicas_estudio::select('pregunta_18_tecnica', DB::raw('count(*) as total'))
+
+        /*$data_37 = Encuesta_tecnicas_estudio::select('pregunta_18_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_18_tecnica')
+            ->get();*/
+        $data_37 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_18_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_18_tecnica')
             ->get();
 
-        $data_38 = Encuesta_tecnicas_estudio::select('pregunta_19_tecnica', DB::raw('count(*) as total'))
+
+        /*$data_38 = Encuesta_tecnicas_estudio::select('pregunta_19_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_19_tecnica')
+            ->get();*/
+        $data_38 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_19_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_19_tecnica')
             ->get();
 
-        $data_39 = Encuesta_tecnicas_estudio::select('pregunta_20_tecnica', DB::raw('count(*) as total'))
+
+        /*$data_39 = Encuesta_tecnicas_estudio::select('pregunta_20_tecnica', DB::raw('count(*) as total'))
             ->groupBy('pregunta_20_tecnica')
+            ->get();*/
+        $data_39 = Encuesta_tecnicas_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_tecnicas_estudio.pregunta_20_tecnica', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_tecnicas_estudio.pregunta_20_tecnica')
             ->get();
+
 
         //motivacion
 
-        $data_40 = Encuesta_motivacion_estudio::select('pregunta_1_motivacion', DB::raw('count(*) as total'))
+        /*$data_40 = Encuesta_motivacion_estudio::select('pregunta_1_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_1_motivacion')
+            ->get();*/
+        $data_40 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_1_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_1_motivacion')
             ->get();
 
-        $data_41 = Encuesta_motivacion_estudio::select('pregunta_2_motivacion', DB::raw('count(*) as total'))
+        /*$data_41 = Encuesta_motivacion_estudio::select('pregunta_2_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_2_motivacion')
+            ->get();*/
+        $data_41 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_2_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_2_motivacion')
             ->get();
 
-        $data_42 = Encuesta_motivacion_estudio::select('pregunta_3_motivacion', DB::raw('count(*) as total'))
+        /*$data_42 = Encuesta_motivacion_estudio::select('pregunta_3_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_3_motivacion')
+            ->get();*/
+        $data_42 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_3_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_3_motivacion')
             ->get();
 
-        $data_43 = Encuesta_motivacion_estudio::select('pregunta_4_motivacion', DB::raw('count(*) as total'))
+        /*$data_43 = Encuesta_motivacion_estudio::select('pregunta_4_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_4_motivacion')
+            ->get();*/
+        $data_43 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_4_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_4_motivacion')
             ->get();
 
-        $data_44 = Encuesta_motivacion_estudio::select('pregunta_5_motivacion', DB::raw('count(*) as total'))
+
+        /*$data_44 = Encuesta_motivacion_estudio::select('pregunta_5_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_5_motivacion')
+            ->get();*/
+        $data_44 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_5_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_5_motivacion')
             ->get();
 
-        $data_45 = Encuesta_motivacion_estudio::select('pregunta_6_motivacion', DB::raw('count(*) as total'))
+        /*$data_45 = Encuesta_motivacion_estudio::select('pregunta_6_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_6_motivacion')
+            ->get();*/
+        $data_45 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_6_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_6_motivacion')
             ->get();
 
-        $data_46 = Encuesta_motivacion_estudio::select('pregunta_7_motivacion', DB::raw('count(*) as total'))
+        /*$data_46 = Encuesta_motivacion_estudio::select('pregunta_7_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_7_motivacion')
+            ->get();*/
+        $data_46 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_7_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_7_motivacion')
             ->get();
 
-        $data_47 = Encuesta_motivacion_estudio::select('pregunta_8_motivacion', DB::raw('count(*) as total'))
+        /*$data_47 = Encuesta_motivacion_estudio::select('pregunta_8_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_8_motivacion')
+            ->get();*/
+        $data_47 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_8_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_8_motivacion')
             ->get();
 
-        $data_48 = Encuesta_motivacion_estudio::select('pregunta_9_motivacion', DB::raw('count(*) as total'))
+
+
+        /*$data_48 = Encuesta_motivacion_estudio::select('pregunta_9_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_9_motivacion')
+            ->get();*/
+        $data_48 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_9_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_9_motivacion')
             ->get();
 
-        $data_49 = Encuesta_motivacion_estudio::select('pregunta_10_motivacion', DB::raw('count(*) as total'))
+
+        /*$data_49 = Encuesta_motivacion_estudio::select('pregunta_10_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_10_motivacion')
+            ->get();*/
+        $data_49 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_10_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_10_motivacion')
             ->get();
 
-        $data_50 = Encuesta_motivacion_estudio::select('pregunta_11_motivacion', DB::raw('count(*) as total'))
+
+        /*$data_50 = Encuesta_motivacion_estudio::select('pregunta_11_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_11_motivacion')
+            ->get();*/
+        $data_50 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_11_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_11_motivacion')
             ->get();
 
-        $data_51 = Encuesta_motivacion_estudio::select('pregunta_12_motivacion', DB::raw('count(*) as total'))
+
+        /*$data_51 = Encuesta_motivacion_estudio::select('pregunta_12_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_12_motivacion')
+            ->get();*/
+        $data_51 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_12_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_12_motivacion')
             ->get();
 
-        $data_52 = Encuesta_motivacion_estudio::select('pregunta_13_motivacion', DB::raw('count(*) as total'))
+        /*$data_52 = Encuesta_motivacion_estudio::select('pregunta_13_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_13_motivacion')
+            ->get();*/
+        $data_52 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_13_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_13_motivacion')
             ->get();
 
-        $data_53 = Encuesta_motivacion_estudio::select('pregunta_14_motivacion', DB::raw('count(*) as total'))
+
+        /*$data_53 = Encuesta_motivacion_estudio::select('pregunta_14_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_14_motivacion')
+            ->get();*/
+        $data_53 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_14_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_14_motivacion')
             ->get();
 
-        $data_54 = Encuesta_motivacion_estudio::select('pregunta_15_motivacion', DB::raw('count(*) as total'))
+
+        /*$data_54 = Encuesta_motivacion_estudio::select('pregunta_15_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_15_motivacion')
+            ->get();*/
+        $data_54 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_15_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_15_motivacion')
             ->get();
 
-        $data_55 = Encuesta_motivacion_estudio::select('pregunta_16_motivacion', DB::raw('count(*) as total'))
+
+        /*$data_55 = Encuesta_motivacion_estudio::select('pregunta_16_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_16_motivacion')
+            ->get();*/
+        $data_55 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_16_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_16_motivacion')
             ->get();
 
-        $data_56 = Encuesta_motivacion_estudio::select('pregunta_17_motivacion', DB::raw('count(*) as total'))
+
+        /*$data_56 = Encuesta_motivacion_estudio::select('pregunta_17_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_17_motivacion')
+            ->get();*/
+        $data_56 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_17_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_17_motivacion')
             ->get();
 
-        $data_57 = Encuesta_motivacion_estudio::select('pregunta_18_motivacion', DB::raw('count(*) as total'))
+
+        /*$data_57 = Encuesta_motivacion_estudio::select('pregunta_18_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_18_motivacion')
+            ->get();*/
+        $data_57 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_18_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_18_motivacion')
             ->get();
 
-        $data_58 = Encuesta_motivacion_estudio::select('pregunta_19_motivacion', DB::raw('count(*) as total'))
+
+        /*$data_58 = Encuesta_motivacion_estudio::select('pregunta_19_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_19_motivacion')
+            ->get();*/
+        $data_58 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_19_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_19_motivacion')
             ->get();
 
-        $data_59 = Encuesta_motivacion_estudio::select('pregunta_20_motivacion', DB::raw('count(*) as total'))
+
+        /* $data_59 = Encuesta_motivacion_estudio::select('pregunta_20_motivacion', DB::raw('count(*) as total'))
             ->groupBy('pregunta_20_motivacion')
+            ->get();*/
+        $data_59 = Encuesta_motivacion_estudio::whereHas('alumno.grupo', function ($query) use ($grupo) {
+            $query->where('clave_grupo', $grupo);
+        })
+            ->select('encuesta_motivacion_estudio.pregunta_20_motivacion', DB::raw('count(*) as total'))
+            ->groupBy('encuesta_motivacion_estudio.pregunta_20_motivacion')
             ->get();
+
 
         // Pasar los datos a la vista
         return view('maestro.graficarVista2', compact(

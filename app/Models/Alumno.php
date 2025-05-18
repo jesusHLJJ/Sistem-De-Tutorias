@@ -43,4 +43,9 @@ public function carrera()
 {
     return $this->belongsTo(Carrera::class, 'id_carrera');
 }
+
+
+public function canalizacion(){
+    return $this->belongsTo(Canalizacion::class,'id_alumno','id_alumno');
+}
 }

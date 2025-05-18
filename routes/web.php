@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\CanalizacionController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MaestroController;
 use App\Http\Controllers\RegisterController;
@@ -37,11 +38,9 @@ Route::prefix('admin')
         Route::post('/registro', 'storeMaestro')->name('maestros.store');
         Route::put('/maestros/{maestro}', 'updateMaestro')->name('maestros.update');
         Route::delete('/maestros/{maestro}', 'destroyMaestro')->name('maestros.destroy');
-
-
     });
 
-    Route::prefix('maestro')
+Route::prefix('maestro')
     ->middleware(['auth', 'role:2'])
     ->name('maestro.')
     ->controller(MaestroController::class)
@@ -49,31 +48,42 @@ Route::prefix('admin')
         Route::get('/', 'show')->name('dashboard');
         Route::get('/grupos', 'grupos')->name('grupos');
         Route::get('/grupo/{grupo}', 'mostrarGrupo')->name('grupo.show');
-        
+
         // Ruta para la ficha del alumno, con el nombre 'maestro.ficha_id_profesor'
         Route::get('/ficha/{id_alumno}', [MaestroController::class, 'ficha'])->name('maestro.ficha_id_profesor');
         Route::get('/graficar/{grupo}', 'graficar')->name('graficar');
-        //Route::get('/graficar', 'graficar')->name('graficar');
 
         Route::get('/tutorias-academicas', [TutoriasacademicasController::class, 'index'])->name('tutorias_academicas');
         Route::post('/tutorias-academicas/guardar', [TutoriasacademicasController::class, 'guardar'])->name('guardar_tutorias_academicas');
         Route::get('/alumno/{id_alumno}/seleccionar', [MaestroController::class, 'seleccionarVistaAlumno'])->name('alumno.seleccionar');
         Route::get('/alumno/{id_alumno}/habilidades', [App\Http\Controllers\HabilidadesController::class, 'verDesdeMaestro'])->name('maestro.maestro.habilidades');
-        Route::get('/graficar2', [App\Http\Controllers\HabilidadesController::class, 'graficar'])->name('graficar2');
+        Route::get('/graficar2/{grupo}', [App\Http\Controllers\HabilidadesController::class, 'graficar'])->name('graficar2');
+
+        Route::get('/canalizacion/{id_alumno}', [CanalizacionController::class, 'index'])->name('canalizacion_alumno'); //Formulario Canalizacion
+        Route::post('/canalizacion/{id_alumno}', [CanalizacionController::class, 'crear'])->name('canalizacion.crear'); //Crear Canalizacion
+        Route::get('/canalizacion/citas/{id_alumno}', [CanalizacionController::class, 'citas'])->name('citas_alumno'); //Ver citas del usuario
+        Route::post('/canalizacion/citas/{id_alumno}', [CanalizacionController::class, 'crearcita'])->name('citas_alumno.crear'); //Crear citas
+        Route::delete('/canalizacion/citas/eliminar/{id_cita}', [CanalizacionController::class, 'eliminarcita'])->name('citas_alumno.eliminar'); //Eliminar citas
+        Route::get('/canalizacion/documentos/{id_alumno}', [CanalizacionController::class, 'verDocumentos'])->name('documentos.ver'); //Ver documentos
+
+        Route::delete('/canalizacion/documentos/eliminar', [CanalizacionController::class, 'eliminarDocumento'])->name('documentos.eliminar');
+        Route::get('/canalizacion/documentos/subir/{id_alumno}', [CanalizacionController::class, 'subirDocumentoVista'])->name('documentos.subir');
+        Route::post('/canalizacion/documentos/subir', [CanalizacionController::class, 'subirDocumentoGuardar'])->name('documentos.subir.guardar');
+
+
+
 
 
         Route::get('/maestro/solicitudes/{id}', [SolicitudAsesoriaController::class, 'listaSolicitudes2'])
-        ->name('maestro.solicitudes.lista');
+            ->name('maestro.solicitudes.lista');
 
         // Ruta para ver una solicitud de asesoría por el maestro
         Route::get('/maestro/solicitud/{id}', [SolicitudAsesoriaController::class, 'ver2'])
-        ->name('maestro.solicitud.ver');
-
-    
+            ->name('maestro.solicitud.ver');
     });
 
 
-    Route::prefix('alumno')
+Route::prefix('alumno')
     ->middleware(['auth', 'role:3'])
     ->name('alumno.')
     ->controller(AlumnoController::class)
@@ -81,24 +91,22 @@ Route::prefix('admin')
         Route::get('/', 'show')->name('dashboard');
         Route::get('/ficha-identificacion', [fichaIdenTutoradoController::class, 'index'])->name('fichaidentificacion');
         Route::post('/identificacion/guardar', [fichaIdenTutoradoController::class, 'guardar'])->name('ficha.guardar');
-    
+
         Route::get('/encuesta_habilidades', [HabilidadesController::class, 'index'])->name('habilidades');
         Route::post('/habilidades/guardar', [HabilidadesController::class, 'guardar'])->name('habilidad.guardar');
         Route::post('/habilidades/guardar2', [HabilidadesController::class, 'guardar2'])->name('habilidad.guardar2');
         Route::post('/habilidades/guardar3', [HabilidadesController::class, 'guardar3'])->name('habilidad.guardar3');
 
         Route::get('/solicitud/nueva', [SolicitudAsesoriaController::class, 'index'])
-        ->name('solicitudasesoria.formulario');
+            ->name('solicitudasesoria.formulario');
 
         // Ruta para ver una solicitud en específico
         Route::get('/solicitud/{id}', [SolicitudAsesoriaController::class, 'ver'])
-        ->name('solicitudasesoria.ver');
+            ->name('solicitudasesoria.ver');
 
         // Ruta para la lista de solicitudes de asesoría
         Route::get('/solicitudes', [SolicitudAsesoriaController::class, 'listaSolicitudes'])
-        ->name('solicitudes.lista');
+            ->name('solicitudes.lista');
 
         Route::post('/solicitud-asesoria/guardar', [SolicitudAsesoriaController::class, 'guardar'])->name('solicitudasesoria.guardar');
-
-
     });

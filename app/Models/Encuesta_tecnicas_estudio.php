@@ -39,4 +39,8 @@ class Encuesta_tecnicas_estudio extends Model
         'pregunta_20_tecnica',
         'calificacion_final_tecnica',
     ];
+
+    public function alumno(){
+        return $this->belongsTo(alumno::class,'id_alumno','id_alumno');
+    }
 }

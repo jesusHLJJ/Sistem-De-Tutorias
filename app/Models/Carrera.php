@@ -14,4 +14,18 @@ class Carrera extends Model
     protected $primaryKey = 'id_carrera';
 
     protected $fillable = ['carrera']; // Ajusta esto según los campos de tu tabla
+
+public function jefecarrera()
+{
+    return $this->belongsTo(JefesCarrera::class, 'id_carrera', 'id_carrera');
 }
+
+
+
+
+
+}
+
+
+
+

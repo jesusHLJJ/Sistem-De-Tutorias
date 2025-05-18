@@ -38,4 +38,8 @@ class Encuesta_motivacion_estudio extends Model
         'pregunta_20_motivacion',
         'calificacion_final_motivacion',
     ];
+    
+    public function alumno(){
+        return $this->belongsTo(alumno::class,'id_alumno','id_alumno');
+    }
 }

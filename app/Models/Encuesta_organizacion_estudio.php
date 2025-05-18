@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Encuesta_organizacion_estudio extends Model
 {
@@ -39,4 +40,10 @@ class Encuesta_organizacion_estudio extends Model
         'pregunta_20_organizacion',
         'calificacion_final_organizacion',
     ];
+
+    //CODIGO DEPRUEBA
+    public function alumno(){
+        return $this->belongsTo(Alumno::class,'id_alumno','id_alumno');
+    }
+    //CODIGO DEPRUEBA
 }
