@@ -773,6 +773,7 @@
             </tbody>
         </table>
     </div>
+            <a href="{{ route('maestro.grupos') }}">← Volver a Mis Grupos</a>
 
 </div>
 </main>

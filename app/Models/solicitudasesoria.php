@@ -32,7 +32,8 @@ class solicitudasesoria extends Model
         return $this->belongsTo(Profesor::class, 'id_profesor', 'id_profesor');
     }
     public function alumno()
-{
-    return $this->belongsTo(Alumno::class, 'id_alumno', 'id_alumno');
-}
+    {
+        return $this->belongsTo(Alumno::class, 'id_alumno', 'id_alumno');
+    }
+    
 }

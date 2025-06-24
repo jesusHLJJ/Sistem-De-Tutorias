@@ -3387,6 +3387,9 @@
             doc.save('grafica_y_porcentajes.pdf');
         }
     </script>
+
+    <a href="{{ route('maestro.grupos') }}">← Volver a Mis Grupos</a>
+
 </body>
 
 </html>

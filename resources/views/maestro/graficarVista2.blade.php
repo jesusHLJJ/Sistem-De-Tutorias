@@ -4806,6 +4806,8 @@
             doc.save('grafica_y_porcentajes_habilidades.pdf');
         }
     </script>
+    <a href="{{ route('maestro.grupos') }}">← Volver a Mis Grupos</a>
+
 </body>
 
 </html>

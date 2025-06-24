@@ -164,6 +164,6 @@
 }
 
     </script>
-
+<a href="{{ route('maestro.grupos') }}">← Volver a Mis Grupos</a>
 </body>
 </html>
