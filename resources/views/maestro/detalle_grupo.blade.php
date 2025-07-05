@@ -35,7 +35,10 @@
     <a href="{{ route('maestro.graficar', $grupo->clave_grupo) }}" class="btn btn-primary">Graficar ficha de identificacion</a>
     <br>
     <br>
-    <a href="{{ route('maestro.graficar2', $grupo->clave_grupo) }}" class="btn btn-primary">Graficar encuesta sobre habilidades</a>
+    <a href="{{ route('maestro.graficar2', $grupo->clave_grupo) }}" class="btn btn-primary">Graficar encuesta sobre habilidades</a><br>
+    
+    <a href="{{ route('maestro.semestral.form', $grupo->id_grupo) }}">Llenar reporte</a>
+
 
 </body>
 

@@ -100,6 +100,13 @@ Route::prefix('maestro')
         ->name('maestro.tutoria.guardar');
 
 
+        Route::get('/tutoria-semestral/{id_grupo}', 
+            [App\Http\Controllers\SemestralTutoriaController::class, 'formGrupo']
+        )->name('semestral.form');
+
+        Route::post('/tutoria-semestral/guardar', 
+            [App\Http\Controllers\SemestralTutoriaController::class, 'guardar']
+        )->name('semestral.guardar');
     });
 
 Route::prefix('alumno')
