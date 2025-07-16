@@ -134,6 +134,10 @@ Route::prefix('alumno')
         Route::get('/solicitudes', [SolicitudAsesoriaController::class, 'listaSolicitudes'])
             ->name('solicitudes.lista');
 
+        Route::post('/solicitud/guardar', [SolicitudAsesoriaController::class, 'guardar'])
+        ->name('solicitudasesoria.guardar');
+
+
             Route::post('/maestro/tutoria/guardar', [MensualTutoriaController::class, 'guardar'])
     ->name('maestro.tutoria.guardar');
     });

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Reporte Mensual de Tutoría Académica</title>
     <link rel="stylesheet" href="{{ asset('css/fomularios.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 </head>
 <body>
     <header>
@@ -101,7 +103,76 @@
     </table>
 
     <br>
+    <button onclick="generarReportePDF()">Generar PDF</button>
 </div>
     </main>
+
+    <script>
+        //FUNCION PARA GENERAR PDF
+function generarReportePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'landscape' }); // Horizontal para caber bien la tabla
+
+    let y = 20;
+
+    // Encabezado institucional
+    doc.setFontSize(12);
+    doc.text("TECNOLÓGICO DE ESTUDIOS SUPERIORES DE IXTAPALUCA", 148, 10, { align: 'center' });
+    doc.setFontSize(10);
+    doc.text("REPORTE MENSUAL DE TUTORÍA ACADÉMICA", 148, 17, { align: 'center' });
+
+    // Datos del profesor
+    const asesor = document.querySelector('input[value*="{{ $profesor->nombre }}"]')?.value || "";
+    const carrera = document.querySelector('input[value*="{{ $profesor->carrera->carrera }}"]')?.value || "";
+    const periodo = document.querySelector('input[value*="{{ $periodo }}"]')?.value || "";
+
+    doc.setFontSize(9);
+    doc.text(`ASESOR(A): ${asesor}`, 10, y); y += 6;
+    doc.text(`CARRERA: ${carrera}`, 10, y); y += 6;
+    doc.text(`PERIODO: ${periodo}`, 10, y); y += 10;
+
+    // Tabla
+    doc.setFontSize(8);
+    const headers = [
+        ["No", "Estudiante", "Matrícula", "Grupo", "Mes", "Problemática", "Análisis", "Área a canalizar"]
+    ];
+
+    const body = [];
+
+    const rows = document.querySelectorAll('table tbody tr');
+
+    rows.forEach((tr, index) => {
+        const tds = tr.querySelectorAll('td');
+        if (tds.length < 8) return;
+
+        const num = tds[0].innerText.trim();
+        const estudiante = tds[1].innerText.trim();
+        const matricula = tds[2].innerText.trim();
+        const grupo = tds[3].innerText.trim();
+        const mes = tds[4].querySelector('select')?.value || '';
+        const problematica = tds[5].querySelector('select')?.selectedOptions[0]?.text || '';
+        const analisis = tds[6].querySelector('textarea')?.value || '';
+        const canalizar = tds[7].querySelector('input')?.value || '';
+
+        body.push([num, estudiante, matricula, grupo, mes, problematica, analisis, canalizar]);
+    });
+
+    // Agregar tabla al PDF (usando autoTable)
+    doc.autoTable({
+        startY: y,
+        head: headers,
+        body: body,
+        styles: { fontSize: 6, cellWidth: 'wrap' },
+        headStyles: { fillColor: [41, 128, 185] },
+        margin: { top: y }
+    });
+
+    doc.save('Reporte_Mensual_Tutoria.pdf');
+}
+</script>
+
+<!-- jsPDF AutoTable Plugin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
 </body>
 </html>

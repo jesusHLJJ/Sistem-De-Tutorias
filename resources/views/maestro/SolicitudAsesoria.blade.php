@@ -119,49 +119,67 @@
         </div>
     </form>
     </div>
+
+    
 </main>
     <script>
         // Función para generar el PDF
-        function generatePDF() {
+function generatePDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // Obteniendo los valores de los campos
+    // Obtener datos del formulario
     const division = document.querySelector('input[name="division"]').value;
     const fecha = document.querySelector('input[name="fecha"]').value;
     const semestre = document.querySelector('input[name="semestre"]').value;
-    const profesor = document.querySelector('select[name="id_profesor"]').value;
-    const asignatura = document.querySelector('select[name="id_materia"]').value;
+    const profesor = document.querySelector('#id_profesor_display option:checked').textContent.trim();
+    const asignatura = document.querySelector('#id_materia_display option:checked').textContent.trim();
     const alumno = document.querySelector('input[name="alumno"]').value;
     const matricula = document.querySelector('input[name="matricula"]').value;
     const grupo = document.querySelector('input[name="grupo"]').value;
-    const medio_asesoria = document.querySelector('textarea[name="medio_asesoria"]').value;
-    const descripcion = document.querySelector('textarea[name="descripcion"]').value;
+    const medio_asesoria = document.querySelector('textarea[name="medio_asesoria"]').value.trim();
+    const descripcion = document.querySelector('textarea[name="descripcion"]').value.trim();
 
-    // Generando el contenido del PDF
-    let content = `
-        SOLICITUD DE ASESORÍA
+    let y = 10; // Espaciado vertical
 
-        DIVISIÓN ACADÉMICA: ${division}
-        FECHA: ${fecha}
-        SEMESTRE: ${semestre}
-        PROFESOR(A): ${profesor}
-        ASIGNATURA DE LA ASESORÍA: ${asignatura}
-        ESTUDIANTE: ${alumno}
-        MATRÍCULA: ${matricula}
-        GRUPO: ${grupo}
-        MEDIO POR EL QUE SE RECIBE LA ASESORÍA: ${medio_asesoria}
+    // Encabezado
+    doc.setFontSize(12);
+    doc.text("TECNOLÓGICO DE ESTUDIOS SUPERIORES DE IXTAPALUCA", 105, y, { align: "center" }); y += 7;
+    doc.text("SOLICITUD DE ASESORÍA", 105, y, { align: "center" }); y += 7;
+    doc.text("Código: SGI-FO-TU-05", 105, y, { align: "center" }); y += 7;
+    doc.text("Autorizado: 10/07/2023", 105, y, { align: "center" }); y += 7;
+    doc.text("Referencia a la Norma: ISO 9001:2015. 8.1, 8.5", 105, y, { align: "center" }); y += 10;
 
-        DESCRIPCIÓN DE LA ASESORÍA:
-        ${descripcion}
-    `;
+    // Información de la solicitud
+    doc.setFontSize(10);
+    doc.text(`DIVISIÓN ACADÉMICA: ${division}`, 10, y); y += 6;
+    doc.text(`FECHA: ${fecha}    SEMESTRE: ${semestre}`, 10, y); y += 6;
 
-    // Añadiendo el contenido al PDF
-    doc.text(content, 10, 10);
+    doc.text(`PROFESOR(A): ${profesor}    FIRMA: ____________________`, 10, y); y += 6;
+    doc.text(`ASIGNATURA DE LA ASESORÍA: ${asignatura}`, 10, y); y += 6;
 
-    // Llama al guardado sin nombre de archivo para que se abra la ventana de guardado
-    doc.save('Solicitud Tutoria');
+    doc.text(`ESTUDIANTE: ${alumno}    FIRMA: ____________________`, 10, y); y += 6;
+    doc.text(`MATRÍCULA: ${matricula}    GRUPO: ${grupo}    MEDIO: ${medio_asesoria}`, 10, y); y += 10;
+
+    // Descripción de temas
+    doc.text("TEMAS PARA TRATAR Y DESCRIPCIÓN:", 10, y); y += 6;
+
+    const splitDescripcion = doc.splitTextToSize(descripcion, 190);
+    doc.text(splitDescripcion, 10, y);
+    y += splitDescripcion.length * 6;
+
+    y += 10;
+
+    // Firmas finales
+    doc.text("ELABORÓ: ____________", 10, y);
+    doc.text("REVISÓ: ____________", 75, y);
+    doc.text("AUTORIZÓ: ____________", 140, y);
+
+    // Guardar PDF
+    doc.save('Solicitud_Asesoria.pdf');
 }
+
+
 
     </script>
 <a href="{{ route('maestro.grupos') }}">← Volver a Mis Grupos</a>

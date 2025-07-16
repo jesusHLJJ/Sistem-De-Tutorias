@@ -44,24 +44,33 @@ class SolicitudAsesoriaController extends Controller
     }
     
 
-    public function guardar(Request $request)
-    {
-        // Buscar o crear el registro con la referencia del id_alumno
+public function guardar(Request $request)
+{
+    if ($request->has('id_solicitud')) {
+        // Estamos editando una solicitud existente
+        $solicitud = solicitudasesoria::find($request->input('id_solicitud'));
+
+        if (!$solicitud) {
+            return redirect()->back()->with('error', 'La solicitud no fue encontrada.');
+        }
+    } else {
+        // Estamos creando una nueva
         $solicitud = new solicitudasesoria();
-
-        //Aqui inyectamos los datos de los id del formulario a la tabla (modelo);
-        $solicitud->id_profesor = $request->input('id_profesor');
-        $solicitud->id_materia = $request->input('id_materia');
         $solicitud->id_alumno = $request->input('alumno_id');
-        $solicitud->fecha = $request->input('fecha');
-        $solicitud->medio_didactico_recurso = $request->input('medio_asesoria');
-        $solicitud->temas_tratar_descripcion = $request->input('descripcion');
-
-       
-        $solicitud->save(); //guardamos los datos
-
-        return redirect()->back()->with('success', 'Datos guardados correctamente');
     }
+
+    $solicitud->id_profesor = $request->input('id_profesor');
+    $solicitud->id_materia = $request->input('id_materia');
+    $solicitud->fecha = $request->input('fecha');
+    $solicitud->medio_didactico_recurso = $request->input('medio_asesoria');
+    $solicitud->temas_tratar_descripcion = $request->input('descripcion');
+
+    $solicitud->save();
+
+return redirect()->route('alumno.solicitudes.lista', $solicitud->id_alumno)
+    ->with('success', $request->has('id_solicitud') ? 'Solicitud actualizada correctamente' : 'Solicitud creada correctamente');
+}
+
 
     public function ver($id)
     {

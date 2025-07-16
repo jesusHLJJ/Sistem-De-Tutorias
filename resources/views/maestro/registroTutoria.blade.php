@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Reporte Semestral de Tutoría Académica</title>
     <link rel="stylesheet" href="{{ asset('css/fomularios.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
     <header>
@@ -110,8 +112,110 @@
 
                 <br>
                 <button type="submit">Guardar Reporte</button>
+                <button type="button" onclick="generarReporteSemestral()">Generar PDF</button>
+
             </form>
         </div>
     </main>
+    <script>
+        //funcion para crear pdf
+function generarReporteSemestral() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('landscape');
+
+    let y = 15;
+
+    // Título general
+    doc.setFontSize(12);
+    doc.text("TECNOLÓGICO DE ESTUDIOS SUPERIORES DE IXTAPALUCA", 148, 10, { align: 'center' });
+    doc.setFontSize(10);
+    doc.text("REPORTE SEMESTRAL DE TUTORÍA ACADÉMICA", 148, y, { align: 'center' });
+    y += 10;
+
+    // Docente y grupo
+    const docente = document.querySelector('input[value*="{{ $profesor->nombre }}"]')?.value || "";
+    const periodo = document.querySelector('input[value*="{{ $grupo->periodo->periodo }}"]')?.value || "";
+    const grupo = document.querySelector('input[value*="{{ $grupo->clave_grupo }}"]')?.value || "";
+    const semestre = document.querySelector('input[value*="{{ $grupo->semestre->semestre }}"]')?.value || "";
+
+    doc.setFontSize(9);
+    doc.text(`DOCENTE TUTOR(A): ${docente}`, 10, y); y += 6;
+    doc.text(`PERIODO: ${periodo}`, 10, y); y += 6;
+    doc.text(`GRUPO: ${grupo}`, 10, y); y += 6;
+    doc.text(`SEMESTRE: ${semestre}`, 10, y); y += 10;
+
+    // Encabezados y cuerpo de la tabla
+    const headers = [[
+        "No.",
+        "Estudiante",
+        "Matrícula",
+        "Tut. Grupal",
+        "Tut. Individual",
+        "Asesoría Acad.",
+        "Psicología",
+        "Créditos Culturales",
+        "Créditos Académicos",
+        "Inglés 100%",
+        "Mat. Reprobadas"
+    ]];
+
+    const body = [];
+    const filas = document.querySelectorAll('table tbody tr');
+
+    filas.forEach((tr, index) => {
+        const tds = tr.querySelectorAll('td');
+        const nombre = tds[1]?.textContent.trim() || "";
+        const matricula = tds[2]?.textContent.trim() || "";
+        const tutorGrupal = tds[3]?.querySelector('input')?.checked ? 'Sí' : 'No';
+        const tutorIndiv = tds[4]?.querySelector('input')?.checked ? 'Sí' : 'No';
+        const asesoria = tds[5]?.querySelector('input')?.checked ? 'Sí' : 'No';
+        const psicologia = tds[6]?.querySelector('input')?.checked ? 'Sí' : 'No';
+        const creditosCult = tds[7]?.querySelector('input')?.value || "0";
+        const creditosAcad = tds[8]?.querySelector('input')?.value || "0";
+        const ingles = tds[9]?.querySelector('input')?.value || "";
+        const reprobadas = tds[10]?.querySelector('input')?.value || "0";
+
+        body.push([
+            index + 1,
+            nombre,
+            matricula,
+            tutorGrupal,
+            tutorIndiv,
+            asesoria,
+            psicologia,
+            creditosCult,
+            creditosAcad,
+            ingles,
+            reprobadas
+        ]);
+    });
+
+    doc.autoTable({
+        head: headers,
+        body: body,
+        startY: y,
+        styles: { fontSize: 7 },
+        headStyles: { fillColor: [41, 128, 185] },
+    });
+
+    y = doc.lastAutoTable.finalY + 10;
+
+    // Informe grupal
+    const informe = document.querySelector('textarea[name="informe_grupal"]').value;
+    doc.setFontSize(9);
+    doc.text("Informe Grupal Ejecutivo del Periodo Escolar:", 10, y); y += 6;
+    const textoDividido = doc.splitTextToSize(informe, 270);
+    doc.text(textoDividido, 10, y);
+    y += textoDividido.length * 5;
+
+    // Índice de reprobación
+    const indice = "{{ $indiceReprobacion }}";
+    doc.text(`Índice de reprobación del grupo: ${indice}%`, 10, y + 10);
+
+    // Guardar PDF
+    doc.save("Reporte_Semestral_Tutoria.pdf");
+}
+</script>
+
 </body>
 </html>
