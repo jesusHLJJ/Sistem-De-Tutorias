@@ -7,6 +7,8 @@
     <title>Solicitud de Asesoría</title>
     <link rel="stylesheet" href="{{ asset('css/fomularios.css')}}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 <body>
 
@@ -27,7 +29,10 @@
       <input type="hidden" name="alumno_id" value="{{ $alumno->id_alumno }}">
       <input type="hidden" name="semestre_id" value="{{ $semestre->id_semestre}}">
       <input type="hidden" name="carrera_id" value="{{ $carrera->id_carrera}}">
-     
+     @if(isset($solicitud))
+    <input type="hidden" name="id_solicitud" value="{{ $solicitud->id_solicitud }}">
+    @endif
+
         <!-- División Académica y Fecha -->
         <label for="division">DIVISIÓN ACADÉMICA:</label>
         <input type="text" id="division" name="division" value="{{ $carrera->carrera }}" readonly>

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Carrera;
 use App\Models\FichaIdentificacionTutorado;
 use App\Models\plan_accion_tutoria;
+use App\Models\MensualTutoria;
 use Illuminate\Http\Request;
 
 class MaestroController extends Controller
@@ -640,5 +641,40 @@ class MaestroController extends Controller
     }
 
  
+public function reporteAsesorias()
+    {
+        $user = Auth::user();
+        $profesor = $user->profesor;
+
+        $grupos = $profesor->grupos->pluck('id_grupo');
+        $alumnos = \App\Models\Alumno::whereIn('id_grupo', $grupos)->pluck('id_alumno');
+
+        $asesorias = \App\Models\SolicitudAsesoria::with(['alumno.grupo', 'materia'])
+                        ->whereIn('id_alumno', $alumnos)
+                        ->get();
+
+        $mes = now()->locale('es')->translatedFormat('F');
+        $periodo = '2024-2025/2';
+
+        return view('maestro.reporteAsesorias', compact('profesor', 'asesorias', 'mes', 'periodo'));
+    }
+
+    public function reporteMensualTutoria(Request $request)
+    {
+        $user = Auth::user();
+        $profesor = $user->profesor;
+
+        $mes = $request->input('mes', now()->format('m')); // por defecto mes actual
+
+        $registros = MensualTutoria::with(['alumno.grupo', 'problematica'])
+            ->where('id_profesor', $profesor->id_profesor)
+            ->whereMonth('mes_entrega', $mes)
+            ->get();
+
+        $mesNombre = \Carbon\Carbon::createFromFormat('m', $mes)->locale('es')->monthName;
+        $periodo = '2024-2025/2';
+
+        return view('maestro.reporteTutoria', compact('profesor', 'registros', 'mesNombre', 'periodo'));
+    }
 }
 

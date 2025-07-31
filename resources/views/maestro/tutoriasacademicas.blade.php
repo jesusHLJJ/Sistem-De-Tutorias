@@ -97,7 +97,8 @@
                 <!-- Botones de acción -->
                 <button type="submit">Enviar</button>
                 <button type="button" onclick="generatePDF()">Generar PDF</button> <!-- Botón para generar PDF -->
-                <a href="{{ route('maestro.dashboard') }}">← Volver al inicio</a>
+                <a href="{{ route('maestro.grupos') }}">← Volver a Mis Grupos</a>
+
             </form>
         </div>
     </main>
@@ -136,6 +137,7 @@
             doc.save('tutoria.pdf');
         }
     </script>
+
 </body>
 
 </html>

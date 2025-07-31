@@ -659,7 +659,6 @@
     </script>
 
 
-    <!-- Funciones a considerar el alumno-profesor -->
     <div class="botones">
         <button id="generarPDF" onclick="generarPDF()">Generar PDF</button>
     </div>

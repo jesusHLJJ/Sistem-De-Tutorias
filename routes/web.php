@@ -10,6 +10,7 @@ use App\Http\Controllers\TutoriasacademicasController;
 use App\Http\Controllers\fichaIdenTutoradoController;
 use App\Http\Controllers\HabilidadesController;
 use App\Http\Controllers\plan_accion_tutoriaController;
+use App\Http\Controllers\MensualTutoriaController;
 use App\Http\Controllers\SolicitudAsesoriaController;
 use App\Models\plan_accion_tutoria;
 use Illuminate\Support\Facades\Route;
@@ -80,16 +81,41 @@ Route::prefix('maestro')
         Route::post('/pat/borrar_actividad/{actividad}', [plan_accion_tutoriaController::class, 'borrar_actividad'])->name('pat_borrar_actividad');
         Route::post('pat/{pat}/agregar actividad final', [plan_accion_tutoriaController::class, 'agregar_actividad_final'])->name('pat_agregar_act_final');
 
-
-
         Route::get('/maestro/solicitudes/{id}', [SolicitudAsesoriaController::class, 'listaSolicitudes2'])
             ->name('maestro.solicitudes.lista');
 
         // Ruta para ver una solicitud de asesoría por el maestro
         Route::get('/maestro/solicitud/{id}', [SolicitudAsesoriaController::class, 'ver2'])
             ->name('maestro.solicitud.ver');
-    });
 
+        Route::get('/reporte-asesorias', [MaestroController::class, 'reporteAsesorias'])
+            ->name('maestro.reporte.asesorias');
+
+        Route::get('/maestro/reporte-tutoria', [MaestroController::class, 'reporteMensualTutoria'])
+        ->name('maestro.reporte.tutoria');
+
+
+         Route::get('/maestro/tutoria', [MensualTutoriaController::class, 'index'])
+         ->name('maestro.tutoria.index'); // formulario
+        Route::get('/maestro/tutoria/reporte', [MensualTutoriaController::class, 'reporte'])
+        ->name('maestro.tutoria.reporte'); // vista tipo reporte
+        Route::put('maestro/tutoria/actualizar/{id}', [MensualTutoriaController::class, 'actualizar'])
+        ->name('maestro.tutoria.actualizar');
+
+        Route::get('/maestro/tutoria/registro', [MensualTutoriaController::class, 'vistaRegistro'])
+        ->name('maestro.tutoria.registro');
+        Route::post('/maestro/tutoria/guardar', [MensualTutoriaController::class, 'guardar'])
+        ->name('maestro.tutoria.guardar');
+
+
+        Route::get('/tutoria-semestral/{id_grupo}', 
+            [App\Http\Controllers\SemestralTutoriaController::class, 'formGrupo']
+        )->name('semestral.form');
+
+        Route::post('/tutoria-semestral/guardar', 
+            [App\Http\Controllers\SemestralTutoriaController::class, 'guardar']
+        )->name('semestral.guardar');
+    });
 
 Route::prefix('alumno')
     ->middleware(['auth', 'role:3'])
@@ -116,5 +142,10 @@ Route::prefix('alumno')
         Route::get('/solicitudes', [SolicitudAsesoriaController::class, 'listaSolicitudes'])
             ->name('solicitudes.lista');
 
-        Route::post('/solicitud-asesoria/guardar', [SolicitudAsesoriaController::class, 'guardar'])->name('solicitudasesoria.guardar');
+        Route::post('/solicitud/guardar', [SolicitudAsesoriaController::class, 'guardar'])
+        ->name('solicitudasesoria.guardar');
+
+
+            Route::post('/maestro/tutoria/guardar', [MensualTutoriaController::class, 'guardar'])
+    ->name('maestro.tutoria.guardar');
     });

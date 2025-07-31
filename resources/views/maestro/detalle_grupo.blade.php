@@ -41,6 +41,9 @@
     <br>
     <br>
     <a href="{{ route('maestro.pat', $grupo->id_grupo) }}" class="btn btn-primary">PLAN DE ACCIÓN TUTORÍAL</a>
+    <br>
+
+    <a href="{{ route('maestro.semestral.form', $grupo->id_grupo) }}">Llenar reporte</a>
 
 
 </body>
