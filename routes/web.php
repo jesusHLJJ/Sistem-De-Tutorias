@@ -9,7 +9,9 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TutoriasacademicasController;
 use App\Http\Controllers\fichaIdenTutoradoController;
 use App\Http\Controllers\HabilidadesController;
+use App\Http\Controllers\plan_accion_tutoriaController;
 use App\Http\Controllers\SolicitudAsesoriaController;
+use App\Models\plan_accion_tutoria;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -61,6 +63,7 @@ Route::prefix('maestro')
 
         Route::get('/canalizacion/{id_alumno}', [CanalizacionController::class, 'index'])->name('canalizacion_alumno'); //Formulario Canalizacion
         Route::post('/canalizacion/{id_alumno}', [CanalizacionController::class, 'crear'])->name('canalizacion.crear'); //Crear Canalizacion
+        Route::post('/canalizacion/editar/{id_alumno}', [CanalizacionController::class, 'editar_informacion'])->name('canalizacion_editar_info'); //Editar información (Factores que motivan y Observaciones)
         Route::get('/canalizacion/citas/{id_alumno}', [CanalizacionController::class, 'citas'])->name('citas_alumno'); //Ver citas del usuario
         Route::post('/canalizacion/citas/{id_alumno}', [CanalizacionController::class, 'crearcita'])->name('citas_alumno.crear'); //Crear citas
         Route::delete('/canalizacion/citas/eliminar/{id_cita}', [CanalizacionController::class, 'eliminarcita'])->name('citas_alumno.eliminar'); //Eliminar citas
@@ -70,7 +73,12 @@ Route::prefix('maestro')
         Route::get('/canalizacion/documentos/subir/{id_alumno}', [CanalizacionController::class, 'subirDocumentoVista'])->name('documentos.subir');
         Route::post('/canalizacion/documentos/subir', [CanalizacionController::class, 'subirDocumentoGuardar'])->name('documentos.subir.guardar');
 
-
+        Route::get('/pat/{grupo}', [plan_accion_tutoriaController::class, 'mostrarpat'])->name('pat');
+        Route::post('/pat/guardar_info/{grupo}', [plan_accion_tutoriaController::class, 'guardar_info'])->name('pat_guardar');
+        Route::post('/pat/modificar_info/{grupo}', [plan_accion_tutoriaController::class, 'modificar_info'])->name('pat_modificar');
+        Route::post('/pat/{grupo}/agregar_actividad/{pat}', [plan_accion_tutoriaController::class, 'agregar_actividad'])->name('pat_agregar_actividad');
+        Route::post('/pat/borrar_actividad/{actividad}', [plan_accion_tutoriaController::class, 'borrar_actividad'])->name('pat_borrar_actividad');
+        Route::post('pat/{pat}/agregar actividad final', [plan_accion_tutoriaController::class, 'agregar_actividad_final'])->name('pat_agregar_act_final');
 
 
 

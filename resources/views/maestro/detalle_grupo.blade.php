@@ -16,8 +16,8 @@
         <ul>
             @foreach ($grupo->alumnos as $alumno)
                 <li>
-                <a href="{{ route('maestro.alumno.seleccionar', $alumno->id_alumno) }}">
-                {{ $alumno->nombre }}
+                    <a href="{{ route('maestro.alumno.seleccionar', $alumno->id_alumno) }}">
+                        {{ $alumno->nombre }}
                     </a>
                 </li>
             @endforeach
@@ -27,15 +27,21 @@
     <br>
     <a href="{{ route('maestro.grupos') }}">← Volver a Mis Grupos</a>
     <h1>El grupo seleccionado es: {{ $grupo->id_grupo }}</h1>
-    <h2>La clave del grupo seleccionado es: {{$grupo->clave_grupo}}</h2>
+    <h2>La clave del grupo seleccionado es: {{ $grupo->clave_grupo }}</h2>
 
 
     <br>
     <br>
-    <a href="{{ route('maestro.graficar', $grupo->clave_grupo) }}" class="btn btn-primary">Graficar ficha de identificacion</a>
+    <a href="{{ route('maestro.graficar', $grupo->clave_grupo) }}" class="btn btn-primary">Graficar ficha de
+        identificacion</a>
     <br>
     <br>
-    <a href="{{ route('maestro.graficar2', $grupo->clave_grupo) }}" class="btn btn-primary">Graficar encuesta sobre habilidades</a>
+    <a href="{{ route('maestro.graficar2', $grupo->clave_grupo) }}" class="btn btn-primary">Graficar encuesta sobre
+        habilidades</a>
+    <br>
+    <br>
+    <a href="{{ route('maestro.pat', $grupo->id_grupo) }}" class="btn btn-primary">PLAN DE ACCIÓN TUTORÍAL</a>
+
 
 </body>
 

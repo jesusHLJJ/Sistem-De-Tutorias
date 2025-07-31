@@ -16,4 +16,7 @@ class Canalizacion extends Model
         return $this->hasMany(Canalizacioncita::class,'id_canalizacion','id_canalizacion');
     }
 
+    public function alumno(){
+        return $this->belongsTo(Alumno::class,'id_alumno','id_alumno');
+    }
 }

@@ -16,19 +16,20 @@ class CanalizacionController extends Controller
     {
         $crear_canalizacion = '';
         $administrar_citas = '';
-
+        $datos_canalizacion = [];
 
         $datos_alumno = Alumno::with('grupo.profesor', 'grupo.carrera.jefecarrera')->where('id_alumno', $id_alumno)->first();
         $estatus_canalizacion = Alumno::select('estatus_canalizacion')->where('id_alumno', $id_alumno)->first();
         if ($estatus_canalizacion->estatus_canalizacion == "PROCESO") {
             $crear_canalizacion = 'hidden';
             $administrar_citas = '';
+            $datos_canalizacion = Canalizacion::with('alumno')->where('id_alumno', $id_alumno)->first();
         } else {
             $crear_canalizacion = '';
             $administrar_citas = 'hidden';
         }
 
-        return view('maestro.canalizacion', compact('datos_alumno', 'crear_canalizacion', 'administrar_citas'));
+        return view('maestro.canalizacion', compact('datos_alumno', 'crear_canalizacion', 'administrar_citas', 'datos_canalizacion'));
     }
 
     public function crear(Request $datos_formulario, $id_alumno)
@@ -36,10 +37,10 @@ class CanalizacionController extends Controller
 
         $datos_alumno = Alumno::where('id_alumno', $id_alumno)->first();
         $nombre_carpeta = $datos_alumno->matricula . strtolower($datos_alumno->nombre) . strtolower($datos_alumno->ap_paterno);
-        $ruta_carpeta = 'canalizaciones/' . $nombre_carpeta;
+        $ruta_carpeta = public_path('canalizaciones/' . $nombre_carpeta);
 
-        if (!Storage::disk('public')->exists($ruta_carpeta)) {
-            Storage::disk('public')->makeDirectory($ruta_carpeta);
+        if (!file_exists($ruta_carpeta)) {
+            mkdir($ruta_carpeta, 0755, true);
         }
 
         $datos_formulario->validate([
@@ -59,9 +60,9 @@ class CanalizacionController extends Controller
         if ($datos_formulario->hasFile('documentos_solicitud')) {
             foreach ($datos_formulario->file('documentos_solicitud') as $archivo) {
                 $nombreOriginal = $archivo->getClientOriginalName();
-                $archivo->storeAs($ruta_carpeta, $nombreOriginal, 'public');
+                $archivo->move($ruta_carpeta, $nombreOriginal, 'public');
             }
-            $canalizacion->relacion_documentos_solicitud = $ruta_carpeta;
+            $canalizacion->relacion_documentos_solicitud = "canalizaciones/" . $nombre_carpeta;
         }
         $canalizacion->save();
         $datos_alumno->estatus_canalizacion = 'PROCESO';
@@ -74,8 +75,17 @@ class CanalizacionController extends Controller
     public function citas($id_alumno)
     {
         $datos_alumno = Alumno::with('canalizacion')->where('id_alumno', $id_alumno)->first();
+        $datos_canalizacion=Canalizacion::with('alumno')->where('id_alumno',$id_alumno)->first();
 
-        return view('maestro.canalizacioncitas', compact('datos_alumno'));
+        return view('maestro.canalizacioncitas', compact('datos_alumno','datos_canalizacion'));
+    }
+
+    public function editar_informacion($id_alumno, Request $datos_formulario){
+        $modificar=Canalizacion::find($id_alumno)->first();
+        $modificar->factores_motivacion=$datos_formulario->fact_mo;
+        $modificar->observaciones_problematica=$datos_formulario->obs_pro;
+        $modificar->save();
+        return redirect()->back();
     }
 
     public function crearcita(Request $datos_formulario, $id_alumno)
@@ -110,7 +120,7 @@ class CanalizacionController extends Controller
     {
 
         $datos_alumno = Alumno::with('canalizacion')->findOrFail($id_alumno);
-        $rutaCarpeta = storage_path('app/public/' . $datos_alumno->canalizacion->relacion_documentos_solicitud);
+        $rutaCarpeta = public_path($datos_alumno->canalizacion->relacion_documentos_solicitud);
         $archivos = File::exists($rutaCarpeta) ? File::files($rutaCarpeta) : [];
         return view('maestro.canalizaciondocumentos', compact('datos_alumno', 'archivos'));
     }
@@ -122,7 +132,7 @@ class CanalizacionController extends Controller
             'ruta' => 'required|string',
         ]);
 
-        $rutaCompleta = storage_path('app/public/' . $request->ruta . '/' . $request->archivo);
+        $rutaCompleta = public_path($request->ruta . '/' . $request->archivo);
 
         if (File::exists($rutaCompleta)) {
             File::delete($rutaCompleta);
@@ -147,8 +157,8 @@ class CanalizacionController extends Controller
 
         $archivo = $request->file('archivo');
         $nombre = $archivo->getClientOriginalName();
-        // $archivo->move(storage_path($request->ruta), $nombre);
-        $destino = storage_path('app/public/' . $request->ruta); // se asume que $request->ruta contiene solo la parte después de 'public/'
+        $destino = public_path($request->ruta); // se asume que $request->ruta contiene solo la parte después de 'public/'
+        echo $destino;
         if (!file_exists($destino)) {
             mkdir($destino, 0755, true);
         }

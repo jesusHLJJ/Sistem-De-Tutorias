@@ -14,6 +14,7 @@ use App\Models\Periodos;
 use Illuminate\Support\Facades\DB;
 use App\Models\Carrera;
 use App\Models\FichaIdentificacionTutorado;
+use App\Models\plan_accion_tutoria;
 use Illuminate\Http\Request;
 
 class MaestroController extends Controller
@@ -83,14 +84,14 @@ class MaestroController extends Controller
         ));
     }
 
-   
+
     public function seleccionarVistaAlumno($id)
     {
         $alumno = Alumno::findOrFail($id);
         return view('maestro.seleccion', compact('alumno'));
     }
-    
-    public function graficar($grupo)//public function graficar()
+
+    public function graficar($grupo) //public function graficar()
     {
 
 
@@ -637,4 +638,7 @@ class MaestroController extends Controller
 
         ));
     }
+
+ 
 }
+

@@ -9,8 +9,31 @@
 </head>
 
 <body>
+    <form action="{{ route('maestro.canalizacion_editar_info', $datos_alumno->id_alumno) }}" method="POST">
+        @csrf
+        <h1>EDITAR INFORMACIÓN</h1>
+        <table border="1" cellpadding="10" cellspacing="0">
+            <tr>
+                <td><label for="factores_motivan">Factores que motivan la canalización del estudiante:</label></td>
+            </tr>
+            <tr>
+                <td>
+                    <textarea name="fact_mo" rows="4" cols="50" required >{{ $datos_canalizacion->factores_motivacion }}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="observaciones">OBSERVACIONES:</label></td>
+            </tr>
+            <tr>
+                <td>
+                    <textarea name="obs_pro"rows="4" cols="50" required >{{ $datos_canalizacion->observaciones_problematica }}</textarea>
+                </td>
+            </tr>
+        </table>
+        <button type="submit">EDITAR INFORMACIÓN</button>
+    </form>
 
-
+    <h1>PROGRAMAR CITAS</h1>
     <form action="{{ route('maestro.citas_alumno.crear', $datos_alumno->id_alumno) }}" method="POST">
         @csrf
         <label for="fecha">Fecha:</label>
@@ -58,7 +81,9 @@
         <p>No hay citas registradas.</p>
     @endif
 
-    <a href="{{route('maestro.documentos.ver',$datos_alumno->id_alumno)}}">Ver documentos</a><br>
+
+
+    <a href="{{ route('maestro.documentos.ver', $datos_alumno->id_alumno) }}">Ver documentos</a><br>
     <a href="{{ route('maestro.canalizacion_alumno', $datos_alumno->id_alumno) }}">← Volver a canalización</a>
 
 
