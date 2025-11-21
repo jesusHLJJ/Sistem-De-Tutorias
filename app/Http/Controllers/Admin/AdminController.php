@@ -40,7 +40,7 @@ class AdminController extends Controller
      */
     public function storeMaestro(StoreMaestroRequest $request)
     {
-        dd($request->all());
+       
         $user = User::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),

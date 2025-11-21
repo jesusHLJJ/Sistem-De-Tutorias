@@ -7,10 +7,10 @@ use App\Http\Requests\Admin\EditGrupoRequest;
 use App\Http\Requests\Admin\StoreGrupoRequest;
 use App\Models\Carrera;
 use App\Models\Grupo;
-use App\Models\Periodo;
+use App\Models\Periodos;
 use App\Models\Profesor;
 use App\Models\Salon;
-use App\Models\Semestre;
+use App\Models\Semestres;
 use App\Models\Turno;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,9 +33,9 @@ class GruposController extends Controller
 
         $carreras = Carrera::get();
         $profesores = Profesor::get();
-        $semestres = Semestre::get();
+        $semestres = Semestres::get();
         $turnos = Turno::get();
-        $periodos = Periodo::get();
+        $periodos = Periodos::get();
         $salones = Salon::get();
 
         return view('admin.grupos.dashboard', compact(
@@ -57,7 +57,7 @@ class GruposController extends Controller
         }
 
         DB::transaction(function () use ($request) {
-            $periodo = Periodo::create([
+            $periodo = Periodos::create([
                 'periodo' => htmlspecialchars(trim($request->periodo), ENT_QUOTES, 'UTF-8')
             ]);
 
@@ -86,9 +86,9 @@ class GruposController extends Controller
     {
         $carreras = Carrera::all();
         $profesores = Profesor::all();
-        $semestres = Semestre::all();
+        $semestres = Semestres::all();
         $turnos = Turno::all();
-        $periodos = Periodo::all();
+        $periodos = Periodos::all();
         $salones = Salon::all();
 
         return response()->json([

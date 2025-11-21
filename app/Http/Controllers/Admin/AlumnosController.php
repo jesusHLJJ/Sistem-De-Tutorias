@@ -9,6 +9,8 @@ use App\Models\Alumno;
 use App\Models\Carrera;
 use App\Models\Grupo;
 use Illuminate\Http\Request;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -41,9 +43,19 @@ class AlumnosController extends Controller
         }
 
         DB::transaction(function () use ($request) {
+            $rolAlumno = Role::where('role', 'Alumno')->firstOrFail();
 
+            $user = User::create([
+                'role_id' => $rolAlumno->id_role,
+                'name'     => htmlspecialchars(trim($request->nombre), ENT_QUOTES, 'UTF-8'),
+                // Generamos un email ficticio basado en la matrícula para cumplir con la tabla users
+                'email'    => $request->matricula . '@sistema.com',
+                // La contraseña por defecto será la matrícula
+                'password' => bcrypt($request->matricula),
+            ]);
             // Crear el alumno
             $alumno = Alumno::create([
+                'user_id'    => $user->id,
                 'id_grupo' => $request->grupo,
                 'id_carrera' => $request->carrera,
                 'matricula' => $request->matricula,
@@ -78,6 +90,8 @@ class AlumnosController extends Controller
 
     public function update(EditAlumnoRequest $request, Alumno $alumno)
     {
+
+        
         // Validar matrícula única excluyendo al alumno actual
         if (Alumno::where('matricula', $request->matricula)
             ->where('id_alumno', '!=', $alumno->id_alumno)
@@ -87,6 +101,7 @@ class AlumnosController extends Controller
         }
 
         $alumnoData = [
+            
             'matricula' => $request->matricula,
             'id_carrera' => $request->carrera,
             'id_grupo' => $request->grupo,
@@ -109,10 +124,7 @@ class AlumnosController extends Controller
 
     public function destroy(Alumno $alumno)
     {
-        // Verificar si el alumno tiene registros asociados
-        if ($alumno->calificaciones()->exists() || $alumno->asistencias()->exists()) {
-            return back()->with('error', 'No se puede eliminar el alumno porque tiene registros académicos asociados');
-        }
+
 
         DB::transaction(function () use ($alumno) {
             $alumnoData = [

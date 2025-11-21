@@ -14,15 +14,16 @@ class SemestresSeeder extends Seeder
     public function run(): void
     {
         DB::table('semestres')->insert([
-            ['semestre' => 'Primero', 'clave_semestre' => 'Primero', 'created_at' => now(), 'updated_at' => now()],
-            ['semestre' => 'Segundo', 'clave_semestre' => 'Segundo', 'created_at' => now(), 'updated_at' => now()],
-            ['semestre' => 'Tercero', 'clave_semestre' => 'Tercero', 'created_at' => now(), 'updated_at' => now()],
-            ['semestre' => 'Cuarto', 'clave_semestre' => 'Cuarto', 'created_at' => now(), 'updated_at' => now()],
-            ['semestre' => 'Quinto', 'clave_semestre' => 'Quintoo', 'created_at' => now(), 'updated_at' => now()],
-            ['semestre' => 'Sexto', 'clave_semestre' => 'Sextoo', 'created_at' => now(), 'updated_at' => now()],
-            ['semestre' => 'Septimo', 'clave_semestre' => 'Septimoro', 'created_at' => now(), 'updated_at' => now()],
-            ['semestre' => 'Octavo', 'clave_semestre' => 'Octavo', 'created_at' => now(), 'updated_at' => now()],
-            ['semestre' => 'Noveno', 'clave_semestre' => 'Novenoo', 'created_at' => now(), 'updated_at' => now()],
+            ['semestre' => 'Primero',  'clave_semestre' => '1'],
+            ['semestre' => 'Segundo',  'clave_semestre' => '2'],
+            ['semestre' => 'Tercero',  'clave_semestre' => '3'],
+            ['semestre' => 'Cuarto',  'clave_semestre' => '4'],
+            ['semestre' => 'Quinto',  'clave_semestre' => '5'],
+            ['semestre' => 'Sexto',   'clave_semestre' => '6'],
+            ['semestre' => 'Séptimo', 'clave_semestre' => '7'],
+            ['semestre' => 'Octavo',  'clave_semestre' => '8'],
+            ['semestre' => 'Noveno',  'clave_semestre' => '9'],
+            ['semestre' => 'Decimo',  'clave_semestre' => '10'],
         ]);
     }
 }

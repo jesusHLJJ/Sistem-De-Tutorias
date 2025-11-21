@@ -35,12 +35,12 @@ class ProfesoresController extends Controller
             return back()->withErrors(['email' => 'Este email ya está registrado'])->withInput();
         }
 
-        $rolProfesor = Role::where('rol', 'Profesor')->firstOrFail();
+        $rolProfesor = Role::where('role', 'Profesor')->firstOrFail();
 
         DB::transaction(function () use ($request, $rolProfesor) {
             // Crear el usuario
             $user = User::create([
-                'rol_id' => $rolProfesor->id_rol,
+                'role_id' => $rolProfesor->id_role,
                 'email' => filter_var(trim($request->email), FILTER_SANITIZE_EMAIL),
                 'password' => bcrypt($request->password),
             ]);

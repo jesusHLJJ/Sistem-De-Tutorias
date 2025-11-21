@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Profesor extends Model
 {
     protected $table = 'profesores';
-
+    protected $primaryKey = 'id_profesor';
     protected $fillable = [
         'id_carrera',
         'user_id',
@@ -29,5 +29,14 @@ class Profesor extends Model
     public function carrera()
     {
         return $this->belongsTo(Carrera::class, 'id_carrera', 'id_carrera');
+    }
+
+     public function getNombreCompletoAttribute()
+    {
+        return trim(implode(' ', [
+            $this->nombre,
+            $this->ap_paterno,
+            $this->ap_materno
+        ]));
     }
 }

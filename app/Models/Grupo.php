@@ -52,4 +52,12 @@ class Grupo extends Model
     {
         return $this->belongsTo(Periodos::class,'id_periodo','id_periodo');
     }
+    public function turno()
+    {
+        return $this->belongsTo(Turno::class, 'id_turno');
+    }
+        public function salon()
+    {
+        return $this->belongsTo(Salon::class, 'id_salon');
+    }
 }

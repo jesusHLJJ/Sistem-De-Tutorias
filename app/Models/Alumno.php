@@ -48,4 +48,6 @@ public function carrera()
 public function canalizacion(){
     return $this->belongsTo(Canalizacion::class,'id_alumno','id_alumno');
 }
+
+
 }

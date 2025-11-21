@@ -1,116 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GESTIÓN DE GRUPOS</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    <title>GRUPOS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .btn { display: inline-flex; align-items: center; justify-content: center; }
+        body { margin: 0; }
+        a { text-decoration: none; }
+    </style>
 </head>
 
-<body>
-    <div class="nav">
-        <nav class="nevegacion">
-            <ul class="lista">
-                <li class="elemento-lista">
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">INICIO</a>
-                </li>
+<body class="bg-cover bg-center min-h-screen flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')]">
 
-                <li class="elemento-lista">
-                    <a href="{{ route('admin.profesores.dashboard') }}" class="btn btn-primary">PROFESORES</a>
-                </li>
-
-                <li class="elemento-lista">
-                    <a href="{{ route('admin.alumnos.dashboard') }}" class="btn btn-primary">ALUMNOS</a>
-                </li>
-
-                <li class="elemento-lista">
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-danger">Cerrar Sesión
-                        </button>
-                    </form>
-                </li>
-            </ul>
-        </nav>
-    </div>
-
-    <div class="contenedor">
-        <!-- Mensajes de éxito/error -->
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <header class="w-full shadow-[0_12px_14px_rgba(0,0,0,0.25)] z-20 relative">
+        <div class="bg-[#13934A] w-full h-24 flex items-center justify-between px-4 lg:justify-center relative">
+            
+            <div class="hidden md:flex lg:absolute lg:left-4 h-full items-center gap-4">
+                <img src="{{ asset('multimedia/tesi.png') }}" alt="Logo TESI" class="h-16">
+                <img src="{{ asset('multimedia/isclogo.png') }}" alt="Logo ISC" class="h-16">
             </div>
-        @endif
-
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        <!-- Mostrar errores de validación -->
-        @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-        <h2 class="titulo">Grupos</h2>
-
-        <div class="boton-agregar">
-            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registroModal"><i
-                    class="fa-solid fa-circle-plus"></i> Nuevo Grupo</a>
+            <img src="{{ asset('multimedia/tesi.png') }}" alt="Logo TESI" class="md:hidden h-10">
+            
+            <h1 class="text-white font-montserrat font-bold text-[18px] md:text-[35px] tracking-wider text-right md:text-center leading-none flex-1 md:flex-none">
+                SISTEMA DE TUTORIAS
+            </h1>
         </div>
 
-        <table class="table table-striped-columns">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Clave de Grupo</th>
-                    <th>Carrera</th>
-                    <th>Profesor</th>
-                    <th>Periodo</th>
-                    <th>Salon</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
+        <div class="bg-[#13934A] w-full h-12 flex items-center justify-center border-t border-white/20">
+            <h2 class="text-white font-montserrat font-bold text-[16px] md:text-[24px] tracking-wide">
+                PANEL DE GRUPOS
+            </h2>
+        </div>
+    </header>
 
-            <tbody>
-                @foreach ($grupos as $grupo)
-                    <tr>
-                        <td>{{ $grupo->id_grupo }}</td>
-                        <td>{{ $grupo->clave_grupo }}</td>
-                        <td>{{ $grupo->carrera->carrera ?? 'Sin Carrera' }}</td>
-                        <td>{{ $grupo->profesor->nombre_completo ?? 'Sin Profesor' }}</td>
-                        <td>{{ $grupo->periodo->periodo ?? 'Sin Periodo' }}</td>
-                        <td>{{ $grupo->salon->clave_salon }}</td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-warning" data-bs-toggle="modal"
-                                data-bs-target="#editaModal" data-id="{{ $grupo->id_grupo }}"
-                                data-clave_grupo="{{ $grupo->clave_grupo }}" data-carrera="{{ $grupo->id_carrera }}"
-                                data-profesor="{{ $grupo->id_profesor }}"
-                                data-periodo="{{ $grupo->periodo->periodo }}" data-salon="{{ $grupo->id_salon }}"
-                                data-semestre="{{ $grupo->id_semestre }}" data-turno="{{ $grupo->id_turno }}">
-                                <i class="fa-solid fa-user-pen"></i>
-                            </a>
-                            <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                data-bs-target="#deleteModal" data-id="{{ $grupo->id_grupo }}">
-                                <i class="fa-solid fa-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <div class="w-11/12 max-w-7xl mx-auto py-8 flex flex-col items-center flex-grow">
+        
+        <div class="bg-[#044C26]/90 w-full rounded-xl shadow-2xl p-6 md:p-8 backdrop-blur-sm">
+
+            <div class="flex flex-wrap justify-between items-center mb-6 border-b border-white/20 pb-4 gap-4">
+                <a href="{{ route('admin.dashboard') }}" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg font-montserrat font-bold transition flex items-center gap-2 no-underline">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al Inicio
+                </a>
+
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-montserrat font-bold transition flex items-center gap-2 shadow-lg border-none">
+                        <i class="fa-solid fa-right-from-bracket"></i> Salir
+                    </button>
+                </form>
+            </div>
+
+            @if (session('success'))
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded shadow-md flex justify-between items-center font-montserrat">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-check-circle"></i> {{ session('success') }}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded shadow-md flex justify-between items-center font-montserrat">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 rounded shadow-md font-montserrat">
+                    <strong><i class="fas fa-exclamation-triangle"></i> Revise los siguientes errores:</strong>
+                    <ul class="mt-2 list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close float-right" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            <div class="flex flex-wrap justify-between items-center mb-6">
+                <h3 class="text-white font-montserrat font-bold text-2xl">Listado de Grupos</h3>
+                
+                <button type="button" class="bg-[#A3E635] hover:bg-[#84cc16] text-[#044C26] font-bold py-2 px-6 rounded-lg shadow-lg transform hover:-translate-y-1 transition duration-200 flex items-center gap-2 border-none" 
+                        data-bs-toggle="modal" data-bs-target="#registroModal">
+                    <i class="fa-solid fa-circle-plus text-xl"></i>
+                    Nuevo Grupo
+                </button>
+            </div>
+
+            <div class="overflow-x-auto rounded-lg shadow-lg">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-[#0A8644] text-white font-montserrat uppercase text-sm">
+                        <tr>
+                            <th class="py-4 px-6">ID</th>
+                            <th class="py-4 px-6">Clave</th>
+                            <th class="py-4 px-6">Carrera</th>
+                            <th class="py-4 px-6">Profesor</th>
+                            <th class="py-4 px-6">Periodo</th>
+                            <th class="py-4 px-6">Salón</th>
+                            <th class="py-4 px-6 text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-white font-montserrat text-sm">
+                        @foreach ($grupos as $grupo)
+                            <tr class="bg-white/10 hover:bg-white/20 border-b border-white/10 transition-colors">
+                                <td class="py-3 px-6 font-bold">{{ $grupo->id_grupo }}</td>
+                                <td class="py-3 px-6">
+                                    <span class="bg-blue-600/80 text-white py-1 px-2 rounded text-xs font-bold">
+                                        {{ $grupo->clave_grupo }}
+                                    </span>
+                                </td>
+                                <td class="py-3 px-6">{{ $grupo->carrera->carrera ?? 'Sin Carrera' }}</td>
+                                <td class="py-3 px-6">{{ $grupo->profesor->nombre_completo ?? 'Sin Profesor' }}</td>
+                                <td class="py-3 px-6">{{ $grupo->periodo->periodo ?? 'Sin Periodo' }}</td>
+                                <td class="py-3 px-6">{{ $grupo->salon->clave_salon ?? 'S/A' }}</td>
+                                
+                                <td class="py-3 px-6 text-center">
+                                    <div class="flex item-center justify-center gap-2">
+                                        <a href="#" class="bg-yellow-500 hover:bg-yellow-600 text-white w-9 h-9 rounded-lg flex items-center justify-center transition shadow-md no-underline"
+                                           data-bs-toggle="modal" 
+                                           data-bs-target="#editaModal" 
+                                           data-id="{{ $grupo->id_grupo }}"
+                                           data-clave_grupo="{{ $grupo->clave_grupo }}" 
+                                           data-carrera="{{ $grupo->id_carrera }}"
+                                           data-profesor="{{ $grupo->id_profesor }}"
+                                           data-periodo="{{ $grupo->periodo->periodo ?? '' }}" 
+                                           data-salon="{{ $grupo->id_salon }}"
+                                           data-semestre="{{ $grupo->id_semestre }}" 
+                                           data-turno="{{ $grupo->id_turno }}"
+                                           title="Editar">
+                                            <i class="fa-solid fa-user-pen"></i>
+                                        </a>
+
+                                        <a href="#" class="bg-red-500 hover:bg-red-600 text-white w-9 h-9 rounded-lg flex items-center justify-center transition shadow-md no-underline"
+                                           data-bs-toggle="modal" 
+                                           data-bs-target="#deleteModal" 
+                                           data-id="{{ $grupo->id_grupo }}"
+                                           title="Eliminar">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                
+                @if ($grupos->isEmpty())
+                    <div class="p-8 text-center text-white font-montserrat border border-white/10 rounded-b-lg bg-white/5">
+                        <i class="fa-solid fa-users-slash text-4xl mb-3 opacity-50"></i>
+                        <p>No hay grupos registrados.</p>
+                    </div>
+                @endif
+            </div>
+        </div>
     </div>
 
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
@@ -119,6 +185,6 @@
     @include('admin.grupos.registros')
     @include('admin.grupos.edit')
     @include('admin.grupos.delete')
-</body>
 
+</body>
 </html>

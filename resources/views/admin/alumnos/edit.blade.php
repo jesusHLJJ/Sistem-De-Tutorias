@@ -9,6 +9,7 @@
                 <form method="POST" id="editForm">
                     @csrf
                     @method('PUT')
+                    
                     <div class="contenido">
                         <label for="grupo">Grupo:</label>
                         <select name="grupo" id="grupo_edit" class="form-control">
@@ -34,9 +35,14 @@
                         <input type="text" name="matricula" id="matricula_edit" class="form-control">
                     </div>
 
+                    <div class="contenido">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" name="nombre" id="nombre_edit" class="form-control">
+                    </div>
+
                     <div class="contenido mt-4">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-success">Agregar</button>
+                        <button type="submit" class="btn btn-success">Actualizar</button>
                     </div>
                 </form>
             </div>
