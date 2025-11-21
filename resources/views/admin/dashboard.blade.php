@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <title>DASHBOARD</title>
 </head>
 
@@ -13,7 +15,15 @@
         <nav class="nevegacion">
             <ul class="lista">
                 <li class="elemento-lista">
-                    <a href="{{ route('admin.registros') }}">MAESTROS</a>
+                    <a href="{{ route('admin.profesores.dashboard') }}" class="btn btn-primary">PROFESORES</a>
+                </li>
+
+                <li class="elemento-lista">
+                    <a href="{{ route('admin.grupos.dashboard') }}" class="btn btn-primary">GRUPOS</a>
+                </li>
+
+                <li class="elemento-lista">
+                    <a href="{{ route('admin.alumnos.dashboard') }}" class="btn btn-primary">ALUMNOS</a>
                 </li>
 
                 <li class="elemento-lista">
@@ -27,7 +37,7 @@
         </nav>
     </div>
 
-    <h1>ADMIN</h1>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 </body>
 
 </html>

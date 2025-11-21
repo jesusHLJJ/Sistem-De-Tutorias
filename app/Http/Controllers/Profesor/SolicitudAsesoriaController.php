@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Profesor;
 
+use App\Http\Controllers\Controller;
 use App\Models\Alumno;
 use App\Models\Carrera;
 use App\Models\Materias;

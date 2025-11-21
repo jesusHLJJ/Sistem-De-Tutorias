@@ -15,12 +15,10 @@
 
             @csrf
 
-            @if ($showMatriculaField ?? User::count() > 0)
-                <div class="elemento">
-                    <label for="matricula">Matrícula: </label>
-                    <input type="text" name="matricula" id="matricula" required>
-                </div>
-            @endif
+            <div class="elemento">
+                <label for="matricula">Matrícula: </label>
+                <input type="text" name="matricula" id="matricula" required>
+            </div>
 
             <div class="elemento">
                 <label for="email">Email: </label>

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Profesor;
 
+use App\Http\Controllers\Controller;
 use App\Models\Area_psicopedagogica;
 use App\Models\Area_social;
 use App\Models\Caracteristicas_personales;

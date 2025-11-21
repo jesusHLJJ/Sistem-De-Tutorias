@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Profesor;
 
+use App\Http\Controllers\Controller;
 use App\Models\Grupo;
 use App\Models\pat_actividades;
 use App\Models\plan_accion_tutoria;

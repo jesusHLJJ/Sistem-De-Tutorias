@@ -1,17 +1,20 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AlumnoController;
-use App\Http\Controllers\CanalizacionController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\MaestroController;
-use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\TutoriasacademicasController;
-use App\Http\Controllers\fichaIdenTutoradoController;
-use App\Http\Controllers\HabilidadesController;
-use App\Http\Controllers\plan_accion_tutoriaController;
-use App\Http\Controllers\MensualTutoriaController;
-use App\Http\Controllers\SolicitudAsesoriaController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AlumnosController;
+use App\Http\Controllers\Admin\GruposController;
+use App\Http\Controllers\Admin\ProfesoresController;
+use App\Http\Controllers\Alumno\AlumnoController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Profesor\CanalizacionController;
+use App\Http\Controllers\Profesor\fichaIdenTutoradoController;
+use App\Http\Controllers\Profesor\HabilidadesController;
+use App\Http\Controllers\Profesor\MaestroController;
+use App\Http\Controllers\Profesor\MensualTutoriaController;
+use App\Http\Controllers\Profesor\plan_accion_tutoriaController;
+use App\Http\Controllers\Profesor\SolicitudAsesoriaController;
+use App\Http\Controllers\Profesor\TutoriasacademicasController;
 use App\Models\plan_accion_tutoria;
 use Illuminate\Support\Facades\Route;
 
@@ -36,11 +39,24 @@ Route::prefix('admin')
     ->controller(AdminController::class)
     ->group(function () {
         Route::get('/', 'show')->name('dashboard');
-        Route::get('/registro', 'registro')->name('registros');
-        // Gestión de maestros
-        Route::post('/registro', 'storeMaestro')->name('maestros.store');
-        Route::put('/maestros/{maestro}', 'updateMaestro')->name('maestros.update');
-        Route::delete('/maestros/{maestro}', 'destroyMaestro')->name('maestros.destroy');
+
+        Route::get('/profesores', [ProfesoresController::class, 'show'])->name('profesores.dashboard');
+        Route::post('/profesores', [ProfesoresController::class, 'store'])->name('profesores.store');
+        Route::get('/profesores/edit/{profesor}', [ProfesoresController::class, 'edit'])->name('profesores.edit');
+        Route::put('/profesores/update/{profesor}', [ProfesoresController::class, 'update'])->name('profesores.update');
+        Route::delete('/profesores/destroy/{profesor}', [ProfesoresController::class, 'destroy'])->name('profesores.destroy');
+
+        Route::get('/grupos', [GruposController::class, 'show'])->name('grupos.dashboard');
+        Route::post('/grupos', [GruposController::class, 'store'])->name('grupos.store');
+        Route::get('/grupos/edit/{grupo}', [GruposController::class, 'edit'])->name('grupos.edit');
+        Route::put('/grupos/update/{grupo}', [GruposController::class, 'update'])->name('grupos.update');
+        Route::delete('/grupos/destroy/{grupo}', [GruposController::class, 'destroy'])->name('grupos.destroy');
+
+        Route::get('/alumnos', [AlumnosController::class, 'show'])->name('alumnos.dashboard');
+        Route::post('/alumnos', [AlumnosController::class, 'store'])->name('alumnos.store');
+        Route::get('/alumnos/edit/{alumno}', [AlumnosController::class, 'edit'])->name('alumnos.edit');
+        Route::put('/alumnos/update/{alumno}', [AlumnosController::class, 'update'])->name('alumnos.update');
+        Route::delete('/alumnos/destroy/{alumno}', [AlumnosController::class, 'destroy'])->name('alumnos.destroy');
     });
 
 Route::prefix('maestro')
@@ -59,8 +75,8 @@ Route::prefix('maestro')
         Route::get('/tutorias-academicas', [TutoriasacademicasController::class, 'index'])->name('tutorias_academicas');
         Route::post('/tutorias-academicas/guardar', [TutoriasacademicasController::class, 'guardar'])->name('guardar_tutorias_academicas');
         Route::get('/alumno/{id_alumno}/seleccionar', [MaestroController::class, 'seleccionarVistaAlumno'])->name('alumno.seleccionar');
-        Route::get('/alumno/{id_alumno}/habilidades', [App\Http\Controllers\HabilidadesController::class, 'verDesdeMaestro'])->name('maestro.maestro.habilidades');
-        Route::get('/graficar2/{grupo}', [App\Http\Controllers\HabilidadesController::class, 'graficar'])->name('graficar2');
+        Route::get('/alumno/{id_alumno}/habilidades', [HabilidadesController::class, 'verDesdeMaestro'])->name('maestro.maestro.habilidades');
+        Route::get('/graficar2/{grupo}', [HabilidadesController::class, 'graficar'])->name('graficar2');
 
         Route::get('/canalizacion/{id_alumno}', [CanalizacionController::class, 'index'])->name('canalizacion_alumno'); //Formulario Canalizacion
         Route::post('/canalizacion/{id_alumno}', [CanalizacionController::class, 'crear'])->name('canalizacion.crear'); //Crear Canalizacion
@@ -109,11 +125,11 @@ Route::prefix('maestro')
 
 
         Route::get('/tutoria-semestral/{id_grupo}', 
-            [App\Http\Controllers\SemestralTutoriaController::class, 'formGrupo']
+            [App\Http\Controllers\Profesor\SemestralTutoriaController::class, 'formGrupo']
         )->name('semestral.form');
 
         Route::post('/tutoria-semestral/guardar', 
-            [App\Http\Controllers\SemestralTutoriaController::class, 'guardar']
+            [App\Http\Controllers\Profesor\SemestralTutoriaController::class, 'guardar']
         )->name('semestral.guardar');
     });
 
