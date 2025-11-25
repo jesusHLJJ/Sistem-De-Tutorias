@@ -23,6 +23,7 @@ return new class extends Migration
                 ->constrained('carreras', 'id_carrera');
 
             $table->foreignId('user_id')
+                ->nullable()
                 ->constrained()
                 ->onDelete('cascade')
                 ->onUpdate('cascade');

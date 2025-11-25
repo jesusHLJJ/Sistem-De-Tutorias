@@ -29,7 +29,7 @@ class RegisterRequest extends FormRequest
 
         // Solo requerir matrícula si no es el primer usuario (admin)
         if (User::count() > 0) {
-            $rules['matricula'] = 'required|unique:alumnos,matricula';
+            $rules['matricula'] = 'required|exists:alumnos,matricula';
         }
 
         return $rules;

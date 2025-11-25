@@ -56,7 +56,7 @@ class RegisterController extends Controller
             $user = User::create([
                 'email' => $cleanEmail,
                 'password' => bcrypt($request->password),
-                'role_id' => $rolAlumno->id_rol,
+                'role_id' => $rolAlumno->id_role,
             ]);
 
             $alumnoExistente->update([
