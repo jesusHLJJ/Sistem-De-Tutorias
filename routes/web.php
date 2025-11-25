@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AlumnosController;
 use App\Http\Controllers\Admin\GruposController;
 use App\Http\Controllers\Admin\ProfesoresController;
+use App\Http\Controllers\Admin\SalonesController;
 use App\Http\Controllers\Alumno\AlumnoController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -51,6 +52,12 @@ Route::prefix('admin')
         Route::get('/grupos/edit/{grupo}', [GruposController::class, 'edit'])->name('grupos.edit');
         Route::put('/grupos/update/{grupo}', [GruposController::class, 'update'])->name('grupos.update');
         Route::delete('/grupos/destroy/{grupo}', [GruposController::class, 'destroy'])->name('grupos.destroy');
+
+        Route::get('/salones', [SalonesController::class, 'index'])->name('salones.dashboard');
+        Route::post('/salones', [SalonesController::class, 'store'])->name('salones.store');
+        Route::get('/salones/edit/{salon}', [SalonesController::class, 'edit'])->name('salones.edit');
+        Route::put('/salones/update/{salon}', [SalonesController::class, 'update'])->name('salones.update');
+        Route::delete('/salones/destroy/{salon}', [SalonesController::class, 'destroy'])->name('salones.destroy');
 
         Route::get('/alumnos', [AlumnosController::class, 'show'])->name('alumnos.dashboard');
         Route::post('/alumnos', [AlumnosController::class, 'store'])->name('alumnos.store');

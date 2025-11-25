@@ -33,8 +33,8 @@
 
 <body class="bg-cover bg-center min-h-screen flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')]">
 
-    <header class="w-full shadow-[0_12px_14px_rgba(0,0,0,0.25)] z-20 relative">
-        <div class="bg-[#13934A] w-full h-24 flex items-center justify-between px-4 lg:justify-center relative">
+    <header class="w-full z-20 relative">
+        <div class="bg-[#13934A] w-full h-24 flex items-center justify-between px-4 lg:justify-center relative shadow-[0_12px_14px_rgba(0,0,0,0.25)]" style="box-shadow: 0 12px 14px rgba(0,0,0,0.25);">
             
             <div class="hidden md:flex lg:absolute lg:left-4 h-full items-center gap-4">
                 <img src="{{ asset('multimedia/tesi.png') }}" alt="Logo TESI" class="h-16">
@@ -47,7 +47,7 @@
             </h1>
         </div>
 
-        <div class="bg-[#13934A] w-full h-12 flex items-center justify-center border-t border-white/20">
+        <div class="bg-[#13934A] w-full h-12 flex items-center justify-center border-t border-white/20 shadow-[0_12px_14px_rgba(0,0,0,0.25)]" style="box-shadow: 0 12px 14px rgba(0,0,0,0.25);">
             <h2 class="text-white font-montserrat font-bold text-[16px] md:text-[24px] tracking-wide">
                 PANEL DE PROFESORES
             </h2>

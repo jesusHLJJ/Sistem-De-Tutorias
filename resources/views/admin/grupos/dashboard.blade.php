@@ -33,8 +33,8 @@
 
 <body class="bg-cover bg-center min-h-screen flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')]">
 
-    <header class="w-full shadow-[0_12px_14px_rgba(0,0,0,0.25)] z-20 relative">
-        <div class="bg-[#13934A] w-full h-24 flex items-center justify-between px-4 lg:justify-center relative">
+    <header class="w-full z-20 relative">
+        <div class="bg-[#13934A] w-full h-24 flex items-center justify-between px-4 lg:justify-center relative shadow-[0_12px_14px_rgba(0,0,0,0.25)]" style="box-shadow: 0 12px 14px rgba(0,0,0,0.25);">
             
             <div class="hidden md:flex lg:absolute lg:left-4 h-full items-center gap-4">
                 <img src="{{ asset('multimedia/tesi.png') }}" alt="Logo TESI" class="h-16">
@@ -47,7 +47,7 @@
             </h1>
         </div>
 
-        <div class="bg-[#13934A] w-full h-12 flex items-center justify-center border-t border-white/20">
+        <div class="bg-[#13934A] w-full h-12 flex items-center justify-center border-t border-white/20 shadow-[0_12px_14px_rgba(0,0,0,0.25)]" style="box-shadow: 0 12px 14px rgba(0,0,0,0.25);">
             <h2 class="text-white font-montserrat font-bold text-[16px] md:text-[24px] tracking-wide">
                 PANEL DE GRUPOS
             </h2>
@@ -104,11 +104,19 @@
             <div class="flex flex-wrap justify-between items-center mb-6">
                 <h3 class="text-white font-montserrat font-bold text-2xl">Listado de Grupos</h3>
                 
-                <button type="button" class="bg-[#A3E635] hover:bg-[#84cc16] text-[#044C26] font-bold py-2 px-6 rounded-lg shadow-lg transform hover:-translate-y-1 transition duration-200 flex items-center gap-2 border-none" 
-                        data-bs-toggle="modal" data-bs-target="#registroModal">
-                    <i class="fa-solid fa-circle-plus text-xl"></i>
-                    Nuevo Grupo
-                </button>
+                <div class="flex flex-wrap gap-3">
+                    <button type="button" class="bg-[#3B82F6] hover:bg-[#2563EB] text-white font-bold py-2 px-6 rounded-lg shadow-lg transform hover:-translate-y-1 transition duration-200 flex items-center gap-2 border-none" 
+                            data-bs-toggle="modal" data-bs-target="#registroSalonModal">
+                        <i class="fa-solid fa-door-open text-xl"></i>
+                        Registar Salón
+                    </button>
+                    
+                    <button type="button" class="bg-[#A3E635] hover:bg-[#84cc16] text-[#044C26] font-bold py-2 px-6 rounded-lg shadow-lg transform hover:-translate-y-1 transition duration-200 flex items-center gap-2 border-none" 
+                            data-bs-toggle="modal" data-bs-target="#registroModal">
+                        <i class="fa-solid fa-circle-plus text-xl"></i>
+                        Nuevo Grupo
+                    </button>
+                </div>
             </div>
 
             <div class="overflow-x-auto rounded-lg shadow-lg">
@@ -181,10 +189,15 @@
 
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/Admin/Grupo.js') }}"></script>
+    <script src="{{ asset('js/Admin/Salon.js') }}"></script>
 
     @include('admin.grupos.registros')
     @include('admin.grupos.edit')
     @include('admin.grupos.delete')
+    
+    @include('admin.grupos.registros_salon')
+    @include('admin.grupos.edit_salon')
+    @include('admin.grupos.delete_salon')
 
 </body>
 </html>
