@@ -101,6 +101,45 @@
                 </div>
             @endif
 
+            <div class="mb-4">
+                <h3 class="text-white font-montserrat font-bold text-2xl">Buscar Grupos</h3>
+            </div>
+
+            <!-- Barra de Búsqueda con Filtros -->
+            <div class="mb-6 bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+                <div class="flex flex-col md:flex-row gap-4 items-end">
+                    <!-- Selector de Filtro -->
+                    <div class="flex-1">
+                        <label for="searchFilter" class="text-white font-montserrat font-medium text-sm mb-2 block">
+                            <i class="fa-solid fa-filter"></i> Buscar por:
+                        </label>
+                        <select id="searchFilter" class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white font-montserrat text-sm focus:ring-2 focus:ring-[#13934A] focus:border-transparent outline-none">
+                            <option value="clave">Clave</option>
+                            <option value="carrera">Carrera</option>
+                        </select>
+                    </div>
+
+                    <!-- Campo de Búsqueda -->
+                    <div class="flex-[2]">
+                        <label for="searchInput" class="text-white font-montserrat font-medium text-sm mb-2 block">
+                            <i class="fa-solid fa-magnifying-glass"></i> Término de búsqueda:
+                        </label>
+                        <input type="text" id="searchInput" placeholder="Escribe para buscar..." 
+                               class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white font-montserrat text-sm focus:ring-2 focus:ring-[#13934A] focus:border-transparent outline-none">
+                    </div>
+
+                    <!-- Botón Limpiar -->
+                    <button type="button" id="clearSearch" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-montserrat font-bold transition flex items-center gap-2 border-none h-[42px]">
+                        <i class="fa-solid fa-xmark"></i> Limpiar
+                    </button>
+                </div>
+
+                <!-- Contador de resultados -->
+                <div class="mt-3 text-white font-montserrat text-sm">
+                    <span id="resultCount">Mostrando <strong>{{ count($grupos) }}</strong> de <strong>{{ count($grupos) }}</strong> grupos</span>
+                </div>
+            </div>
+
             <div class="flex flex-wrap justify-between items-center mb-6">
                 <h3 class="text-white font-montserrat font-bold text-2xl">Listado de Grupos</h3>
                 
@@ -134,7 +173,9 @@
                     </thead>
                     <tbody class="text-white font-montserrat text-sm">
                         @foreach ($grupos as $grupo)
-                            <tr class="bg-white/10 hover:bg-white/20 border-b border-white/10 transition-colors">
+                            <tr class="bg-white/10 hover:bg-white/20 border-b border-white/10 transition-colors grupo-row"
+                                data-clave="{{ strtolower($grupo->clave_grupo) }}"
+                                data-carrera="{{ strtolower($grupo->carrera->carrera ?? '') }}">
                                 <td class="py-3 px-6 font-bold">{{ $grupo->id_grupo }}</td>
                                 <td class="py-3 px-6">
                                     <span class="bg-blue-600/80 text-white py-1 px-2 rounded text-xs font-bold">
@@ -183,6 +224,12 @@
                         <p>No hay grupos registrados.</p>
                     </div>
                 @endif
+
+                <!-- Mensaje cuando no hay resultados de búsqueda -->
+                <div id="noResults" class="p-8 text-center text-white font-montserrat border border-white/10 rounded-b-lg bg-white/5 hidden">
+                    <i class="fa-solid fa-magnifying-glass text-4xl mb-3 opacity-50"></i>
+                    <p>No se encontraron grupos que coincidan con tu búsqueda.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -190,6 +237,56 @@
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/Admin/Grupo.js') }}"></script>
     <script src="{{ asset('js/Admin/Salon.js') }}"></script>
+
+    <!-- Script de búsqueda -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchFilter = document.getElementById('searchFilter');
+            const clearButton = document.getElementById('clearSearch');
+            const grupoRows = document.querySelectorAll('.grupo-row');
+            const resultCount = document.getElementById('resultCount');
+            const noResults = document.getElementById('noResults');
+            const totalGrupos = grupoRows.length;
+
+            function filterGrupos() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const filterType = searchFilter.value;
+                let visibleCount = 0;
+
+                grupoRows.forEach(row => {
+                    const searchValue = row.getAttribute(`data-${filterType}`);
+                    
+                    if (searchValue.includes(searchTerm)) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                // Actualizar contador
+                resultCount.innerHTML = `Mostrando <strong>${visibleCount}</strong> de <strong>${totalGrupos}</strong> grupos`;
+
+                // Mostrar mensaje si no hay resultados
+                if (visibleCount === 0 && searchTerm !== '') {
+                    noResults.classList.remove('hidden');
+                } else {
+                    noResults.classList.add('hidden');
+                }
+            }
+
+            // Event listeners
+            searchInput.addEventListener('input', filterGrupos);
+            searchFilter.addEventListener('change', filterGrupos);
+            
+            clearButton.addEventListener('click', function() {
+                searchInput.value = '';
+                searchFilter.value = 'clave';
+                filterGrupos();
+            });
+        });
+    </script>
 
     @include('admin.grupos.registros')
     @include('admin.grupos.edit')
