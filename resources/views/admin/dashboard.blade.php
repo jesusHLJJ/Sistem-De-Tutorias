@@ -54,50 +54,50 @@
     </div>
 
     <!-- Contenedor Principal (Efecto Cristal) -->
-    <div class="relative mt-[140px] w-11/12 max-w-5xl bg-[#044C26]/90 rounded-xl shadow-2xl p-8 md:p-12 flex flex-col items-center backdrop-blur-sm mb-10">
+    <div class="relative mt-40 sm:mt-44 md:mt-48 w-11/12 max-w-5xl bg-[#044C26]/90 rounded-xl shadow-2xl p-6 sm:p-8 md:p-12 flex flex-col items-center backdrop-blur-sm mb-10">
         
-        <h3 class="text-white font-montserrat font-medium text-xl mb-8 border-b border-white/30 pb-2 w-full text-center">
+        <h3 class="text-white font-montserrat font-medium text-lg sm:text-xl mb-6 sm:mb-8 border-b border-white/30 pb-2 w-full text-center">
             Seleccione una opción para gestionar
         </h3>
 
         <!-- Grid de Opciones las tarjetas pues-->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 w-full">
 
             <!--  PROFESORES -->
             <a href="{{ route('admin.profesores.dashboard') }}" 
-               class="group bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl p-6 flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer h-48">
-                <div class="bg-white text-[#13934A] p-4 rounded-full shadow-lg group-hover:bg-[#13934A] group-hover:text-white transition-colors">
+               class="group bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl p-4 sm:p-6 flex flex-col items-center justify-center gap-3 sm:gap-4 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer h-40 sm:h-44 md:h-48">
+                <div class="bg-white text-[#13934A] p-3 sm:p-4 rounded-full shadow-lg group-hover:bg-[#13934A] group-hover:text-white transition-colors">
                     <!-- Ícono FontAwesome -->
-                    <i class="fa-solid fa-chalkboard-user text-3xl"></i>
+                    <i class="fa-solid fa-chalkboard-user text-2xl sm:text-3xl"></i>
                 </div>
-                <span class="text-white font-montserrat font-bold text-lg tracking-wide group-hover:text-[#A3E635] transition-colors">PROFESORES</span>
+                <span class="text-white font-montserrat font-bold text-base sm:text-lg tracking-wide group-hover:text-[#A3E635] transition-colors">PROFESORES</span>
             </a>
 
             <!--  GRUPOS -->
             <a href="{{ route('admin.grupos.dashboard') }}" 
-               class="group bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl p-6 flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer h-48">
-                <div class="bg-white text-[#13934A] p-4 rounded-full shadow-lg group-hover:bg-[#13934A] group-hover:text-white transition-colors">
-                    <i class="fa-solid fa-users-rectangle text-3xl"></i>
+               class="group bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl p-4 sm:p-6 flex flex-col items-center justify-center gap-3 sm:gap-4 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer h-40 sm:h-44 md:h-48">
+                <div class="bg-white text-[#13934A] p-3 sm:p-4 rounded-full shadow-lg group-hover:bg-[#13934A] group-hover:text-white transition-colors">
+                    <i class="fa-solid fa-users-rectangle text-2xl sm:text-3xl"></i>
                 </div>
-                <span class="text-white font-montserrat font-bold text-lg tracking-wide group-hover:text-[#A3E635] transition-colors">GRUPOS</span>
+                <span class="text-white font-montserrat font-bold text-base sm:text-lg tracking-wide group-hover:text-[#A3E635] transition-colors">GRUPOS</span>
             </a>
 
             <!-- Botón ALUMNOS -->
             <a href="{{ route('admin.alumnos.dashboard') }}" 
-               class="group bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl p-6 flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer h-48">
-                <div class="bg-white text-[#13934A] p-4 rounded-full shadow-lg group-hover:bg-[#13934A] group-hover:text-white transition-colors">
-                    <i class="fa-solid fa-user-graduate text-3xl"></i>
+               class="group bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl p-4 sm:p-6 flex flex-col items-center justify-center gap-3 sm:gap-4 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer h-40 sm:h-44 md:h-48 sm:col-span-2 md:col-span-1">
+                <div class="bg-white text-[#13934A] p-3 sm:p-4 rounded-full shadow-lg group-hover:bg-[#13934A] group-hover:text-white transition-colors">
+                    <i class="fa-solid fa-user-graduate text-2xl sm:text-3xl"></i>
                 </div>
-                <span class="text-white font-montserrat font-bold text-lg tracking-wide group-hover:text-[#A3E635] transition-colors">ALUMNOS</span>
+                <span class="text-white font-montserrat font-bold text-base sm:text-lg tracking-wide group-hover:text-[#A3E635] transition-colors">ALUMNOS</span>
             </a>
 
         </div>
 
         <!-- Botón Cerrar Sesión -->
-        <div class="mt-12 w-full border-t border-white/20 pt-6 flex justify-center">
+        <div class="mt-8 sm:mt-12 w-full border-t border-white/20 pt-4 sm:pt-6 flex justify-center">
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="flex items-center gap-3 bg-red-600 hover:bg-red-700 text-white font-montserrat font-bold py-3 px-8 rounded-lg shadow-lg transform hover:-translate-y-1 transition duration-200 text-lg">
+                <button type="submit" class="flex items-center gap-2 sm:gap-3 bg-red-600 hover:bg-red-700 text-white font-montserrat font-bold py-2 sm:py-3 px-6 sm:px-8 rounded-lg shadow-lg transform hover:-translate-y-1 transition duration-200 text-base sm:text-lg">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     Cerrar Sesión
                 </button>

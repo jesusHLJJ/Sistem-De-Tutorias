@@ -39,9 +39,9 @@
         <img src="{{ asset('multimedia/tesi.png') }}" alt="Logo TESI" class="w-9/12 max-w-2xl">
     </div>
 
-    <div class="absolute top-0 right-0 w-full md:w-1/2 h-full flex items-center justify-center z-10 pt-24">
+    <div class="absolute top-0 right-0 w-full md:w-1/2 h-full flex items-center justify-center z-10 pt-24 pb-10">
         
-        <div class="bg-[#D9D9D9]/30 w-11/12 max-w-[482px] h-auto min-h-[592px] p-10 rounded-xl shadow-[0_12px_14px_rgba(0,0,0,0.25)] flex flex-col justify-center backdrop-blur-sm">
+        <div class="bg-[#D9D9D9]/30 w-11/12 max-w-[482px] h-auto min-h-[450px] md:min-h-[500px] lg:min-h-[520px] p-6 md:p-8 lg:p-10 rounded-xl shadow-[0_12px_14px_rgba(0,0,0,0.25)] flex flex-col justify-center backdrop-blur-sm">
 
             <h2 class="text-[24px] sm:text-[28px] md:text-[32px] lg:text-[40px] font-bold text-white text-center mb-6 md:mb-8 tracking-wider font-montserrat">INICIAR SESIÓN</h2>
 
