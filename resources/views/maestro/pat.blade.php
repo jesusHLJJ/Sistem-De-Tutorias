@@ -12,6 +12,17 @@
 <body>
     <h1>PLAN DE ACCIÓN TUTORÍAL</h1>
     <h2>EL ID DEL GRUPO ES: {{ $grupo->id_grupo }}</h2>
+
+    @if ($errors->any())
+        <div style="background-color: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 10px; border: 1px solid #f5c6cb; border-radius: 5px;">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('maestro.pat_guardar', $grupo->id_grupo) }}" method="POST">
            @csrf
 

@@ -13,26 +13,35 @@ class plan_accion_tutoriaController extends Controller
 {
     public function mostrarpat($id_grupo)
     {
-        $status = plan_accion_tutoria::where('id_grupo', $id_grupo)->count();
-
-
         $grupo = Grupo::with('carrera', 'semestre', 'profesor', 'periodo')
             ->withCount('alumnos as cantidad_de_alumnos')
-            ->withCount([
-                'alumnos as hombres' => function ($query) {
-                    $query->where('genero', 'M');
-                }
-            ])
-            ->withCount([
-                'alumnos as mujeres' => function ($query) {
-                    $query->where('genero', 'F');
-                }
-            ])
+            ->withCount(['alumnos as hombres' => function ($query) {
+                $query->where('genero', 'M');
+            }])
+            ->withCount(['alumnos as mujeres' => function ($query) {
+                $query->where('genero', 'F');
+            }])
             ->where('id_grupo', $id_grupo)
             ->first();
 
-        if ($status == 1) {
-            $pat = plan_accion_tutoria::where('id_grupo', $id_grupo)->first();
+        // Fallback logic: Try to find PAT by professor, period, and semestre associated with the group
+        // Note: This assumes one PAT per professor/period/semestre, which might be ambiguous if multiple groups exist.
+        // But without id_grupo in PAT table, this is the best guess.
+        $status = 0;
+        $pat = null;
+        
+        if ($grupo) {
+             $pat = plan_accion_tutoria::where('id_profesor', $grupo->id_profesor)
+                                       ->where('id_periodo', $grupo->id_periodo)
+                                       ->where('id_semestre', $grupo->id_semestre)
+                                       ->first();
+             if ($pat) {
+                 $status = 1;
+             }
+        }
+
+        if ($status == 1 && $pat) {
+            // $pat is already retrieved above
             $actividades= pat_actividades::where('id_plan_accion',$pat->id_plan_accion)->orderBy('fecha', 'asc')->get();
             return view('maestro.pat_mod', compact('grupo', 'status', 'pat','actividades'));
         } else {
@@ -42,8 +51,27 @@ class plan_accion_tutoriaController extends Controller
 
     public function guardar_info($id_grupo, request $datos_formulario)
     {
+        $datos_formulario->validate([
+            'problematica_identificada' => 'required|string',
+            'objetivos' => 'required|string',
+            'acciones_a_implementar' => 'required|string',
+            'cant_alumnos_hombres' => 'required|integer',
+            'cant_alumnos_mujeres' => 'required|integer',
+        ], [
+            'problematica_identificada.required' => 'La problemática identificada es obligatoria.',
+            'objetivos.required' => 'Los objetivos son obligatorios.',
+            'acciones_a_implementar.required' => 'Las acciones a implementar son obligatorias.',
+            'cant_alumnos_hombres.required' => 'La cantidad de hombres es obligatoria.',
+            'cant_alumnos_mujeres.required' => 'La cantidad de mujeres es obligatoria.',
+        ]);
+
+        $grupo = Grupo::find($id_grupo);
         $agregar = new plan_accion_tutoria();
         $agregar->id_grupo = $id_grupo;
+        $agregar->id_profesor = $grupo->id_profesor;
+        $agregar->id_periodo = $grupo->id_periodo;
+        $agregar->id_semestre = $grupo->id_semestre;
+        
         $agregar->no_matricula_grupo =  $datos_formulario->cant_alumnos;
         $agregar->hombres =  $datos_formulario->cant_alumnos_hombres;
         $agregar->mujeres =  $datos_formulario->cant_alumnos_mujeres;
@@ -56,7 +84,25 @@ class plan_accion_tutoriaController extends Controller
 
     public function modificar_info($id_grupo, Request $datos_formulario)
     {
-        $modificar = plan_accion_tutoria::where('id_grupo', $id_grupo)->first();
+        $datos_formulario->validate([
+            'problematica_identificada' => 'required|string',
+            'objetivos' => 'required|string',
+            'acciones_a_implementar' => 'required|string',
+            'cant_alumnos_hombres' => 'required|integer',
+            'cant_alumnos_mujeres' => 'required|integer',
+        ], [
+            'problematica_identificada.required' => 'La problemática identificada es obligatoria.',
+            'objetivos.required' => 'Los objetivos son obligatorios.',
+            'acciones_a_implementar.required' => 'Las acciones a implementar son obligatorias.',
+            'cant_alumnos_hombres.required' => 'La cantidad de hombres es obligatoria.',
+            'cant_alumnos_mujeres.required' => 'La cantidad de mujeres es obligatoria.',
+        ]);
+
+        $grupo = Grupo::find($id_grupo);
+        $modificar = plan_accion_tutoria::where('id_profesor', $grupo->id_profesor)
+                                       ->where('id_periodo', $grupo->id_periodo)
+                                       ->where('id_semestre', $grupo->id_semestre)
+                                       ->first();
         $modificar->no_matricula_grupo = $datos_formulario->cant_alumnos;
         $modificar->hombres =  $datos_formulario->cant_alumnos_hombres;
         $modificar->mujeres =  $datos_formulario->cant_alumnos_mujeres;

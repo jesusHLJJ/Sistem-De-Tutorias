@@ -34,7 +34,7 @@
 
     </ul>
 
-    <a href="{{ route('maestro.grupos') }}">← Volver al Grupo</a>
+    <a href="{{ route('maestro.grupo.show', $alumno->id_grupo) }}">← Volver al Grupo</a>
 </body>
 
 </html>
