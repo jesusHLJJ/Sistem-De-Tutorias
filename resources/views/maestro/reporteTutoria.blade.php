@@ -77,11 +77,6 @@
             
             <div class="border-t border-white/20 my-2"></div>
             
-            <div class="text-hover-pink px-5 py-3 md:py-4 rounded-lg font-bold text-sm md:text-base flex items-center gap-2 md:gap-3 bg-hover-pink/10">
-                <i class="fa-solid fa-clipboard-list text-lg w-5"></i>
-                <span>Registrar Tutoría</span>
-            </div>
-            
             <a href="{{ route('maestro.tutorias_academicas') }}" 
                class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
                 <i class="fa-solid fa-book text-lg w-5"></i>
@@ -93,12 +88,13 @@
                 <i class="fa-solid fa-chart-line text-lg w-5"></i>
                 <span>Reporte de Asesorías</span>
             </a>
-            
-            <a href="{{ route('maestro.maestro.tutoria.registro') }}" 
-               class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+
+            <div class="text-hover-pink px-5 py-3 md:py-4 rounded-lg font-bold text-sm md:text-base flex items-center gap-2 md:gap-3 bg-hover-pink/10">
                 <i class="fa-solid fa-pen-to-square text-lg w-5"></i>
                 <span>Registrar Tutoría</span>
-            </a>
+            </div>
+            
+
             
             <div class="border-t border-white/20 my-2"></div>
             

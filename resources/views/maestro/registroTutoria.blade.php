@@ -69,37 +69,45 @@
                 <i class="fa-solid fa-times"></i>
             </button>
             
-            <a href="{{ route('maestro.grupos') }}" 
-               class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
-                <i class="fa-solid fa-users text-lg w-5"></i>
-                <span>Mis Grupos</span>
-            </a>
-            
-            <div class="border-t border-white/20 my-2"></div>
-            
-            <a href="{{ route('maestro.tutorias_academicas') }}" 
-               class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
-                <i class="fa-solid fa-book text-lg w-5"></i>
-                <span>Mensual Tutoría</span>
-            </a>
-            
-            <a href="{{ route('maestro.maestro.reporte.asesorias') }}" 
-               class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
-                <i class="fa-solid fa-chart-line text-lg w-5"></i>
-                <span>Reporte de Asesorías</span>
-            </a>
-            
+            <!-- Grupo (siempre en rosa) -->
             <div class="text-hover-pink px-5 py-3 md:py-4 rounded-lg font-bold text-sm md:text-base flex items-center gap-2 md:gap-3 bg-hover-pink/10">
-                <i class="fa-solid fa-pen-to-square text-lg w-5"></i>
-                <span>Registrar Tutoría</span>
+                <i class="fa-solid fa-users text-lg w-5"></i>
+                <span>Grupo {{ $grupo->clave_grupo }}</span>
             </div>
             
             <div class="border-t border-white/20 my-2"></div>
             
-            <a href="{{ route('maestro.dashboard') }}" 
+            <a href="{{ route('maestro.graficar', $grupo->clave_grupo) }}" 
                class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
-                <i class="fa-solid fa-home text-lg w-5"></i>
-                <span>Volver al Inicio</span>
+                <i class="fa-solid fa-chart-column text-lg w-5"></i>
+                <span>Graficar Ficha</span>
+            </a>
+            
+            <a href="{{ route('maestro.graficar2', $grupo->clave_grupo) }}" 
+               class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-chart-pie text-lg w-5"></i>
+                <span>Graficar Habilidades</span>
+            </a>
+            
+            <!-- Plan de Acción -->
+            <a href="{{ route('maestro.pat', $grupo->id_grupo) }}" 
+               class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-clipboard-list text-lg w-5"></i>
+                <span>Plan de Acción</span>
+            </a>
+            
+            <!-- Llenar Reporte (activo) -->
+            <div class="text-hover-pink px-5 py-3 md:py-4 rounded-lg font-bold text-sm md:text-base flex items-center gap-2 md:gap-3 bg-hover-pink/10">
+                <i class="fa-solid fa-file-pen text-lg w-5"></i>
+                <span>Llenar Reporte</span>
+            </div>
+            
+            <div class="border-t border-white/20 my-2"></div>
+            
+            <a href="{{ route('maestro.grupos') }}" 
+               class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-arrow-left text-lg w-5"></i>
+                <span>Volver a Mis Grupos</span>
             </a>
         </div>
 
@@ -148,77 +156,81 @@
                             @php
                                 $registro = $tutorias[$alumno->id_alumno] ?? null;
                             @endphp
-                            <div class="bg-white/10 rounded-lg p-4 border border-white/30">
+                            <div class="bg-white/10 rounded-lg border border-white/30 overflow-hidden">
                                 <input type="hidden" name="registros[{{ $i }}][id_alumno]" value="{{ $alumno->id_alumno }}">
                                 
-                                <!-- Encabezado del alumno -->
-                                <div class="mb-4 pb-3 border-b border-white/30">
+                                <!-- Encabezado del alumno (clickeable) -->
+                                <div class="p-4 cursor-pointer hover:bg-white/5 transition-colors" onclick="toggleAlumnoForm({{ $i }})">
                                     <div class="flex justify-between items-start mb-2">
                                         <span class="bg-tec-green text-white px-3 py-1 rounded-full text-sm font-bold">{{ $i + 1 }}</span>
+                                        <i id="icon-{{ $i }}" class="fa-solid fa-chevron-down text-white text-lg transition-transform duration-300"></i>
                                     </div>
                                     <h3 class="text-white font-bold text-base mb-1">{{ $alumno->nombre_completo }}</h3>
                                     <p class="text-white/70 text-sm">Matrícula: <span class="text-white font-medium">{{ $alumno->matricula }}</span></p>
                                 </div>
 
-                                <!-- Checkboxes -->
-                                <div class="grid grid-cols-2 gap-3 mb-4">
-                                    <label class="flex items-center gap-2 bg-white/5 p-3 rounded-lg border border-white/20">
-                                        <input type="checkbox" name="registros[{{ $i }}][tutoria_grupal]" value="1"
-                                            {{ $registro && $registro->tutoria_grupal ? 'checked' : '' }}
-                                            class="w-5 h-5 rounded bg-white/20 border-white/30">
-                                        <span class="text-white text-sm font-medium">Tut. Grupal</span>
-                                    </label>
+                                <!-- Formulario colapsable -->
+                                <div id="form-{{ $i }}" class="hidden px-4 pb-4 border-t border-white/30">
+                                    <!-- Checkboxes -->
+                                    <div class="grid grid-cols-2 gap-3 mb-4 mt-4">
+                                        <label class="flex items-center gap-2 bg-white/5 p-3 rounded-lg border border-white/20">
+                                            <input type="checkbox" name="registros[{{ $i }}][tutoria_grupal]" value="1"
+                                                {{ $registro && $registro->tutoria_grupal ? 'checked' : '' }}
+                                                class="w-5 h-5 rounded bg-white/20 border-white/30">
+                                            <span class="text-white text-sm font-medium">Tut. Grupal</span>
+                                        </label>
 
-                                    <label class="flex items-center gap-2 bg-white/5 p-3 rounded-lg border border-white/20">
-                                        <input type="checkbox" name="registros[{{ $i }}][tutoria_individual]" value="1"
-                                            {{ $registro && $registro->tutoria_individual ? 'checked' : '' }}
-                                            class="w-5 h-5 rounded bg-white/20 border-white/30">
-                                        <span class="text-white text-sm font-medium">Tut. Individual</span>
-                                    </label>
+                                        <label class="flex items-center gap-2 bg-white/5 p-3 rounded-lg border border-white/20">
+                                            <input type="checkbox" name="registros[{{ $i }}][tutoria_individual]" value="1"
+                                                {{ $registro && $registro->tutoria_individual ? 'checked' : '' }}
+                                                class="w-5 h-5 rounded bg-white/20 border-white/30">
+                                            <span class="text-white text-sm font-medium">Tut. Individual</span>
+                                        </label>
 
-                                    <label class="flex items-center gap-2 bg-white/5 p-3 rounded-lg border border-white/20">
-                                        <input type="checkbox" name="registros[{{ $i }}][asesoria_academica]" value="1"
-                                            {{ $registro && $registro->asesoria_academica ? 'checked' : '' }}
-                                            class="w-5 h-5 rounded bg-white/20 border-white/30">
-                                        <span class="text-white text-sm font-medium">Asesoría Acad.</span>
-                                    </label>
+                                        <label class="flex items-center gap-2 bg-white/5 p-3 rounded-lg border border-white/20">
+                                            <input type="checkbox" name="registros[{{ $i }}][asesoria_academica]" value="1"
+                                                {{ $registro && $registro->asesoria_academica ? 'checked' : '' }}
+                                                class="w-5 h-5 rounded bg-white/20 border-white/30">
+                                            <span class="text-white text-sm font-medium">Asesoría Acad.</span>
+                                        </label>
 
-                                    <label class="flex items-center gap-2 bg-white/5 p-3 rounded-lg border border-white/20">
-                                        <input type="checkbox" name="registros[{{ $i }}][area_psicologica]" value="1"
-                                            {{ $registro && $registro->area_psicologica ? 'checked' : '' }}
-                                            class="w-5 h-5 rounded bg-white/20 border-white/30">
-                                        <span class="text-white text-sm font-medium">Psicología</span>
-                                    </label>
-                                </div>
-
-                                <!-- Inputs numéricos -->
-                                <div class="space-y-3">
-                                    <div>
-                                        <label class="block text-white/70 text-xs font-semibold mb-1">CRÉDITOS CULTURALES/DEPORTIVOS:</label>
-                                        <input type="number" name="registros[{{ $i }}][crditos_culturales_deportivos]" min="0"
-                                            value="{{ $registro->crditos_culturales_deportivos ?? '' }}"
-                                            class="w-full px-3 py-3 text-base rounded-lg bg-white/20 text-white border border-white/30 text-center">
+                                        <label class="flex items-center gap-2 bg-white/5 p-3 rounded-lg border border-white/20">
+                                            <input type="checkbox" name="registros[{{ $i }}][area_psicologica]" value="1"
+                                                {{ $registro && $registro->area_psicologica ? 'checked' : '' }}
+                                                class="w-5 h-5 rounded bg-white/20 border-white/30">
+                                            <span class="text-white text-sm font-medium">Psicología</span>
+                                        </label>
                                     </div>
 
-                                    <div>
-                                        <label class="block text-white/70 text-xs font-semibold mb-1">CRÉDITOS ACADÉMICOS:</label>
-                                        <input type="number" name="registros[{{ $i }}][crditos_academicos]" min="0"
-                                            value="{{ $registro->crditos_academicos ?? '' }}"
-                                            class="w-full px-3 py-3 text-base rounded-lg bg-white/20 text-white border border-white/30 text-center">
-                                    </div>
+                                    <!-- Inputs numéricos -->
+                                    <div class="space-y-3">
+                                        <div>
+                                            <label class="block text-white/70 text-xs font-semibold mb-1">CRÉDITOS CULTURALES/DEPORTIVOS:</label>
+                                            <input type="number" name="registros[{{ $i }}][crditos_culturales_deportivos]" min="0"
+                                                value="{{ $registro->crditos_culturales_deportivos ?? '' }}"
+                                                class="w-full px-3 py-3 text-base rounded-lg bg-white/20 text-white border border-white/30 text-center">
+                                        </div>
 
-                                    <div>
-                                        <label class="block text-white/70 text-xs font-semibold mb-1">INGLÉS CUBIERTO (%):</label>
-                                        <input type="text" name="registros[{{ $i }}][ingles_cubierto]" placeholder="Ej. 100%"
-                                            value="{{ $registro->ingles_cubierto ?? '' }}"
-                                            class="w-full px-3 py-3 text-base rounded-lg bg-white/20 text-white border border-white/30 text-center">
-                                    </div>
+                                        <div>
+                                            <label class="block text-white/70 text-xs font-semibold mb-1">CRÉDITOS ACADÉMICOS:</label>
+                                            <input type="number" name="registros[{{ $i }}][crditos_academicos]" min="0"
+                                                value="{{ $registro->crditos_academicos ?? '' }}"
+                                                class="w-full px-3 py-3 text-base rounded-lg bg-white/20 text-white border border-white/30 text-center">
+                                        </div>
 
-                                    <div>
-                                        <label class="block text-white/70 text-xs font-semibold mb-1">MATERIAS REPROBADAS:</label>
-                                        <input type="number" name="registros[{{ $i }}][materias_reprobadas]" min="0"
-                                            value="{{ $registro->materias_reprobadas ?? '' }}"
-                                            class="w-full px-3 py-3 text-base rounded-lg bg-white/20 text-white border border-white/30 text-center">
+                                        <div>
+                                            <label class="block text-white/70 text-xs font-semibold mb-1">INGLÉS CUBIERTO (%):</label>
+                                            <input type="text" name="registros[{{ $i }}][ingles_cubierto]" placeholder="Ej. 100%"
+                                                value="{{ $registro->ingles_cubierto ?? '' }}"
+                                                class="w-full px-3 py-3 text-base rounded-lg bg-white/20 text-white border border-white/30 text-center">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-white/70 text-xs font-semibold mb-1">MATERIAS REPROBADAS:</label>
+                                            <input type="number" name="registros[{{ $i }}][materias_reprobadas]" min="0"
+                                                value="{{ $registro->materias_reprobadas ?? '' }}"
+                                                class="w-full px-3 py-3 text-base rounded-lg bg-white/20 text-white border border-white/30 text-center">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -357,6 +369,20 @@
                 }
             });
         });
+
+        // Función para expandir/colapsar formularios de alumnos en vista móvil
+        function toggleAlumnoForm(index) {
+            const form = document.getElementById(`form-${index}`);
+            const icon = document.getElementById(`icon-${index}`);
+            
+            if (form.classList.contains('hidden')) {
+                form.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                form.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
 
         function generarReporteSemestral() {
             const { jsPDF } = window.jspdf;

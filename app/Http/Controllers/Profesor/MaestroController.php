@@ -594,8 +594,12 @@ class MaestroController extends Controller
 
 
 
+        // Buscar el objeto Grupo para pasarlo a la vista
+        $grupo = Grupo::where('clave_grupo', $grupo)->firstOrFail();
+
         // Pasar los datos a la vista
         return view('maestro.graficarVista', compact(
+            'grupo',
             'data',
             'data_1',
             'data_2',

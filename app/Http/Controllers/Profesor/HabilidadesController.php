@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Profesor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Alumno;
+use App\Models\Grupo;
 use App\Models\Periodos;
 use App\Models\Encuesta_organizacion_estudio;
 use App\Models\Encuesta_tecnicas_estudio;
@@ -826,8 +827,12 @@ class HabilidadesController extends Controller
             ->get();
 
 
+        // Buscar el objeto Grupo para pasarlo a la vista
+        $grupo = Grupo::where('clave_grupo', $grupo)->firstOrFail();
+
         // Pasar los datos a la vista
         return view('maestro.graficarVista2', compact(
+            'grupo',
             'data',
             'data_1',
             'data_2',
