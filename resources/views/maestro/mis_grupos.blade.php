@@ -30,10 +30,10 @@
     </script>
 </head>
 
-<body class="font-montserrat bg-cover bg-center bg-fixed min-h-screen flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')]">
+<body class="font-montserrat bg-cover bg-center bg-fixed min-h-screen md:h-screen md:overflow-hidden flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')]">
 
     <!-- Header -->
-    <div class="bg-tec-green shadow-[0_12px_14px_rgba(0,0,0,0.25)] h-16 md:h-24 flex items-center justify-between md:justify-center relative z-40 px-4">
+    <div class="bg-tec-green shadow-[0_12px_14px_rgba(0,0,0,0.25)] h-16 md:h-24 shrink-0 flex items-center justify-between md:justify-center relative z-40 px-4">
         <!-- Botón hamburguesa (solo móvil) -->
         <button id="menuToggle" class="md:hidden text-white text-2xl z-50">
             <i class="fa-solid fa-bars"></i>
@@ -50,7 +50,7 @@
     </div>
 
     <!-- Subheader -->
-    <div class="bg-tec-green shadow-[0_12px_14px_rgba(0,0,0,0.25)] h-10 md:h-12 flex items-center justify-center relative z-20">
+    <div class="bg-tec-green shadow-[0_12px_14px_rgba(0,0,0,0.25)] h-10 md:h-12 shrink-0 flex items-center justify-center relative z-20">
         <h2 class="text-white font-bold text-base md:text-2xl tracking-wide">MIS GRUPOS</h2>
     </div>
 
@@ -61,10 +61,10 @@
         <div id="overlay" class="hidden fixed inset-0 bg-black/50 z-30 md:hidden"></div>
         
         <!-- Sidebar -->
-        <div id="sidebar" class="bg-sidebar-dark w-64 flex flex-col gap-2 md:gap-3 shadow-[4px_0_10px_rgba(0,0,0,0.3)]
+        <div id="sidebar" class="bg-sidebar-dark w-64 flex flex-col gap-1.5 md:gap-2 shadow-[4px_0_10px_rgba(0,0,0,0.3)]
             fixed md:absolute top-0 left-0 h-full z-40 md:z-30
             transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out
-            p-5 md:p-8 overflow-y-auto">
+            p-4 md:p-6 overflow-y-auto">
             
             <!-- Botón cerrar (solo móvil) -->
             <button id="closeMenu" class="md:hidden self-end text-white text-2xl mb-3">
@@ -72,38 +72,38 @@
             </button>
             
             <!-- Elemento activo - Mis Grupos -->
-            <div class="text-hover-pink px-5 py-3 md:py-4 rounded-lg font-bold text-sm md:text-base flex items-center gap-2 md:gap-3 bg-hover-pink/10">
-                <i class="fa-solid fa-users text-lg w-5"></i>
+            <div class="text-hover-pink px-4 py-2.5 rounded-lg font-bold text-xs md:text-sm flex items-center gap-2 bg-hover-pink/10">
+                <i class="fa-solid fa-users text-base w-4"></i>
                 <span>Mis Grupos</span>
             </div>
             
             <!-- Separador -->
-            <div class="border-t border-white/20 my-2"></div>
+            <div class="border-t border-white/20 my-1"></div>
             
             <a href="{{ route('maestro.tutorias_academicas') }}" 
-               class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
-                <i class="fa-solid fa-book text-lg w-5"></i>
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-book text-base w-4"></i>
                 <span>Mensual Tutoría</span>
             </a>
             
             <a href="{{ route('maestro.maestro.reporte.asesorias') }}" 
-               class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
-                <i class="fa-solid fa-chart-line text-lg w-5"></i>
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-chart-line text-base w-4"></i>
                 <span>Reporte de Asesorías</span>
             </a>
             
             <a href="{{ route('maestro.maestro.tutoria.registro') }}" 
-               class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
-                <i class="fa-solid fa-pen-to-square text-lg w-5"></i>
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-pen-to-square text-base w-4"></i>
                 <span>Registrar Tutoría</span>
             </a>
             
             <!-- Separador -->
-            <div class="border-t border-white/20 my-2"></div>
+            <div class="border-t border-white/20 my-1"></div>
             
             <a href="{{ route('maestro.dashboard') }}" 
-               class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
-                <i class="fa-solid fa-home text-lg w-5"></i>
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-home text-base w-4"></i>
                 <span>Volver al Inicio</span>
             </a>
         </div>

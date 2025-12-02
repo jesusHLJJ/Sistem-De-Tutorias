@@ -141,23 +141,41 @@
                 display: block;
             }
 
+            /* Contenedor interno para flexbox */
+            .chart-container > div:first-child {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .chart-container h3 {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+
             .chart-container canvas {
-                margin: 0 auto;
+                margin: 1rem auto 0;
                 display: block;
+                width: 100% !important;
+                height: auto !important;
             }
 
             .chart-container button {
                 width: calc(50% - 0.5rem);
                 margin: 0.25rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
         }
     </style>
 </head>
 
-<body class="font-montserrat bg-cover bg-center bg-fixed min-h-screen flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')]">
+<body class="font-montserrat bg-cover bg-center bg-fixed min-h-screen md:h-screen md:overflow-hidden flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')]">
 
     <!-- Header -->
-    <div class="bg-tec-green shadow-[0_12px_14px_rgba(0,0,0,0.25)] h-16 md:h-24 flex items-center justify-between md:justify-center relative z-40 px-4">
+    <div class="bg-tec-green shadow-[0_12px_14px_rgba(0,0,0,0.25)] h-16 md:h-24 shrink-0 flex items-center justify-between md:justify-center relative z-40 px-4">
         <button id="menuToggle" class="md:hidden text-white text-2xl z-50">
             <i class="fa-solid fa-bars"></i>
         </button>
@@ -171,7 +189,7 @@
     </div>
 
     <!-- Subheader -->
-    <div class="bg-tec-green shadow-[0_12px_14px_rgba(0,0,0,0.25)] h-10 md:h-12 flex items-center justify-center relative z-20">
+    <div class="bg-tec-green shadow-[0_12px_14px_rgba(0,0,0,0.25)] h-10 md:h-12 shrink-0 flex items-center justify-center relative z-20">
         <h2 class="text-white font-bold text-base md:text-2xl tracking-wide">GRÁFICOS DE HABILIDADES</h2>
     </div>
 
@@ -192,42 +210,42 @@
             </button>
             
             <!-- Grupo (siempre en rosa) -->
-            <div class="text-hover-pink px-5 py-3 md:py-4 rounded-lg font-bold text-sm md:text-base flex items-center gap-2 md:gap-3 bg-hover-pink/10">
-                <i class="fa-solid fa-users text-lg w-5"></i>
+            <div class="text-hover-pink px-4 py-2.5 rounded-lg font-bold text-xs md:text-sm flex items-center gap-2 bg-hover-pink/10">
+                <i class="fa-solid fa-users text-base w-4"></i>
                 <span>Grupo {{ $grupo->clave_grupo }}</span>
             </div>
             
-            <div class="border-t border-white/20 my-2"></div>
+            <div class="border-t border-white/20 my-1"></div>
             
             <a href="{{ route('maestro.graficar', $grupo->clave_grupo) }}" 
-               class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
-                <i class="fa-solid fa-chart-column text-lg w-5"></i>
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-chart-column text-base w-4"></i>
                 <span>Graficar Ficha</span>
             </a>
             
             <!-- Graficar Habilidades (activo) -->
-            <div class="text-hover-pink px-5 py-3 md:py-4 rounded-lg font-bold text-sm md:text-base flex items-center gap-2 md:gap-3 bg-hover-pink/10">
-                <i class="fa-solid fa-chart-pie text-lg w-5"></i>
+            <div class="text-hover-pink px-4 py-2.5 rounded-lg font-bold text-xs md:text-sm flex items-center gap-2 bg-hover-pink/10">
+                <i class="fa-solid fa-chart-pie text-base w-4"></i>
                 <span>Graficar Habilidades</span>
             </div>
             
             <a href="{{ route('maestro.pat', $grupo->id_grupo) }}" 
-               class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
-                <i class="fa-solid fa-clipboard-list text-lg w-5"></i>
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-clipboard-list text-base w-4"></i>
                 <span>Plan de Acción</span>
             </a>
             
             <a href="{{ route('maestro.semestral.form', $grupo->id_grupo) }}" 
-               class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
-                <i class="fa-solid fa-file-pen text-lg w-5"></i>
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-file-pen text-base w-4"></i>
                 <span>Llenar Reporte</span>
             </a>
             
-            <div class="border-t border-white/20 my-2"></div>
+            <div class="border-t border-white/20 my-1"></div>
             
             <a href="{{ route('maestro.grupos') }}" 
-               class="text-white no-underline px-5 py-3 md:py-4 rounded-lg transition-all duration-300 font-medium text-sm md:text-base flex items-center gap-2 md:gap-3 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
-                <i class="fa-solid fa-arrow-left text-lg w-5"></i>
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-arrow-left text-base w-4"></i>
                 <span>Volver a Mis Grupos</span>
             </a>
         </div>
