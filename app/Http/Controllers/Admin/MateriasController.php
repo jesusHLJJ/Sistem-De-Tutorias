@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Materias\EditMateriaRequest;
 use App\Http\Requests\Admin\Materias\StoreMateriaRequest;
 use App\Models\Grupo;
-use App\Models\Materia;
+use App\Models\Materias;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -17,7 +17,7 @@ class MateriasController extends Controller
     {
         // Obtener grupos con el conteo de materias relacionadas
         $grupos = Grupo::withCount('materias')->get();
-        $materias = Materia::all();
+        $materias = Materias::all();
 
         //dd($grupos, $materias);
 
