@@ -26,7 +26,7 @@
     </script>
 </head>
 
-<body class="bg-cover bg-center min-h-screen flex items-center justify-center relative bg-[url('{{ asset('multimedia/fondo.jpg') }}')]">
+<body class="bg-cover bg-center min-h-screen md:min-h-[125vh] flex items-center justify-center relative bg-[url('{{ asset('multimedia/fondo.jpg') }}')] md:[zoom:80%]">
 
   
     <div class="absolute top-0 left-0 w-full h-24 bg-[#13934A] shadow-[0_12px_14px_rgba(0,0,0,0.25)] z-20 flex items-center justify-start lg:justify-center pl-4 md:pl-4 lg:pl-0 gap-4">

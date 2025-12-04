@@ -172,7 +172,7 @@
     </style>
 </head>
 
-<body class="font-montserrat bg-cover bg-center bg-fixed min-h-screen md:h-screen md:overflow-hidden flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')]">
+<body class="font-montserrat bg-cover bg-center bg-fixed min-h-screen md:h-[125vh] md:overflow-hidden flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')] md:[zoom:80%]">
 
     <!-- Header -->
     <div class="bg-tec-green shadow-[0_12px_14px_rgba(0,0,0,0.25)] h-16 md:h-24 shrink-0 flex items-center justify-between md:justify-center relative z-40 px-4">

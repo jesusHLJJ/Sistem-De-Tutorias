@@ -4,780 +4,446 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Encuesta de Habilidades de Estudio</title>
-    <link rel="stylesheet" href="{{ asset('css/fomularios.css')}}">
+    <title>Habilidades de Estudio - Maestro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        'sidebar-dark': '#2C2C2C',
+                        'hover-pink': '#FF9898',
+                        'tec-green': '#13934A',
+                        'tec-green-dark': '#044C26',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        input[type="radio"]:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+            accent-color: #13934A;
+        }
+    </style>
 </head>
 
-<body>
-    <header>
-        <div class="logos">
-            <img src="{{ asset('multimedia/edomex.png') }}" alt="Logo 1" class="logoedomex">
-            <img src="{{ asset('multimedia/tesi.png') }}" alt="Logo 2" class="logotesi">
-            <img src="{{ asset('multimedia/isclogo.jpeg') }}" alt="Logo 3" class="logoisc">
-        </div>
-        <div class="banner">
-            <h1>Encuesta de Habilidades de Estudio </h1>
-        </div>
-    </header>
+<body class="font-montserrat bg-cover bg-center bg-fixed min-h-screen md:h-[125vh] md:overflow-hidden flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')] md:[zoom:80%]">
 
-    <!-- Encuesta de Organización del Estudio -->
-    <main>
-        <div class="formulariocontenedor">
-
-
-            <p>Instrucciones: La presente encuesta está formada por tres breves cuestionarios en los cuales puedes indicar los
-                problemas referentes a organización, técnicas y motivación en el estudio que quizá perjudican tu rendimiento
-                académico. Si contestas todas las preguntas con sinceridad y reflexión, podrás identificar mucho de tus actuales
-                defectos al estudiar.</p>
-            <p>Cada cuestionario contiene veinte preguntas a las que se contestará con sí o no al finalizar cada pregunta según
-                corresponda tu respuesta. No hay respuestas "correctas" o "incorrectas", ya que la contestación adecuada es tu
-                juicio sincero sobre tu modo de actuar y tus actitudes personales respecto al estudio. No omitas ninguna de
-                ellas.</p>
+    <!-- Header -->
+    <div class="bg-tec-green shadow-[0_12px_14px_rgba(0,0,0,0.25)] h-16 md:h-24 shrink-0 flex items-center justify-between md:justify-center relative z-40 px-4">
+        <button id="menuToggle" class="md:hidden text-white text-2xl z-50">
+            <i class="fa-solid fa-bars"></i>
+        </button>
         
-    <h2>Encuesta de Organización del Estudio</h2>
-    <form id="encuestaForm" action="{{ route('alumno.habilidad.guardar') }}" method="POST">
-        @csrf
-        <!-- Obtenemos el id del alumno para mandarlo en el post despues -->
-        <input type="hidden" name="alumno_id" value="{{ $alumno->id_alumno}}">
-        <!-- Aqui contamos los no obtenidos para sacar el puntaje -->
-        <input type="hidden" name="total_no" id="total_no">
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Preguntas</th>
-                    <th>Sí</th>
-                    <th>No</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>A.- ¿Sueles dejar para el último la preparación de tus trabajos?</td>
-                    <td><input type="radio" name="pregunta1" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_1_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta1" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_1_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>B.- ¿Crees que el sueño o el cansancio te impidan estudiar eficazmente en muchas ocasiones?</td>
-                    <td><input type="radio" name="pregunta2" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_2_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta2" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_2_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>C.- ¿Es frecuente que no termines tu tarea a tiempo?</td>
-                    <td><input type="radio" name="pregunta3" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_3_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta3" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_3_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>D.- ¿Tiendes a emplear tiempo en leer revistas, ver televisión o charlar cuando debieras
-                        estudiar?</td>
-                    <td><input type="radio" name="pregunta4" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_4_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta4" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_4_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>E.- ¿Tus actividades sociales o deportivas te llevan a descuidar tus tareas escolares?</td>
-                    <td><input type="radio" name="pregunta5" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_5_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta5" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_5_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>F.- ¿Sueles dejar pasar un día o más antes de repasar los apuntes tomados en clase?</td>
-                    <td><input type="radio" name="pregunta6" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_6_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta6" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_6_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>G.- ¿Sueles dedicar tu tiempo libre entre las 4:00 de la tarde y las 9:00 de la noche a otras
-                        actividades que no sean estudiar?</td>
-                    <td><input type="radio" name="pregunta7" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_7_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta7" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_7_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>H.- ¿Descubres algunas veces de pronto que debes entregar una tarea antes de lo que creías?</td>
-                    <td><input type="radio" name="pregunta8" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_8_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta8" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_8_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>I.- ¿Te retrasas con frecuencia en una asignatura debido a que tienes que estudiar otra?</td>
-                    <td><input type="radio" name="pregunta9" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_9_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta9" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_9_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>J.- ¿Te parece que tu rendimiento es muy bajo en relación con el tiempo que dedicas al estudio?
-                    </td>
-                    <td><input type="radio" name="pregunta10" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_10_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta10" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_10_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>K.- ¿Está situado tu escritorio directamente frente a una ventana, puerta u otra fuente de
-                        distracción?</td>
-                    <td><input type="radio" name="pregunta11" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_11_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta11" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_11_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>L.- ¿Sueles tener fotografías, trofeos o recuerdos sobre tu mesa de escritorio?</td>
-                    <td><input type="radio" name="pregunta12" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_12_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta12" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_12_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>M.- ¿Sueles estudiar recostado en la cama o arrellanado en un asiento cómodo?</td>
-                    <td><input type="radio" name="pregunta13" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_13_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta13" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_13_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>N.- ¿Produce resplandor la lámpara que utilizas al estudiar?</td>
-                    <td><input type="radio" name="pregunta14" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_14_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta14" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_14_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>O.- Tu mesa de estudio, ¿está tan desordenada y llena de objetos que no dispones de sitio
-                        suficiente para estudiar con eficacia?</td>
-                    <td><input type="radio" name="pregunta15" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_15_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta15" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_15_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>P.- ¿Sueles interrumpir tu estudio por personas que vienen a visitarte?</td>
-                    <td><input type="radio" name="pregunta16" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_16_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta16" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_16_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>Q.- ¿Estudias con frecuencia mientras tienes puesta la televisión y/o la radio?</td>
-                    <td><input type="radio" name="pregunta17" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_17_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta17" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_17_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>R.- En el lugar donde estudias, ¿se pueden ver con facilidad revistas, fotos de jóvenes o
-                        materiales pertenecientes a tu afición?</td>
-                    <td><input type="radio" name="pregunta18" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_18_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta18" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_18_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>S.- ¿Con frecuencia interrumpen tu estudio actividades o ruidos que provienen del exterior?</td>
-                    <td><input type="radio" name="pregunta19" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_19_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta19" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_19_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-                <tr>
-                    <td>T.- ¿Suele hacerse lento tu estudio debido a que no tienes a la mano los libros y los materiales
-                        necesarios?</td>
-                    <td><input type="radio" name="pregunta20" value="si"
-                            {{ isset($organizacion) && $organizacion->pregunta_20_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                    <td><input type="radio" name="pregunta20" value="no"
-                            {{ isset($organizacion) && $organizacion->pregunta_20_organizacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas()"></td>
-                </tr>
-            </tbody>
-        </table>
-    </form>
-    <p id="resultado"></p>
-    <script>
-        function contarRespuestas() {
-            const form = document.getElementById("encuestaForm");
-            let siCount = 0;
-            let noCount = 0;
-
-            for (let i = 1; i <= 20; i++) {
-                const respuestaSi = form.querySelector(`input[name="pregunta${i}"][value="si"]`);
-                const respuestaNo = form.querySelector(`input[name="pregunta${i}"][value="no"]`);
-
-                if (respuestaSi && respuestaSi.checked) siCount++;
-                if (respuestaNo && respuestaNo.checked) noCount++;
-            }
-
-            document.getElementById("resultado").innerHTML = "Calificación:" + "<br>" +
-                "Respuestas Sí: " + siCount + "<br>" +
-                "Respuestas No: " + noCount;
-
-            // Asigna el total de respuestas "No" al campo oculto
-            document.getElementById("total_no").value = noCount;
-        }
-    </script>
-
-
-    <!-- Encuesta sobre Técnicas de Estudio -->
-    <h2>Encuesta sobre Técnicas de Estudio</h2>
-    <form id="encuestaForm2" action="{{ route('alumno.habilidad.guardar2') }}" method="POST">
-        @csrf
-        <!-- Obtenemos el id del alumno para mandarlo en el post despues -->
-        <input type="hidden" name="alumno_id" value="{{ $alumno->id_alumno}}">
-
-        <!-- Aqui contamos los no obtenidos para sacar el puntaje -->
-        <input type="hidden" name="total_no2" id="total_no2">
-        <table>
-            <thead>
-                <tr>
-                    <th>Preguntas</th>
-                    <th>Sí</th>
-                    <th>No</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>A.- ¿Tiendes a comenzar la lectura de un libro de texto sin hojear previamente los subtítulos y
-                        las ilustraciones?</td>
-                    <td><input type="radio" name="pregunta21" value="si" {{ isset($tecnica) && $tecnica->pregunta_1_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta21" value="no" {{ isset($tecnica) && $tecnica->pregunta_1_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>B.- ¿Te saltas por lo general las figuras, gráficas y tablas cuando estudias un tema?</td>
-                    <td><input type="radio" name="pregunta22" value="si" {{ isset($tecnica) && $tecnica->pregunta_2_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta22" value="no" {{ isset($tecnica) && $tecnica->pregunta_2_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>C.- ¿Suelo serte difícil seleccionar los puntos de los temas de estudio?</td>
-                    <td><input type="radio" name="pregunta23" value="si" {{ isset($tecnica) && $tecnica->pregunta_3_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta23" value="no" {{ isset($tecnica) && $tecnica->pregunta_3_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>D.- ¿Te sorprendes con cierta frecuencia, pensando en algo que no tiene nada que ver con lo que
-                        estudias?</td>
-                    <td><input type="radio" name="pregunta24" value="si" {{ isset($tecnica) && $tecnica->pregunta_4_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta24" value="no" {{ isset($tecnica) && $tecnica->pregunta_4_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>E.- ¿Sueles tener dificultad en entender tus apuntes de clase cuando tratas de repasarlos,
-                        después de cierto tiempo?</td>
-                    <td><input type="radio" name="pregunta25" value="si" {{ isset($tecnica) && $tecnica->pregunta_5_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta25" value="no" {{ isset($tecnica) && $tecnica->pregunta_5_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>F.- Al tomar notas, ¿te sueles quedar atrás con frecuencia debido a que no puedes escribir con
-                        suficiente rapidez?</td>
-                    <td><input type="radio" name="pregunta26" value="si" {{ isset($tecnica) && $tecnica->pregunta_6_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta26" value="no" {{ isset($tecnica) && $tecnica->pregunta_6_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>G.- Poco después de comenzar un curso, ¿sueles encontrarte con tus apuntes formando un
-                        “revoltijo"?</td>
-                    <td><input type="radio" name="pregunta27" value="si" {{ isset($tecnica) && $tecnica->pregunta_7_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta27" value="no" {{ isset($tecnica) && $tecnica->pregunta_7_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>H.- ¿Tomas normalmente tus apuntes tratando de escribir las palabras exactas del docente?</td>
-                    <td><input type="radio" name="pregunta28" value="si" {{ isset($tecnica) && $tecnica->pregunta_8_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta28" value="no" {{ isset($tecnica) && $tecnica->pregunta_8_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>I.- Cuando tomas notas de un libro, ¿tienes la costumbre de copiar el material necesario,
-                        palabra por Palabra?</td>
-                    <td><input type="radio" name="pregunta29" value="si" {{ isset($tecnica) && $tecnica->pregunta_9_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta29" value="no" {{ isset($tecnica) && $tecnica->pregunta_9_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>J.- ¿Te es difícil preparar un temario apropiado para una evaluación?</td>
-                    <td><input type="radio" name="pregunta30" value="si" {{ isset($tecnica) && $tecnica->pregunta_10_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta30" value="no" {{ isset($tecnica) && $tecnica->pregunta_10_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>K.- ¿Tienes problemas para organizar los datos o el contenido de una evaluación?</td>
-                    <td><input type="radio" name="pregunta31" value="si" {{ isset($tecnica) && $tecnica->pregunta_11_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta31" value="no" {{ isset($tecnica) && $tecnica->pregunta_11_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>L.- ¿Al repasar el temario de una evaluación formulas un resumen de este?</td>
-                    <td><input type="radio" name="pregunta32" value="si" {{ isset($tecnica) && $tecnica->pregunta_12_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta32" value="no" {{ isset($tecnica) && $tecnica->pregunta_12_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>M.- ¿Te preparas a veces para una evaluación memorizando fórmulas, definiciones o reglas que no
-                        entiendes con claridad?</td>
-                    <td><input type="radio" name="pregunta33" value="si" {{ isset($tecnica) && $tecnica->pregunta_13_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta33" value="no" {{ isset($tecnica) && $tecnica->pregunta_13_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>N.- ¿Te resulta difícil decidir qué estudiar y cómo estudiarlo cuando preparas una evaluación?
-                    </td>
-                    <td><input type="radio" name="pregunta34" value="si" {{ isset($tecnica) && $tecnica->pregunta_14_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta34" value="no" {{ isset($tecnica) && $tecnica->pregunta_14_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>O.- ¿Sueles tener dificultades para organizar, en un orden lógico, las asignaturas que debes
-                        estudiar por temas?</td>
-                    <td><input type="radio" name="pregunta35" value="si" {{ isset($tecnica) && $tecnica->pregunta_15_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta35" value="no" {{ isset($tecnica) && $tecnica->pregunta_15_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>P.- Al preparar evaluación, ¿sueles estudiar toda la asignatura, en el último momento?</td>
-                    <td><input type="radio" name="pregunta36" value="si" {{ isset($tecnica) && $tecnica->pregunta_16_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta36" value="no" {{ isset($tecnica) && $tecnica->pregunta_16_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>Q.- ¿Sueles entregar tus exámenes sin revisarlos detenidamente, para ver si tienen algún error
-                        cometido por descuido?</td>
-                    <td><input type="radio" name="pregunta37" value="si" {{ isset($tecnica) && $tecnica->pregunta_17_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta37" value="no" {{ isset($tecnica) && $tecnica->pregunta_17_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>R.- ¿Te es posible con frecuencia terminar una evaluación de exposición de un tema en el tiempo
-                        prescrito?</td>
-                    <td><input type="radio" name="pregunta38" value="si" {{ isset($tecnica) && $tecnica->pregunta_18_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta38" value="no" {{ isset($tecnica) && $tecnica->pregunta_18_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>S.- ¿Sueles perder puntos en exámenes con preguntas de “Verdadero - Falso", debido a que no lees
-                        detenidamente?</td>
-                    <td><input type="radio" name="pregunta39" value="si" {{ isset($tecnica) && $tecnica->pregunta_19_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta39" value="no" {{ isset($tecnica) && $tecnica->pregunta_19_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-                <tr>
-                    <td>T.- ¿Empleas normalmente mucho tiempo en contestar la primera mitad de la prueba y tienes que
-                        apresurarte en la segunda?</td>
-                    <td><input type="radio" name="pregunta40" value="si" {{ isset($tecnica) && $tecnica->pregunta_20_tecnica == 'si' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                    <td><input type="radio" name="pregunta40" value="no" {{ isset($tecnica) && $tecnica->pregunta_20_tecnica == 'no' ? 'checked' : '' }} onchange="contarRespuestas2()"></td>
-                </tr>
-            </tbody>
-        </table>
-    </form>
-    <p id="resultado2"></p>
-    <script>
-        function contarRespuestas2() {
-            // Selecciona todas las respuestas "sí" y "no" del formulario usando querySelectorAll
-            const respuestasSi = document.querySelectorAll('#encuestaForm2 input[type="radio"][value="si"]:checked');
-            const respuestasNo = document.querySelectorAll('#encuestaForm2 input[type="radio"][value="no"]:checked');
-
-            // Cuenta las respuestas seleccionadas
-            const siCount = respuestasSi.length;
-            const noCount = respuestasNo.length;
-
-            // Muestra los resultados
-            document.getElementById("resultado2").innerHTML = "Calificacion:" + "<br>" +
-                "Respuestas Sí: " + siCount + "<br>" +
-                "Respuestas No: " + noCount;
-            // Asigna el total de respuestas "No" al campo oculto
-            document.getElementById("total_no2").value = noCount;
-        }
-    </script>
-
-    <!-- Encuesta sobre Motivación para el Estudio -->
-    <h2>Encuesta sobre Motivación para el Estudio</h2>
-    <form id="encuestaForm3" action="{{ route('alumno.habilidad.guardar3') }}" method="POST">
-        @csrf
-        <!-- Obtenemos el id del alumno para mandarlo en el post despues -->
-        <input type="hidden" name="alumno_id" value="{{ $alumno->id_alumno}}">
-
-        <!-- Aqui contamos los no obtenidos para sacar el puntaje -->
-        <input type="hidden" name="total_no3" id="total_no3">
-        <table>
-            <thead>
-                <tr>
-                    <th>Preguntas</th>
-                    <th>Sí</th>
-                    <th>No</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>A.- Después de los primeros días o semanas del curso, ¿tiendes a perder interés por el estudio?
-                    </td>
-                    <td><input type="radio" name="pregunta41" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_1_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta41" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_2_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>B.- ¿Crees que en general, basta estudiar lo necesario para obtener un "aprobado” en las
-                        asignaturas?</td>
-                    <td><input type="radio" name="pregunta42" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_2_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta42" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_2_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>C.- ¿Te sientes frecuentemente confuso o indeciso sobre cuáles deben ser tus metas formativas y
-                        profesionales?</td>
-                    <td><input type="radio" name="pregunta43"
-                            value="si"{{ isset($motivacion) && $motivacion->pregunta_3_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta43" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_3_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>D.- ¿Sueles pensar que no vale la pena el tiempo y el esfuerzo que son necesarios para lograr
-                        una educación universitaria?</td>
-                    <td><input type="radio" name="pregunta44" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_4_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta44" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_4_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>E.- ¿Crees que es más importante divertirte y disfrutar de la vida, que estudiar?</td>
-                    <td><input type="radio" name="pregunta45" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_5_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta45" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_5_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>F.- ¿Sueles pasar el tiempo de clase en divagaciones o soñando despierto en lugar de atender al
-                        docente?</td>
-                    <td><input type="radio" name="pregunta46" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_6_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta46" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_6_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>G.- ¿Te sientes habitualmente incapaz de concentrarte en tus estudios debido a que estas
-                        inquieto, aburrido o de mal humor?</td>
-                    <td><input type="radio" name="pregunta47" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_7_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta47" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_7_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>H.- ¿Piensas con frecuencia que las asignaturas que estudias tienen poco valor practico para ti?
-                    </td>
-                    <td><input type="radio" name="pregunta48" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_8_organizacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta48" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_8_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>I.- ¿Sientes, frecuentes deseos de abandonar la escuela y conseguir un trabajo?</td>
-                    <td><input type="radio" name="pregunta49" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_9_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta49" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_9_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>J.- ¿Sueles tener la sensación de lo que se enseña en los centros docentes no te prepara para
-                        afrontar los problemas de la vida adulta?</td>
-                    <td><input type="radio" name="pregunta50" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_10_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta50" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_10_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>K.- ¿Sueles dedicarte de modo casual, según el estado de ánimo en que te encuentres?</td>
-                    <td><input type="radio" name="pregunta51" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_11_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta51" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_11_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>L.- ¿Te horroriza estudiar libros de textos porque son insípidos y aburridos?</td>
-                    <td><input type="radio" name="pregunta52" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_12_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta52" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_12_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>M.- ¿Esperas normalmente a que te fijen la fecha de una evaluación para comenzar a estudiar los
-                        textos o repasar tus apuntes de clases?</td>
-                    <td><input type="radio" name="pregunta53" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_13_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta53" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_13_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>N - ¿Sueles pensar que los exámenes son pruebas penosas de las que no se puede escapar y
-                        respecto a las cuales lo que debe hacerse es sobrevivir, del modo que sea?</td>
-                    <td><input type="radio" name="pregunta54" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_14_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta54" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_14_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>O.- ¿Sientes con frecuencia que tus docentes no comprenden las necesidades de los estudiantes?
-                    </td>
-                    <td><input type="radio" name="pregunta55" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_15_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta55" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_15_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>P.- ¿Tienes normalmente la sensación de que tus docentes exigen demasiadas horas de estudio
-                        fuera de clase?</td>
-                    <td><input type="radio" name="pregunta56" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_16_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta56" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_16_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>Q.- ¿Dudas por lo general, en pedir ayuda a tus docentes en tareas que te son difíciles?</td>
-                    <td><input type="radio" name="pregunta57" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_17_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta57" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_17_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>R.- ¿Sueles pensar que tus docentes no tienen contacto con los temas y sucesos de actualidad?
-                    </td>
-                    <td><input type="radio" name="pregunta58" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_18_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta58" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_18_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>S.- ¿Te sientes reacio, por lo general, a hablar con tus docentes de tus proyectos futuros, de
-                        estudio o profesionales?</td>
-                    <td><input type="radio" name="pregunta59" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_19_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta59" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_19_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-                <tr>
-                    <td>T.- ¿Criticas con frecuencia a tus docentes cuando charlas con tus compañeros?</td>
-                    <td><input type="radio" name="pregunta60" value="si"
-                            {{ isset($motivacion) && $motivacion->pregunta_20_motivacion == 'si' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                    <td><input type="radio" name="pregunta60" value="no"
-                            {{ isset($motivacion) && $motivacion->pregunta_20_motivacion == 'no' ? 'checked' : '' }}
-                            onchange="contarRespuestas3()"></td>
-                </tr>
-            </tbody>
-        </table>
-    </form>
-    <p id="resultado3"></p>
-    <script>
-        function contarRespuestas3() {
-            // Selecciona todas las respuestas "sí" y "no" del formulario usando querySelectorAll
-            const respuestasSi = document.querySelectorAll('#encuestaForm3 input[type="radio"][value="si"]:checked');
-            const respuestasNo = document.querySelectorAll('#encuestaForm3 input[type="radio"][value="no"]:checked');
-
-            // Cuenta las respuestas seleccionadas
-            const siCount = respuestasSi.length;
-            const noCount = respuestasNo.length;
-
-            // Muestra los resultados
-            document.getElementById("resultado3").innerHTML = "Calificacion:" + "<br>" +
-                "Respuestas Sí: " + siCount + "<br>" +
-                "Respuestas No: " + noCount;
-            // Asigna el total de respuestas "No" al campo oculto
-            document.getElementById("total_no3").value = noCount;
-        }
-    </script>
-
-
-    <!-- Funciones a considerar el alumno-profesor -->
-    <div class="botones">
-    <a href="{{ route('maestro.grupos') }}">← Volver a Mis Grupos</a>
-
-    <button id="generarPDF" onclick="generarPDF()">Generar PDF</button>
+        <div class="absolute left-5 hidden md:flex gap-4 items-center">
+            <img src="{{ asset('multimedia/tesi.png') }}" alt="Logo TESI" class="h-12 md:h-16">
+            <img src="{{ asset('multimedia/isclogo.png') }}" alt="Logo ISC" class="h-12 md:h-16">
+        </div>
+        <h1 class="text-white font-bold text-lg md:text-4xl tracking-wider">SISTEMA DE TUTORIAS</h1>
+        <div class="md:hidden w-8"></div>
     </div>
 
-
-    <!-- Calificacion global -->
-    <div class="calificacion-global">
-        <h2>Calificación Global</h2>
-        <p>Se califica cada una de las encuestas por separado. Para calificar tu encuesta sigue el procedimiento que se
-            te indica:</p>
-        <ol>
-            <li>Se cuentan las respuestas a la que contestaste con la palabra NO.</li>
-            <li>Se utiliza la tabla de comparación para estudiantes universitarios. (Basada en una muestra de 2873
-                estudiantes de la South West Texas State University).</li>
-            <li>Prestar atención especial a las calificaciones consideradas como un promedio bajo o incluso peor.</li>
-            <li>El paso siguiente ha de consistir en comenzar a corregir adecuadamente las deficiencias identificadas.
-            </li>
-        </ol>
-        <p>En primer lugar, deberá releer todas las preguntas de la encuesta contestada con un SI y preguntarte a ti
-            mismo estas cosas acerca de cada una:</p>
-        <ul>
-            <li>a). ¿Qué tan serio es el problema?</li>
-            <li>b). ¿Qué lo causa?</li>
-            <li>c). ¿Qué puedo hacer para corregirlo?</li>
-        </ul>
-        <p>Debo señalarte que las encuestas califican lo siguiente:</p>
-        <ul>
-            <li>La encuesta de organización del estudio, se refiere a los problemas sobre el uso efectivo del tiempo de
-                estudio, así como al lugar donde se estudia.</li>
-            <li>La encuesta de técnicas de estudio se refiere a los problemas de: lectura de libros, toma de apuntes,
-                preparación de exámenes y la realización de los mismos.</li>
-            <li>La encuesta de motivación para el estudio se refiere a los problemas relacionados con la actitud
-                indiferente o negativa hacia el valor de la educación, y a los problemas que surgen de la indiferencia
-                hacia tus docentes.</li>
-        </ul>
-
-        <h3>TABLA COMPARATIVA ENCUESTAS SOBRE HABILIDADES DE ESTUDIO</h3>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Calificación en organización del estudio (I)</th>
-                    <th>Calificación de técnicas de estudio (II)</th>
-                    <th>Calificación en motivación para el estudio (III)</th>
-                    <th>Calificación total en habilidades GLOBAL (IV)</th>
-                    <th>Interpretación (V)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>20</td>
-                    <td>20</td>
-                    <td>20</td>
-                    <td>57-60</td>
-                    <td>Muy alto</td>
-                </tr>
-                <tr>
-                    <td>19</td>
-                    <td>18-19</td>
-                    <td>19</td>
-                    <td>52-56</td>
-                    <td>Alto</td>
-                </tr>
-                <tr>
-                    <td>18</td>
-                    <td>17</td>
-                    <td>18</td>
-                    <td>50-51</td>
-                    <td>Por encima del promedio</td>
-                </tr>
-                <tr>
-                    <td>16-17</td>
-                    <td>16</td>
-                    <td>17</td>
-                    <td>48-49</td>
-                    <td>Promedio alto</td>
-                </tr>
-                <tr>
-                    <td>14-13</td>
-                    <td>14-15</td>
-                    <td>16</td>
-                    <td>43-47</td>
-                    <td>Promedio</td>
-                </tr>
-                <tr>
-                    <td>12-13</td>
-                    <td>13</td>
-                    <td>15</td>
-                    <td>39-42</td>
-                    <td>Promedio bajo</td>
-                </tr>
-                <tr>
-                    <td>11</td>
-                    <td>12</td>
-                    <td>13-14</td>
-                    <td>37-38</td>
-                    <td>Por debajo del promedio</td>
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td>11</td>
-                    <td>12</td>
-                    <td>34-36</td>
-                    <td>Bajo</td>
-                </tr>
-                <tr>
-                    <td>0-9</td>
-                    <td>0-10</td>
-                    <td>0-11</td>
-                    <td>0-33</td>
-                    <td>Muy bajo</td>
-                </tr>
-            </tbody>
-        </table>
+    <!-- Subheader -->
+    <div class="bg-tec-green shadow-[0_12px_14px_rgba(0,0,0,0.25)] h-10 md:h-12 shrink-0 flex items-center justify-center relative z-20">
+        <h2 class="text-white font-bold text-base md:text-2xl tracking-wide">MAESTRO - VISTA DE ALUMNO</h2>
     </div>
-            <a href="{{ route('maestro.grupos') }}">← Volver a Mis Grupos</a>
 
-</div>
-</main>
+    <!-- Main Container -->
+    <div class="flex flex-1 overflow-hidden relative">
+        
+        <div id="overlay" class="hidden fixed inset-0 bg-black/50 z-30 md:hidden"></div>
+        
+        <!-- Sidebar -->
+        <div id="sidebar" class="bg-sidebar-dark w-64 flex flex-col gap-1.5 md:gap-2 shadow-[4px_0_10px_rgba(0,0,0,0.3)]
+            fixed md:absolute top-0 left-0 h-full z-40 md:z-30
+            transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out
+            p-4 md:p-6 overflow-y-auto">
+            
+            <button id="closeMenu" class="md:hidden self-end text-white text-2xl mb-3">
+                <i class="fa-solid fa-times"></i>
+            </button>
+
+            <!-- Menú de Navegación -->
+            <a href="{{ route('maestro.alumno.seleccionar', $alumno->id_alumno) }}" 
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1 mb-2">
+                <i class="fa-solid fa-home text-base w-4"></i>
+                <span>Inicio</span>
+            </a>
+
+            <div class="border-t border-white/20 my-2"></div>
+
+            <!-- Opciones del Alumno -->
+            <a href="{{ route('maestro.maestro.ficha_id_profesor', $alumno->id_alumno) }}" 
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-id-card text-base w-4"></i>
+                <span>Ficha de Identificación</span>
+            </a>
+
+            <div class="text-hover-pink px-4 py-2.5 rounded-lg font-bold text-xs md:text-sm flex items-center gap-2 bg-hover-pink/10">
+                <i class="fa-solid fa-clipboard-list text-base w-4"></i>
+                <span>Habilidades de Estudio</span>
+            </div>
+
+            <a href="{{ route('maestro.maestro.solicitudes.lista', $alumno->id_alumno) }}" 
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-comments text-base w-4"></i>
+                <span>Solicitudes de Asesoría</span>
+            </a>
+
+            <a href="{{ route('maestro.canalizacion_alumno', $alumno->id_alumno) }}" 
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-share-nodes text-base w-4"></i>
+                <span>Canalización</span>
+            </a>
+
+            <div class="border-t border-white/20 my-2"></div>
+
+            <a href="{{ route('maestro.grupo.show', $alumno->id_grupo) }}" 
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-arrow-left text-base w-4"></i>
+                <span>Volver al Grupo</span>
+            </a>
+
+            <div class="mt-8">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="w-full bg-red-600 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Cerrar Sesión</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div id="content-area" class="flex-1 p-4 md:p-10 flex justify-center items-start overflow-y-auto md:ml-64 custom-scrollbar">
+            <div class="bg-tec-green-dark/90 backdrop-blur-md rounded-xl md:rounded-2xl p-6 md:p-10 w-full max-w-6xl shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+                
+                <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b-2 border-white/30 pb-4 gap-4">
+                    <h2 class="text-white text-xl md:text-3xl font-bold text-center md:text-left">
+                        ENCUESTA DE HABILIDADES DE ESTUDIO
+                    </h2>
+                    <button onclick="generarPDF()" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition-all duration-300 flex items-center gap-2 hover:scale-105">
+                        <i class="fa-solid fa-file-pdf"></i>
+                        <span>Generar PDF</span>
+                    </button>
+                </div>
+
+                <div class="text-white/90 mb-8 space-y-4 text-justify">
+                    <p><strong>Resultados del Alumno:</strong> {{ $alumno->nombre_completo }}</p>
+                    <p>A continuación se muestran las respuestas del alumno a los cuestionarios de organización, técnicas y motivación en el estudio.</p>
+                </div>
+
+                <!-- Encuesta de Organización -->
+                <div class="mb-12">
+                    <h3 class="text-white text-xl font-bold mb-4 border-l-4 border-hover-pink pl-3">I. Organización del Estudio</h3>
+                    <div class="overflow-x-auto rounded-lg border border-white/20">
+                        <table class="w-full text-white border-collapse" id="tabla-organizacion">
+                            <thead>
+                                <tr class="bg-white/10">
+                                    <th class="p-3 text-left border-b border-white/20 w-3/4">Preguntas</th>
+                                    <th class="p-3 text-center border-b border-white/20">Sí</th>
+                                    <th class="p-3 text-center border-b border-white/20">No</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $preguntasOrg = [
+                                        'A.- ¿Sueles dejar para el último la preparación de tus trabajos?',
+                                        'B.- ¿Crees que el sueño o el cansancio te impidan estudiar eficazmente en muchas ocasiones?',
+                                        'C.- ¿Es frecuente que no termines tu tarea a tiempo?',
+                                        'D.- ¿Tiendes a emplear tiempo en leer revistas, ver televisión o charlar cuando debieras estudiar?',
+                                        'E.- ¿Tus actividades sociales o deportivas te llevan a descuidar tus tareas escolares?',
+                                        'F.- ¿Sueles dejar pasar un día o más antes de repasar los apuntes tomados en clase?',
+                                        'G.- ¿Sueles dedicar tu tiempo libre entre las 4:00 de la tarde y las 9:00 de la noche a otras actividades que no sean estudiar?',
+                                        'H.- ¿Descubres algunas veces de pronto que debes entregar una tarea antes de lo que creías?',
+                                        'I.- ¿Te retrasas con frecuencia en una asignatura debido a que tienes que estudiar otra?',
+                                        'J.- ¿Te parece que tu rendimiento es muy bajo en relación con el tiempo que dedicas al estudio?',
+                                        'K.- ¿Está situado tu escritorio directamente frente a una ventana, puerta u otra fuente de distracción?',
+                                        'L.- ¿Sueles tener fotografías, trofeos o recuerdos sobre tu mesa de escritorio?',
+                                        'M.- ¿Sueles estudiar recostado en la cama o arrellanado en un asiento cómodo?',
+                                        'N.- ¿Produce resplandor la lámpara que utilizas al estudiar?',
+                                        'O.- Tu mesa de estudio, ¿está tan desordenada y llena de objetos que no dispones de sitio suficiente para estudiar con eficacia?',
+                                        'P.- ¿Sueles interrumpir tu estudio por personas que vienen a visitarte?',
+                                        'Q.- ¿Estudias con frecuencia mientras tienes puesta la televisión y/o la radio?',
+                                        'R.- En el lugar donde estudias, ¿se pueden ver con facilidad revistas, fotos de jóvenes o materiales pertenecientes a tu afición?',
+                                        'S.- ¿Con frecuencia interrumpen tu estudio actividades o ruidos que provienen del exterior?',
+                                        'T.- ¿Suele hacerse lento tu estudio debido a que no tienes a la mano los libros y los materiales necesarios?'
+                                    ];
+                                @endphp
+                                @foreach($preguntasOrg as $index => $pregunta)
+                                    @php $i = $index + 1; @endphp
+                                    <tr class="hover:bg-white/5 border-b border-white/10">
+                                        <td class="p-3 border-r border-white/10">{{ $pregunta }}</td>
+                                        <td class="p-3 text-center border-r border-white/10">
+                                            <input type="radio" name="org_p{{$i}}" value="si" disabled {{ isset($organizacion) && $organizacion->{'pregunta_'.$i.'_organizacion'} == 'si' ? 'checked' : '' }}>
+                                        </td>
+                                        <td class="p-3 text-center">
+                                            <input type="radio" name="org_p{{$i}}" value="no" disabled {{ isset($organizacion) && $organizacion->{'pregunta_'.$i.'_organizacion'} == 'no' ? 'checked' : '' }}>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Encuesta de Técnicas -->
+                <div class="mb-12">
+                    <h3 class="text-white text-xl font-bold mb-4 border-l-4 border-hover-pink pl-3">II. Técnicas de Estudio</h3>
+                    <div class="overflow-x-auto rounded-lg border border-white/20">
+                        <table class="w-full text-white border-collapse" id="tabla-tecnicas">
+                            <thead>
+                                <tr class="bg-white/10">
+                                    <th class="p-3 text-left border-b border-white/20 w-3/4">Preguntas</th>
+                                    <th class="p-3 text-center border-b border-white/20">Sí</th>
+                                    <th class="p-3 text-center border-b border-white/20">No</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $preguntasTec = [
+                                        'A.- ¿Tiendes a comenzar la lectura de un libro de texto sin hojear previamente los subtítulos y las ilustraciones?',
+                                        'B.- ¿Te saltas por lo general las figuras, gráficas y tablas cuando estudias un tema?',
+                                        'C.- ¿Suelo serte difícil seleccionar los puntos de los temas de estudio?',
+                                        'D.- ¿Te sorprendes con cierta frecuencia, pensando en algo que no tiene nada que ver con lo que estudias?',
+                                        'E.- ¿Sueles tener dificultad en entender tus apuntes de clase cuando tratas de repasarlos, después de cierto tiempo?',
+                                        'F.- Al tomar notas, ¿te sueles quedar atrás con frecuencia debido a que no puedes escribir con suficiente rapidez?',
+                                        'G.- Poco después de comenzar un curso, ¿sueles encontrarte con tus apuntes formando un “revoltijo"?',
+                                        'H.- ¿Tomas normalmente tus apuntes tratando de escribir las palabras exactas del docente?',
+                                        'I.- Cuando tomas notas de un libro, ¿tienes la costumbre de copiar el material necesario, palabra por Palabra?',
+                                        'J.- ¿Te es difícil preparar un temario apropiado para una evaluación?',
+                                        'K.- ¿Tienes problemas para organizar los datos o el contenido de una evaluación?',
+                                        'L.- ¿Al repasar el temario de una evaluación formulas un resumen de este?',
+                                        'M.- ¿Te preparas a veces para una evaluación memorizando fórmulas, definiciones o reglas que no entiendes con claridad?',
+                                        'N.- ¿Te resulta difícil decidir qué estudiar y cómo estudiarlo cuando preparas una evaluación?',
+                                        'O.- ¿Sueles tener dificultades para organizar, en un orden lógico, las asignaturas que debes estudiar por temas?',
+                                        'P.- Al preparar evaluación, ¿sueles estudiar toda la asignatura, en el último momento?',
+                                        'Q.- ¿Sueles entregar tus exámenes sin revisarlos detenidamente, para ver si tienen algún error cometido por descuido?',
+                                        'R.- ¿Te es posible con frecuencia terminar una evaluación de exposición de un tema en el tiempo prescrito?',
+                                        'S.- ¿Sueles perder puntos en exámenes con preguntas de “Verdadero - Falso", debido a que no lees detenidamente?',
+                                        'T.- ¿Empleas normalmente mucho tiempo en contestar la primera mitad de la prueba y tienes que apresurarte en la segunda?'
+                                    ];
+                                @endphp
+                                @foreach($preguntasTec as $index => $pregunta)
+                                    @php $i = $index + 1; @endphp
+                                    <tr class="hover:bg-white/5 border-b border-white/10">
+                                        <td class="p-3 border-r border-white/10">{{ $pregunta }}</td>
+                                        <td class="p-3 text-center border-r border-white/10">
+                                            <input type="radio" name="tec_p{{$i}}" value="si" disabled {{ isset($tecnica) && $tecnica->{'pregunta_'.$i.'_tecnica'} == 'si' ? 'checked' : '' }}>
+                                        </td>
+                                        <td class="p-3 text-center">
+                                            <input type="radio" name="tec_p{{$i}}" value="no" disabled {{ isset($tecnica) && $tecnica->{'pregunta_'.$i.'_tecnica'} == 'no' ? 'checked' : '' }}>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Encuesta de Motivación -->
+                <div class="mb-12">
+                    <h3 class="text-white text-xl font-bold mb-4 border-l-4 border-hover-pink pl-3">III. Motivación para el Estudio</h3>
+                    <div class="overflow-x-auto rounded-lg border border-white/20">
+                        <table class="w-full text-white border-collapse" id="tabla-motivacion">
+                            <thead>
+                                <tr class="bg-white/10">
+                                    <th class="p-3 text-left border-b border-white/20 w-3/4">Preguntas</th>
+                                    <th class="p-3 text-center border-b border-white/20">Sí</th>
+                                    <th class="p-3 text-center border-b border-white/20">No</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $preguntasMot = [
+                                        'A.- Después de los primeros días o semanas del curso, ¿tiendes a perder interés por el estudio?',
+                                        'B.- ¿Crees que en general, basta estudiar lo necesario para obtener un "aprobado” en las asignaturas?',
+                                        'C.- ¿Te sientes frecuentemente confuso o indeciso sobre cuáles deben ser tus metas formativas y profesionales?',
+                                        'D.- ¿Sueles pensar que no vale la pena el tiempo y el esfuerzo que son necesarios para lograr una educación universitaria?',
+                                        'E.- ¿Crees que es más importante divertirte y disfrutar de la vida, que estudiar?',
+                                        'F.- ¿Sueles pasar el tiempo de clase en divagaciones o soñando despierto en lugar de atender al docente?',
+                                        'G.- ¿Te sientes habitualmente incapaz de concentrarte en tus estudios debido a que estas inquieto, aburrido o de mal humor?',
+                                        'H.- ¿Piensas con frecuencia que las asignaturas que estudias tienen poco valor practico para ti?',
+                                        'I.- ¿Sientes, frecuentes deseos de abandonar la escuela y conseguir un trabajo?',
+                                        'J.- ¿Sueles tener la sensación de lo que se enseña en los centros docentes no te prepara para afrontar los problemas de la vida adulta?',
+                                        'K.- ¿Sueles dedicarte de modo casual, según el estado de ánimo en que te encuentres?',
+                                        'L.- ¿Te horroriza estudiar libros de textos porque son insípidos y aburridos?',
+                                        'M.- ¿Esperas normalmente a que te fijen la fecha de una evaluación para comenzar a estudiar los textos o repasar tus apuntes de clases?',
+                                        'N - ¿Sueles pensar que los exámenes son pruebas penosas de las que no se puede escapar y respecto a las cuales lo que debe hacerse es sobrevivir, del modo que sea?',
+                                        'O.- ¿Sientes con frecuencia que tus docentes no comprenden las necesidades de los estudiantes?',
+                                        'P.- ¿Tienes normalmente la sensación de que tus docentes exigen demasiadas horas de estudio fuera de clase?',
+                                        'Q.- ¿Dudas por lo general, en pedir ayuda a tus docentes en tareas que te son difíciles?',
+                                        'R.- ¿Sueles pensar que tus docentes no tienen contacto con los temas y sucesos de actualidad?',
+                                        'S.- ¿Te sientes reacio, por lo general, a hablar con tus docentes de tus proyectos futuros, de estudio o profesionales?',
+                                        'T.- ¿Criticas con frecuencia a tus docentes cuando charlas con tus compañeros?'
+                                    ];
+                                @endphp
+                                @foreach($preguntasMot as $index => $pregunta)
+                                    @php $i = $index + 1; @endphp
+                                    <tr class="hover:bg-white/5 border-b border-white/10">
+                                        <td class="p-3 border-r border-white/10">{{ $pregunta }}</td>
+                                        <td class="p-3 text-center border-r border-white/10">
+                                            <input type="radio" name="mot_p{{$i}}" value="si" disabled {{ isset($motivacion) && $motivacion->{'pregunta_'.$i.'_motivacion'} == 'si' ? 'checked' : '' }}>
+                                        </td>
+                                        <td class="p-3 text-center">
+                                            <input type="radio" name="mot_p{{$i}}" value="no" disabled {{ isset($motivacion) && $motivacion->{'pregunta_'.$i.'_motivacion'} == 'no' ? 'checked' : '' }}>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tabla Comparativa -->
+                <div class="mb-8">
+                    <h3 class="text-white text-xl font-bold mb-4 border-l-4 border-hover-pink pl-3">Tabla Comparativa de Resultados</h3>
+                    <div class="overflow-x-auto rounded-lg border border-white/20">
+                        <table class="w-full text-white border-collapse text-center text-sm">
+                            <thead>
+                                <tr class="bg-white/10">
+                                    <th class="p-2 border border-white/20">Organización (I)</th>
+                                    <th class="p-2 border border-white/20">Técnicas (II)</th>
+                                    <th class="p-2 border border-white/20">Motivación (III)</th>
+                                    <th class="p-2 border border-white/20">Total Global (IV)</th>
+                                    <th class="p-2 border border-white/20">Interpretación (V)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-white/5"><td class="p-2 border border-white/20">20</td><td class="p-2 border border-white/20">20</td><td class="p-2 border border-white/20">20</td><td class="p-2 border border-white/20">57-60</td><td class="p-2 border border-white/20">Muy alto</td></tr>
+                                <tr class="hover:bg-white/5"><td class="p-2 border border-white/20">19</td><td class="p-2 border border-white/20">18-19</td><td class="p-2 border border-white/20">19</td><td class="p-2 border border-white/20">52-56</td><td class="p-2 border border-white/20">Alto</td></tr>
+                                <tr class="hover:bg-white/5"><td class="p-2 border border-white/20">18</td><td class="p-2 border border-white/20">17</td><td class="p-2 border border-white/20">18</td><td class="p-2 border border-white/20">50-51</td><td class="p-2 border border-white/20">Por encima del promedio</td></tr>
+                                <tr class="hover:bg-white/5"><td class="p-2 border border-white/20">16-17</td><td class="p-2 border border-white/20">16</td><td class="p-2 border border-white/20">17</td><td class="p-2 border border-white/20">48-49</td><td class="p-2 border border-white/20">Promedio alto</td></tr>
+                                <tr class="hover:bg-white/5"><td class="p-2 border border-white/20">14-13</td><td class="p-2 border border-white/20">14-15</td><td class="p-2 border border-white/20">16</td><td class="p-2 border border-white/20">43-47</td><td class="p-2 border border-white/20">Promedio</td></tr>
+                                <tr class="hover:bg-white/5"><td class="p-2 border border-white/20">12-13</td><td class="p-2 border border-white/20">13</td><td class="p-2 border border-white/20">15</td><td class="p-2 border border-white/20">39-42</td><td class="p-2 border border-white/20">Promedio bajo</td></tr>
+                                <tr class="hover:bg-white/5"><td class="p-2 border border-white/20">11</td><td class="p-2 border border-white/20">12</td><td class="p-2 border border-white/20">13-14</td><td class="p-2 border border-white/20">37-38</td><td class="p-2 border border-white/20">Por debajo del promedio</td></tr>
+                                <tr class="hover:bg-white/5"><td class="p-2 border border-white/20">10</td><td class="p-2 border border-white/20">11</td><td class="p-2 border border-white/20">12</td><td class="p-2 border border-white/20">34-36</td><td class="p-2 border border-white/20">Bajo</td></tr>
+                                <tr class="hover:bg-white/5"><td class="p-2 border border-white/20">0-9</td><td class="p-2 border border-white/20">0-10</td><td class="p-2 border border-white/20">0-11</td><td class="p-2 border border-white/20">0-33</td><td class="p-2 border border-white/20">Muy bajo</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Menú hamburguesa
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+
+        const closeSidebar = () => {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        };
+
+        closeMenu.addEventListener('click', closeSidebar);
+        overlay.addEventListener('click', closeSidebar);
+
+        // Función Generar PDF
+        function generarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Configuración de fuentes y colores
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(18);
+            doc.setTextColor(44, 62, 80); // Color oscuro
+            doc.text('Encuesta de Habilidades de Estudio', 105, 20, null, null, 'center');
+            
+            doc.setFontSize(12);
+            doc.setTextColor(100);
+            doc.text('Alumno: {{ $alumno->nombre_completo }}', 14, 30);
+            
+            let yPos = 40;
+
+            // Función auxiliar para agregar tablas
+            const agregarTabla = (titulo, idTabla) => {
+                doc.setFontSize(14);
+                doc.setTextColor(19, 147, 74); // Tec Green
+                doc.text(titulo, 14, yPos);
+                yPos += 5;
+
+                const tabla = document.getElementById(idTabla);
+                const filas = [];
+                
+                // Recorrer filas de la tabla HTML
+                tabla.querySelectorAll('tbody tr').forEach(tr => {
+                    const pregunta = tr.cells[0].innerText;
+                    const siChecked = tr.cells[1].querySelector('input').checked ? 'X' : '';
+                    const noChecked = tr.cells[2].querySelector('input').checked ? 'X' : '';
+                    filas.push([pregunta, siChecked, noChecked]);
+                });
+
+                doc.autoTable({
+                    startY: yPos,
+                    head: [['Pregunta', 'Sí', 'No']],
+                    body: filas,
+                    theme: 'grid',
+                    headStyles: { fillColor: [19, 147, 74], textColor: 255 },
+                    columnStyles: {
+                        0: { cellWidth: 130 },
+                        1: { cellWidth: 20, halign: 'center' },
+                        2: { cellWidth: 20, halign: 'center' }
+                    },
+                    margin: { top: 10 },
+                });
+
+                yPos = doc.lastAutoTable.finalY + 15;
+            };
+
+            agregarTabla('I. Organización del Estudio', 'tabla-organizacion');
+            
+            // Verificar si necesitamos nueva página
+            if (yPos > 250) { doc.addPage(); yPos = 20; }
+            agregarTabla('II. Técnicas de Estudio', 'tabla-tecnicas');
+
+            if (yPos > 250) { doc.addPage(); yPos = 20; }
+            agregarTabla('III. Motivación para el Estudio', 'tabla-motivacion');
+
+            doc.save('Encuesta_Habilidades_{{ $alumno->matricula }}.pdf');
+        }
+    </script>
 
 </body>
-
 </html>

@@ -31,7 +31,7 @@
     </style>
 </head>
 
-<body class="bg-cover bg-center min-h-screen flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')]">
+<body class="bg-cover bg-center min-h-screen md:min-h-[125vh] flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')] md:[zoom:80%]">
 
     <header class="w-full z-20 relative">
         <div class="bg-[#13934A] w-full h-24 flex items-center justify-between px-4 lg:justify-center relative shadow-[0_12px_14px_rgba(0,0,0,0.25)]" style="box-shadow: 0 12px 14px rgba(0,0,0,0.25);">
