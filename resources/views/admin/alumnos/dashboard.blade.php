@@ -31,7 +31,7 @@
     </style>
 </head>
 
-<body class="bg-cover bg-center min-h-screen flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')]">
+<body class="bg-cover bg-center min-h-screen md:min-h-[125vh] flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')] md:[zoom:80%]">
 
     <header class="w-full z-20 relative">
         
@@ -91,45 +91,88 @@
                 </div>
             @endif
 
-            <div class="flex flex-wrap justify-between items-center mb-6">
-                <h3 class="text-white font-montserrat font-bold text-2xl">Listado de Alumnos</h3>
+            <div class="mb-3 sm:mb-4">
+                <h3 class="text-white font-montserrat font-bold text-lg sm:text-xl md:text-2xl">Buscar Alumnos</h3>
+            </div>
+
+            <!-- Barra de Búsqueda con Filtros -->
+            <div class="mb-4 sm:mb-6 bg-white/10 rounded-lg p-3 sm:p-4 backdrop-blur-sm">
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-end">
+                    <!-- Selector de Filtro -->
+                    <div class="flex-1 min-w-0">
+                        <label for="searchFilter" class="text-white font-montserrat font-medium text-xs sm:text-sm mb-1 sm:mb-2 block">
+                            <i class="fa-solid fa-filter"></i> Buscar por:
+                        </label>
+                        <select id="searchFilter" class="w-full px-3 sm:px-4 py-2 rounded-lg border border-gray-300 bg-white font-montserrat text-xs sm:text-sm focus:ring-2 focus:ring-[#13934A] focus:border-transparent outline-none">
+                            <option value="matricula">Matrícula</option>
+                            <option value="nombre">Nombre</option>
+                            <option value="grupo">Grupo</option>
+                        </select>
+                    </div>
+
+                    <!-- Campo de Búsqueda -->
+                    <div class="flex-[2] min-w-0">
+                        <label for="searchInput" class="text-white font-montserrat font-medium text-xs sm:text-sm mb-1 sm:mb-2 block">
+                            <i class="fa-solid fa-magnifying-glass"></i> Término de búsqueda:
+                        </label>
+                        <input type="text" id="searchInput" placeholder="Escribe para buscar..." 
+                               class="w-full px-3 sm:px-4 py-2 rounded-lg border border-gray-300 bg-white font-montserrat text-xs sm:text-sm focus:ring-2 focus:ring-[#13934A] focus:border-transparent outline-none">
+                    </div>
+
+                    <!-- Botón Limpiar -->
+                    <button type="button" id="clearSearch" class="bg-gray-500 hover:bg-gray-600 text-white px-3 sm:px-4 py-2 rounded-lg font-montserrat font-bold transition flex items-center justify-center gap-2 border-none text-xs sm:text-sm whitespace-nowrap">
+                        <i class="fa-solid fa-xmark"></i> <span class="hidden sm:inline">Limpiar</span><span class="sm:hidden">Limpiar</span>
+                    </button>
+                </div>
+
+                <!-- Contador de resultados -->
+                <div class="mt-2 sm:mt-3 text-white font-montserrat text-xs sm:text-sm">
+                    <span id="resultCount">Mostrando <strong>{{ count($alumnos) }}</strong> de <strong>{{ count($alumnos) }}</strong> alumnos</span>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap justify-between items-center mb-4 sm:mb-6 gap-3">
+                <h3 class="text-white font-montserrat font-bold text-lg sm:text-xl md:text-2xl">Listado de Alumnos</h3>
                 
-                <button type="button" class="bg-[#A3E635] hover:bg-[#84cc16] text-[#044C26] font-bold py-2 px-6 rounded-lg shadow-lg transform hover:-translate-y-1 transition duration-200 flex items-center gap-2 border-none" 
+                <button type="button" class="bg-[#A3E635] hover:bg-[#84cc16] text-[#044C26] font-bold py-2 px-4 sm:px-6 rounded-lg shadow-lg transform hover:-translate-y-1 transition duration-200 flex items-center gap-2 border-none text-sm sm:text-base" 
                         data-bs-toggle="modal" data-bs-target="#registroModal">
-                    <i class="fa-solid fa-circle-plus text-xl"></i>
-                    Nuevo Alumno
+                    <i class="fa-solid fa-circle-plus text-lg sm:text-xl"></i>
+                    <span class="hidden xs:inline">Nuevo Alumno</span><span class="xs:hidden">Nuevo</span>
                 </button>
             </div>
 
             <div class="overflow-x-auto rounded-lg shadow-lg">
                 <table class="w-full text-left border-collapse">
-                    <thead class="bg-[#0A8644] text-white font-montserrat uppercase text-sm">
+                    <thead class="bg-[#0A8644] text-white font-montserrat uppercase text-xs sm:text-sm">
                         <tr>
-                            <th class="py-4 px-6">Matrícula</th>
-                            <th class="py-4 px-6">Nombre</th>
-                            <th class="py-4 px-6">Ap. Paterno</th>
-                            <th class="py-4 px-6">Ap. Materno</th>
-                            <th class="py-4 px-6">Grupo</th>
-                            <th class="py-4 px-6">Carrera</th>
-                            <th class="py-4 px-6 text-center">Acciones</th>
+                            <th class="py-3 px-3 sm:py-4 sm:px-6">Matrícula</th>
+                            <th class="py-3 px-3 sm:py-4 sm:px-6">Nombre</th>
+                            <th class="py-3 px-3 sm:py-4 sm:px-6">Ap. Paterno</th>
+                            <th class="py-3 px-3 sm:py-4 sm:px-6">Ap. Materno</th>
+                            <th class="py-3 px-3 sm:py-4 sm:px-6">Grupo</th>
+                            <th class="py-3 px-3 sm:py-4 sm:px-6">Carrera</th>
+                            <th class="py-3 px-3 sm:py-4 sm:px-6 text-center">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody class="text-white font-montserrat text-sm">
+                    <tbody class="text-white font-montserrat text-xs sm:text-sm">
                         @foreach ($alumnos as $alumno)
-                            <tr class="bg-white/10 hover:bg-white/20 border-b border-white/10 transition-colors">
-                                <td class="py-3 px-6 font-bold">{{ $alumno->matricula }}</td>
-                                <td class="py-3 px-6">{{ $alumno->nombre }}</td>
-                                <td class="py-3 px-6">{{ $alumno->ap_paterno ?? '-' }}</td>
-                                <td class="py-3 px-6">{{ $alumno->ap_materno ?? '-' }}</td>
-                                <td class="py-3 px-6">
+                            <tr class="bg-white/10 hover:bg-white/20 border-b border-white/10 transition-colors alumno-row"
+                                data-matricula="{{ strtolower($alumno->matricula) }}"
+                                data-nombre="{{ strtolower($alumno->nombre . ' ' . ($alumno->ap_paterno ?? '') . ' ' . ($alumno->ap_materno ?? '')) }}"
+                                data-grupo="{{ strtolower($alumno->grupo->clave_grupo ?? '') }}">
+                                <td class="py-2 px-3 sm:py-3 sm:px-6 font-bold">{{ $alumno->matricula }}</td>
+                                <td class="py-2 px-3 sm:py-3 sm:px-6">{{ $alumno->nombre }}</td>
+                                <td class="py-2 px-3 sm:py-3 sm:px-6">{{ $alumno->ap_paterno ?? '-' }}</td>
+                                <td class="py-2 px-3 sm:py-3 sm:px-6">{{ $alumno->ap_materno ?? '-' }}</td>
+                                <td class="py-2 px-3 sm:py-3 sm:px-6">
                                     <span class="bg-blue-600/80 text-white py-1 px-2 rounded text-xs font-bold">
                                         {{ $alumno->grupo->clave_grupo }}
                                     </span>
                                 </td>
-                                <td class="py-3 px-6">{{ $alumno->carrera->carrera }}</td>
-                                <td class="py-3 px-6 text-center">
-                                    <div class="flex item-center justify-center gap-2">
-                                        <a href="#" class="bg-yellow-500 hover:bg-yellow-600 text-white w-9 h-9 rounded-lg flex items-center justify-center transition shadow-md no-underline"
+                                <td class="py-2 px-3 sm:py-3 sm:px-6">{{ $alumno->carrera->carrera }}</td>
+                                <td class="py-2 px-3 sm:py-3 sm:px-6 text-center">
+                                    <div class="flex item-center justify-center gap-1 sm:gap-2">
+                                        <a href="#" class="bg-yellow-500 hover:bg-yellow-600 text-white w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition shadow-md no-underline text-xs sm:text-sm"
                                            data-bs-toggle="modal" data-bs-target="#editaModal"
                                            data-id="{{ $alumno->id_alumno }}"
                                            data-grupo="{{ $alumno->id_grupo }}"
@@ -139,7 +182,7 @@
                                            title="Editar">
                                             <i class="fa-solid fa-user-pen"></i>
                                         </a>
-                                        <a href="#" class="bg-red-500 hover:bg-red-600 text-white w-9 h-9 rounded-lg flex items-center justify-center transition shadow-md no-underline"
+                                        <a href="#" class="bg-red-500 hover:bg-red-600 text-white w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition shadow-md no-underline text-xs sm:text-sm"
                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
                                            data-id="{{ $alumno->id_alumno }}"
                                            title="Eliminar">
@@ -158,12 +201,68 @@
                         <p>No hay alumnos registrados en el sistema.</p>
                     </div>
                 @endif
+
+                <!-- Mensaje cuando no hay resultados de búsqueda -->
+                <div id="noResults" class="p-8 text-center text-white font-montserrat border border-white/10 rounded-b-lg bg-white/5 hidden">
+                    <i class="fa-solid fa-magnifying-glass text-4xl mb-3 opacity-50"></i>
+                    <p>No se encontraron alumnos que coincidan con tu búsqueda.</p>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/Admin/Alumno.js') }}?v=3000"></script>
+
+    <!-- Script de búsqueda -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchFilter = document.getElementById('searchFilter');
+            const clearButton = document.getElementById('clearSearch');
+            const alumnoRows = document.querySelectorAll('.alumno-row');
+            const resultCount = document.getElementById('resultCount');
+            const noResults = document.getElementById('noResults');
+            const totalAlumnos = alumnoRows.length;
+
+            function filterAlumnos() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const filterType = searchFilter.value;
+                let visibleCount = 0;
+
+                alumnoRows.forEach(row => {
+                    const searchValue = row.getAttribute(`data-${filterType}`);
+                    
+                    if (searchValue.includes(searchTerm)) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                // Actualizar contador
+                resultCount.innerHTML = `Mostrando <strong>${visibleCount}</strong> de <strong>${totalAlumnos}</strong> alumnos`;
+
+                // Mostrar mensaje si no hay resultados
+                if (visibleCount === 0 && searchTerm !== '') {
+                    noResults.classList.remove('hidden');
+                } else {
+                    noResults.classList.add('hidden');
+                }
+            }
+
+            // Event listeners
+            searchInput.addEventListener('input', filterAlumnos);
+            searchFilter.addEventListener('change', filterAlumnos);
+            
+            clearButton.addEventListener('click', function() {
+                searchInput.value = '';
+                searchFilter.value = 'matricula';
+                filterAlumnos();
+            });
+        });
+    </script>
 
     @include('admin.alumnos.registros')
     @include('admin.alumnos.edit')

@@ -4,507 +4,546 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Tutorado</title>
-    <link rel="stylesheet" href="{{ asset('css/fomularios.css')}}">
-</head>
-<body>
-<header>
-        <div class="logos">
-            <img src="{{ asset('multimedia/edomex.png') }}" alt="Logo 1" class="logoedomex">
-            <img src="{{ asset('multimedia/tesi.png') }}" alt="Logo 2" class="logotesi">
-            <img src="{{ asset('multimedia/isclogo.jpeg') }}" alt="Logo 3" class="logoisc">
-        </div>
-        <div class="banner">
-            <h1>Ficha de Identificación del Tutorado</h1>
-        </div>
-    </header>
-    <main>
-    <div class="formulariocontenedor">
-    <form method="POST" action="{{ route('alumno.ficha.guardar') }}">
-        @csrf
-        <label for="nombre">Nombre Completo:</label>
-        <input type="text" name="alumno_nombre" value="{{ $alumno->nombre_completo }}" readonly>
-        <input type="hidden" name="alumno_id" value="{{ $alumno->id_alumno }}">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ficha de Identificación - Alumno</title>
 
-        <label for="carrera">Carrera a la que pertenece:</label>
-        <input type="text" id="carrera" name="carrera" class="form-control" value="{{ $alumno->carrera->carrera ?? 'No asignada' }}" readonly>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
 
-        
-        <label for="matricula">Número de matrícula:</label>
-        <input type="text" name="matricula" value="{{ $alumno->matricula }}" readonly>
-
-        <label for="semestre">Semestre:</label>
-        <input type="text" name="semestre" value="{{ optional($alumno->grupo->semestre)->semestre }}" readonly>
-
-
-        <label for="fecha">Fecha:</label>
-        <input type="date" id="fecha" name="fecha" readonly><br><br>
-
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const hoy = new Date();
-                const yyyy = hoy.getFullYear();
-                const mm = String(hoy.getMonth() + 1).padStart(2, '0');
-                const dd = String(hoy.getDate()).padStart(2, '0');
-                const fechaActual = `${yyyy}-${mm}-${dd}`;
-                document.getElementById('fecha').value = fechaActual;
-            });
-        </script>
-
-        <label for="correo_electronico">Correo Electrónico:</label>
-        <input type="email" name="correo_electronico" value="{{ $alumno->user?->email }}" readonly>
-       
-        <h2>Estado Psicofisiológico</h2>
-
-        <table border="1">
-            <tr>
-                <th>Indicadores</th>
-                <th>Frecuente</th>
-                <th>Muy Frecuente</th>
-                <th>Nunca</th>
-                <th>Antes</th>
-                <th>A veces</th>
-            </tr>
-            <tr>
-                <td>Manos y/o pies hinchados</td>
-                <td><input type="radio" name="manos_pies" value="frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_1 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="manos_pies" value="muy_frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_1 == 'muy_frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="manos_pies" value="nunca" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_1 == 'nunca' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="manos_pies" value="antes" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_1 == 'antes' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="manos_pies" value="a_veces" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_1 == 'a_veces' ? 'checked' : '' }}></td>
-            </tr>
-            <tr>
-                <td>Dolores en el vientre</td>
-                <td><input type="radio" name="dolores_vientre" value="frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_2 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="dolores_vientre" value="muy_frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_2 == 'muy_frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="dolores_vientre" value="nunca" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_2 == 'nunca' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="dolores_vientre" value="antes" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_2 == 'antes' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="dolores_vientre" value="a_veces" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_2 == 'a_veces' ? 'checked' : '' }}></td>
-            </tr>
-            <tr>
-                <td>Dolores de cabeza y/o vómitos</td>
-                <td><input type="radio" name="dolores_cabeza" value="frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_3 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="dolores_cabeza" value="muy_frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_3 == 'muy_frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="dolores_cabeza" value="nunca" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_3 == 'nunca' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="dolores_cabeza" value="antes" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_3 == 'antes' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="dolores_cabeza" value="a_veces" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_3 == 'a_veces' ? 'checked' : '' }}></td>
-            </tr>
-            <tr>
-                <td>Pérdida del equilibrio</td>
-                <td><input type="radio" name="equilibrio" value="frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_4 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="equilibrio" value="muy_frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_4 == 'muy_frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="equilibrio" value="nunca" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_4 == 'nunca' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="equilibrio" value="antes" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_4 == 'antes' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="equilibrio" value="a_veces" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_4 == 'a_veces' ? 'checked' : '' }}></td>
-            </tr>
-            <tr>
-                <td>Fatiga y agotamiento</td>
-                <td><input type="radio" name="fatiga" value="frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_5 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="fatiga" value="muy_frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_5 == 'muy_frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="fatiga" value="nunca" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_5 == 'nunca' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="fatiga" value="antes" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_5 == 'antes' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="fatiga" value="a_veces"  {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_5 == 'a_veces' ? 'checked' : '' }}></td>
-            </tr>
-            <tr>
-                <td>Pérdida de vista u oído</td>
-                <td><input type="radio" name="vista_oido" value="frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_6 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="vista_oido" value="muy_frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_6 == 'muy_frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="vista_oido" value="nunca" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_6 == 'nunca' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="vista_oido" value="antes" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_6 == 'antes' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="vista_oido" value="a_veces"  {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_6 == 'a_veces' ? 'checked' : '' }}></td>
-            </tr>
-            <tr>
-                <td>Dificultades para dormir</td>
-                <td><input type="radio" name="dormir" value="frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_7 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="dormir" value="muy_frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_7 == 'muy_frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="dormir" value="nunca" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_7 == 'nunca' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="dormir" value="antes" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_7 == 'antes' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="dormir" value="a_veces"  {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_7 == 'a_veces' ? 'checked' : '' }}></td>
-            </tr>
-            <tr>
-                <td>Pesadillas o terrores nocturnos</td>
-                <td><input type="radio" name="pesadillas" value="frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_8 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="pesadillas" value="muy_frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_8 == 'muy_frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="pesadillas" value="nunca" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_8 == 'nunca' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="pesadillas" value="antes" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_8 == 'antes' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="pesadillas" value="a_veces"  {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_8 == 'a_veces' ? 'checked' : '' }}></td>
-            </tr>
-            <tr>
-                <td>Incontinencia (orina/heces)</td>
-                <td><input type="radio" name="incontinencia" value="frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_9 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="incontinencia" value="muy_frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_9 == 'muy_frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="incontinencia" value="nunca" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_9 == 'nunca' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="incontinencia" value="antes" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_9 == 'antes' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="incontinencia" value="a_veces"  {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_9 == 'a_veces' ? 'checked' : '' }}></td>
-            </tr>
-            <tr>
-                <td>Tartamudeos al explicarse</td>
-                <td><input type="radio" name="tartamudeo" value="frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_10 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="tartamudeo" value="muy_frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_10 == 'muy_frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="tartamudeo" value="nunca" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_10 == 'nunca' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="tartamudeo" value="antes" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_10 == 'antes' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="tartamudeo" value="a_veces"  {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_10 == 'a_veces' ? 'checked' : '' }}></td>
-            </tr>
-            <tr>
-                <td>Miedos intensos ante cosas</td>
-                <td><input type="radio" name="miedo1" value="frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_11 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="miedo1" value="muy_frecuente" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_11 == 'muy_frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="miedo1" value="nunca" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_11 == 'nunca' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="miedo1" value="antes" {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_11 == 'antes' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="miedo1" value="a_veces"  {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->indicador_psicofisiologico_11 == 'a_veces' ? 'checked' : '' }}></td>
-            </tr>
-        </table>
-        <h2>Área Familiar</h2>
-        <label for="relacion_familia">¿Cómo es la relación con tu familia?</label><br>
-        <textarea id="relacion_familia" name="relacion_familia" rows="3" cols="50">{{ $ficha_area_familiar->indicador_1 ?? '' }}</textarea><br><br>
-        
-        <label for="dificultades_familia">¿Existen dificultades?</label><br>
-        <textarea id="dificultades_familia" name="dificultades_familia" rows="3" cols="50">{{ $ficha_area_familiar->indicador_2 ?? '' }}</textarea><br><br>
-        
-        <label for="tipo_dificultades">¿De qué tipo?</label><br>
-        <textarea id="tipo_dificultades" name="tipo_dificultades" rows="3" cols="50">{{ $ficha_area_familiar->indicador_3 ?? '' }}</textarea><br><br>
-        
-        <label for="actitud_familia">¿Qué actitud tienes con tu familia?</label><br>
-        <textarea id="actitud_familia" name="actitud_familia" rows="3" cols="50">{{ $ficha_area_familiar->indicador_4 ?? '' }}</textarea><br><br>
-        
-        <label for="relacion_padre">¿Cómo te relacionas con tu padre?</label><br>
-        <textarea id="relacion_padre" name="relacion_padre" rows="3" cols="50">{{ $ficha_area_familiar->indicador_5 ?? '' }}</textarea><br><br>
-        
-        <label for="relacion_madre">¿Cómo te relacionas con tu madre?</label><br>
-        <textarea id="relacion_madre" name="relacion_madre" rows="3" cols="50">{{ $ficha_area_familiar->indicador_6 ?? '' }}</textarea><br><br>
-        
-        <label for="actitud_madre">¿Qué actitud tienes hacia tu madre?</label><br>
-        <textarea id="actitud_madre" name="actitud_madre" rows="3" cols="50">{{ $ficha_area_familiar->indicador_7 ?? '' }}</textarea><br><br>
-        
-        <label>¿Con quién te sientes más ligado afectivamente?</label><br>
-        <input type="checkbox" name="ligado_afectivamente" value="madre" {{ (isset($ficha_area_familiar) && $ficha_area_familiar->indicador_8 == 'madre') ? 'checked' : '' }}> Madre<br>
-        <input type="checkbox" name="ligado_afectivamente" value="padre" {{ (isset($ficha_area_familiar) && $ficha_area_familiar->indicador_8 == 'padre') ? 'checked' : '' }}> Padre<br>
-        <input type="checkbox" name="ligado_afectivamente" value="hermanos" {{ (isset($ficha_area_familiar) && $ficha_area_familiar->indicador_8 == 'hermanos') ? 'checked' : '' }}> Hermanos<br>
-        <input type="checkbox" name="ligado_afectivamente" value="otros" {{ (isset($ficha_area_familiar) && $ficha_area_familiar->indicador_8 == 'otros') ? 'checked' : '' }}> Otros<br><br>
-        
-        <label for="ligado_afectivamente_razon">Especifica por qué</label><br>
-        <textarea id="ligado_afectivamente_razon" name="ligado_afectivamente_razon" rows="3" cols="50">{{ $ficha_area_familiar->indicador_9 ?? '' }}</textarea><br><br>
-        
-        <label for="ocupacion_educacion">¿Quién se ocupa más directamente de tu educación?</label><br>
-        <textarea id="ocupacion_educacion" name="ocupacion_educacion" rows="3" cols="50">{{ $ficha_area_familiar->indicador_10 ?? '' }}</textarea><br><br>
-        
-        <label for="influencia_carrera">¿Quién ha influido más en tu decisión para estudiar esta carrera?</label><br>
-        <textarea id="influencia_carrera" name="influencia_carrera" rows="3" cols="50">{{ $ficha_area_familiar->indicador_11 ?? '' }}</textarea><br><br>
-        
-
-        <h2>Área Social</h2>
-
-        <label>¿Cómo es tu relación con tus compañeros?</label><br>
-        <input type="radio" name="relacion_companeros" value="buena" {{ (isset($ficha_area_social) && $ficha_area_social->indicador_1 == 'buena') ? 'checked' : '' }}> Buena<br>
-        <input type="radio" name="relacion_companeros" value="regular" {{ (isset($ficha_area_social) && $ficha_area_social->indicador_1 == 'regular') ? 'checked' : '' }}> Regular<br>
-        <input type="radio" name="relacion_companeros" value="mala" {{ (isset($ficha_area_social) && $ficha_area_social->indicador_1 == 'mala') ? 'checked' : '' }}> Mala<br><br>
-        
-        <label for="razon_companeros">¿Por qué?</label><br>
-        <textarea id="razon_companeros" name="razon_companeros" rows="3" cols="50">{{ $ficha_area_social->indicador_2 ?? '' }}</textarea><br><br>
-        
-        <label for="tienes_pareja">¿Tienes pareja?</label><br>
-        <input type="radio" name="tienes_pareja" value="si" {{ (isset($ficha_area_social) && $ficha_area_social->indicador_3 == 'si') ? 'checked' : '' }}> Sí<br>
-        <input type="radio" name="tienes_pareja" value="no" {{ (isset($ficha_area_social) && $ficha_area_social->indicador_3 == 'no') ? 'checked' : '' }}> No<br><br>
-        
-        <label for="relacion_pareja">¿Cómo es tu relación con tu pareja?</label><br>
-        <textarea id="relacion_pareja" name="relacion_pareja" rows="3" cols="50">{{ $ficha_area_social->indicador_4 ?? '' }}</textarea><br><br>
-        
-        <label for="relacion_profesores">¿Cómo es tu relación con tus profesores?</label><br>
-        <textarea id="relacion_profesores" name="relacion_profesores" rows="3" cols="50">{{ $ficha_area_social->indicador_5 ?? '' }}</textarea><br><br>
-        
-        <label for="relacion_autoridades">¿Cómo es tu relación con las autoridades académicas?</label><br>
-        <textarea id="relacion_autoridades" name="relacion_autoridades" rows="3" cols="50">{{ $ficha_area_social->indicador_6 ?? '' }}</textarea><br><br>
-        
-        <label for="tiempo_libre">¿Qué haces en tu tiempo libre?</label><br>
-        <textarea id="tiempo_libre" name="tiempo_libre" rows="3" cols="50">{{ $ficha_area_social->indicador_7 ?? '' }}</textarea><br><br>
-        
-        <!-- Características Personales -->
-        <h2>Características Personales</h2>
-
-        <table border="1">
-            <tr>
-                <th>Auto percepción</th>
-                <th>No</th>
-                <th>Poco</th>
-                <th>Frecuente</th>
-                <th>Mucho</th>
-                <th>Observaciones</th>
-            </tr>
-            <tr>
-                <td>Puntual</td>
-                <td><input type="radio" name="puntual" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_1 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="puntual" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_1  == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="puntual" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_1 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="puntual" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_1 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_puntual" value="{{ $ficha_caracteristicas_personales->observacion_1 ?? '' }}"></td>
-                
-            </tr>
-            <tr>
-                <td>Tímida</td>
-                <td><input type="radio" name="timida" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_2 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="timida" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_2 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="timida" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_2 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="timida" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_2 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_timida" value="{{ $ficha_caracteristicas_personales->observacion_2 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Alegre</td>
-                <td><input type="radio" name="alegre" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_3 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="alegre" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_3 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="alegre" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_3 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="alegre" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_3 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_alegre" value="{{ $ficha_caracteristicas_personales->observacion_3 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Agresiva</td>
-                <td><input type="radio" name="agresiva" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_4 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="agresiva" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_4 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="agresiva" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_4 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="agresiva" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_4 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_agresiva" value="{{ $ficha_caracteristicas_personales->observacion_4 ?? '' }}"></td>
-            </tr>
-
-            <tr>
-                <td>Abierto/a a las ideas de otros</td>
-                <td><input type="radio" name="abierto" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_5 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="abierto" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_5 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="abierto" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_5 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="abierto" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_5 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_abierto" value="{{ $ficha_caracteristicas_personales->observacion_5 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Reflexivo/a</td>
-                <td><input type="radio" name="reflexivo" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_6 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="reflexivo" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_6 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="reflexivo" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_6 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="reflexivo" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_6 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_reflexivo" value="{{ $ficha_caracteristicas_personales->observacion_6 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Constante</td>
-                <td><input type="radio" name="constante" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_7 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="constante" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_7 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="constante" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_7 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="constante" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_7 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_constante" value="{{ $ficha_caracteristicas_personales->observacion_7 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Optimista</td>
-                <td><input type="radio" name="optimista" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_8 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="optimista" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_8 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="optimista" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_8 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="optimista" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_8 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_optimista" value="{{ $ficha_caracteristicas_personales->observacion_8 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Impulsivo/a</td>
-                <td><input type="radio" name="impulsivo" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_9 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="impulsivo" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_9 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="impulsivo" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_9 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="impulsivo" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_9 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_impulsivo" value="{{ $ficha_caracteristicas_personales->observacion_9 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Silencioso</td>
-                <td><input type="radio" name="silencioso" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_10 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="silencioso" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_10 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="silencioso" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_10 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="silencioso" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_10 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_silencioso" value="{{ $ficha_caracteristicas_personales->observacion_10 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Generoso</td>
-                <td><input type="radio" name="generoso" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_11 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="generoso" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_11 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="generoso" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_11 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="generoso" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_11 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_generoso" value="{{ $ficha_caracteristicas_personales->observacion_11 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Inquieto</td>
-                <td><input type="radio" name="inquieto" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_12 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="inquieto" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_12 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="inquieto" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_12 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="inquieto" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_12 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_inquieto" value="{{ $ficha_caracteristicas_personales->observacion_12 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Cambios de humor</td>
-                <td><input type="radio" name="cambios_humor" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_13 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="cambios_humor" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_13 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="cambios_humor" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_13 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="cambios_humor" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_13 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_cambios_humor" value="{{ $ficha_caracteristicas_personales->observacion_13 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Dominante</td>
-                <td><input type="radio" name="dominante" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_14 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="dominante" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_14 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="dominante" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_14 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="dominante" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_14 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_dominante" value="{{ $ficha_caracteristicas_personales->observacion_14 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Egoísta</td>
-                <td><input type="radio" name="egoista" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_15 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="egoista" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_15 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="egoista" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_15 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="egoista" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_15 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_egoista" value="{{ $ficha_caracteristicas_personales->observacion_15 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Sumiso</td>
-                <td><input type="radio" name="sumiso" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_16 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="sumiso" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_16 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="sumiso" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_16 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="sumiso" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_16 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_sumiso" value="{{ $ficha_caracteristicas_personales->observacion_16 ?? '' }}"></td>
-            </tr>
-
-            <tr>
-                <td>Confiado en sí mismo</td>
-                <td><input type="radio" name="confiado_en_si" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_17 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="confiado_en_si" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_17 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="confiado_en_si" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_17 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="confiado_en_si" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_17 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_confiado_en_si" value="{{ $ficha_caracteristicas_personales->observacion_17 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Imaginativo</td>
-                <td><input type="radio" name="imaginativo" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_18 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="imaginativo" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_18 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="imaginativo" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_18 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="imaginativo" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_18 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_imaginativo" value="{{ $ficha_caracteristicas_personales->observacion_18 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Con iniciativa propia</td>
-                <td><input type="radio" name="con_iniciativa" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_19 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="con_iniciativa" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_19 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="con_iniciativa" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_19 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="con_iniciativa" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_19 == 'mucho' ? 'checked' : '' }}></td>
-
-                <td><input type="text" name="observaciones_con_iniciativa" value="{{ $ficha_caracteristicas_personales->observacion_19 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Sociable</td>
-                <td><input type="radio" name="sociable" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_20 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="sociable" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_20 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="sociable" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_20 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="sociable" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_20 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_sociable" value="{{ $ficha_caracteristicas_personales->observacion_20 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Responsable</td>
-                <td><input type="radio" name="responsable" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_21 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="responsable" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_21 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="responsable" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_21 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="responsable" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_21 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_responsable" value="{{ $ficha_caracteristicas_personales->observacion_21 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Perseverante</td>
-                <td><input type="radio" name="perseverante" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_22 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="perseverante" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_22 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="perseverante" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_22 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="perseverante" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_22 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_perseverante" value="{{ $ficha_caracteristicas_personales->observacion_22 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Motivado</td>
-                <td><input type="radio" name="motivado" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_23 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="motivado" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_23 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="motivado" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_23 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="motivado" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_23 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_motivado" value="{{ $ficha_caracteristicas_personales->observacion_23 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Activo</td>
-                <td><input type="radio" name="activo" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_24 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="activo" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_24 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="activo" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_24 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="activo" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_24 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_activo" value="{{ $ficha_caracteristicas_personales->observacion_24 ?? '' }}"></td>
-            </tr>
-            <tr>
-                <td>Independiente</td>
-                <td><input type="radio" name="independiente" value="no" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_25 == 'no' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="independiente" value="poco" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_25 == 'poco' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="independiente" value="frecuente" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_25 == 'frecuente' ? 'checked' : '' }}></td>
-                <td><input type="radio" name="independiente" value="mucho" {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->indicador_25 == 'mucho' ? 'checked' : '' }}></td>
-                <td><input type="text" name="observaciones_independiente" value="{{ $ficha_caracteristicas_personales->observacion_25 ?? '' }}"></td>
-            </tr>
-        </table>
-
-        <!-- Área Psicopedagógica -->
-        <h2>Área Psicopedagógica</h2>
-
-        <label for="como_te_gustaria">¿Cómo te gustaría ser?</label><br>
-        <textarea id="como_te_gustaria" name="como_te_gustaria" rows="3" cols="50">{{ $ficha_psicopedagogica->indicador_psicopedagogico_1 ?? '' }}</textarea><br><br>
-
-        <label for="problemas_estudios">¿Qué problemas personales intervienen en tus estudios?</label><br>
-        <textarea id="problemas_estudios" name="problemas_estudios" rows="3" cols="50">{{ $ficha_psicopedagogica->indicador_psicopedagogico_2 ?? '' }}</textarea><br><br>
-
-        <label for="rendimiento_escolar">¿Cuál es tu rendimiento escolar?</label><br>
-        <textarea id="rendimiento_escolar" name="rendimiento_escolar" rows="3" cols="50">{{ $ficha_psicopedagogica->indicador_psicopedagogico_3 ?? '' }}</textarea><br><br>
-
-        <label for="asignaturas_actuales">Menciona las asignaturas que cursas en el semestre actual</label><br>
-        <textarea id="asignaturas_actuales" name="asignaturas_actuales" rows="3" cols="50">{{ $ficha_psicopedagogica->indicador_psicopedagogico_4 ?? '' }}</textarea><br><br>
-
-        <label for="asignatura_preferida">¿Cuál es tu asignatura preferida? ¿Por qué?</label><br>
-        <textarea id="asignatura_preferida" name="asignatura_preferida" rows="3" cols="50">{{ $ficha_psicopedagogica->indicador_psicopedagogico_5 ?? '' }}</textarea><br><br>
-
-        <label for="asignatura_bajo_promedio">¿Cuál es tu asignatura con más bajo promedio del semestre anterior? ¿Por
-            qué?</label><br>
-        <textarea id="asignatura_bajo_promedio" name="asignatura_bajo_promedio" rows="3" cols="50">{{ $ficha_psicopedagogica->indicador_psicopedagogico_6 ?? '' }}</textarea><br><br>
-
-        <label for="motivo_tesi">¿Por qué escogiste al TESI como opción de estudios?</label><br>
-        <textarea id="motivo_tesi" name="motivo_tesi" rows="3" cols="50">{{ $ficha_psicopedagogica->indicador_psicopedagogico_7 ?? '' }}</textarea><br><br>
-
-        <label for="asignaturas_reprobadas">¿Tienes asignaturas reprobadas?</label><br>
-        <input type="radio" name="asignaturas_reprobadas" value="si" {{ (isset($ficha_psicopedagogica) && $ficha_psicopedagogica->indicador_psicopedagogico_8 == 'si') ? 'checked' : '' }}> Sí<br>
-        <input type="radio" name="asignaturas_reprobadas" value="no" {{ (isset($ficha_psicopedagogica) && $ficha_psicopedagogica->indicador_psicopedagogico_8 == 'no') ? 'checked' : '' }}> No<br><br>
-
-        <label for="cuales_reprobadas">En caso que si, ¿Cuáles?</label><br>
-        <textarea id="cuales_reprobadas" name="cuales_reprobadas" rows="3" cols="50">{{ $ficha_psicopedagogica->indicador_psicopedagogico_9 ?? '' }}</textarea><br><br>
-
-        <!-- Plan de Vida y Carrera -->
-        <h2>Plan de Vida y Carrera</h2>
-
-        <label for="planes_inmediatos">¿Cuáles son tus planes inmediatos?</label><br>
-        <textarea id="planes_inmediatos" name="planes_inmediatos" rows="3" cols="50">{{ $ficha_psicopedagogica->plan_vida_carrera_1 ?? '' }}</textarea><br><br>
-
-        <label for="metas_vida">¿Cuáles son tus metas en la vida?</label><br>
-        <textarea id="metas_vida" name="metas_vida" rows="3" cols="50">{{ $ficha_psicopedagogica->plan_vida_carrera_2 ?? '' }}</textarea><br><br>
-
-        <h2>Características personales</h2>
-
-        <label for="yo_soy">Yo soy...</label><br>
-        <textarea id="yo_soy" name="yo_soy" rows="3" cols="50">{{ $ficha_psicopedagogica->caracteristicas_personales_1 ?? '' }}</textarea><br><br>
-
-        <label for="me_gusta">A mí me gusta que...</label><br>
-        <textarea id="me_gusta" name="me_gusta" rows="3" cols="50">{{ $ficha_psicopedagogica->caracteristicas_personales_2 ?? '' }}</textarea><br><br>
-
-        <label for="aspiracion">Yo aspiro en la vida...</label><br>
-        <textarea id="aspiracion" name="aspiracion" rows="3" cols="50">{{ $ficha_psicopedagogica->caracteristicas_personales_3 ?? '' }}</textarea><br><br>
-
-        <label for="miedos">Yo tengo miedo que...</label><br>
-        <textarea id="miedos" name="miedos" rows="3" cols="50">{{ $ficha_psicopedagogica->caracteristicas_personales_4 ?? '' }}</textarea><br><br>
-
-        <label for="logro">Pero pienso que podrá lograr...</label><br>
-        <textarea id="logro" name="logro" rows="3" cols="50">{{ $ficha_psicopedagogica->caracteristicas_personales_5 ?? '' }}</textarea><br><br>
-
-        <button type="submit">Enviar</button>
-    </form>
-    </div>
-    </main>
-    <footer>
-        <p>© 2024 Tecnológico de Estudios Superiores de Ixtapaluca</p>
-    </footer>
     <script>
-        function cerrarSesion() {
-            window.location.href = "/Tutorias/login.html";
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        'sidebar-dark': '#2C2C2C',
+                        'hover-pink': '#FF9898',
+                        'tec-green': '#13934A',
+                        'tec-green-dark': '#044C26',
+                    }
+                }
+            }
         }
     </script>
+    <style>
+        /* Custom scrollbar for tables if needed */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+
+<body class="font-montserrat bg-cover bg-center bg-fixed min-h-screen md:h-[125vh] md:overflow-hidden flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')] md:[zoom:80%]">
+
+    <!-- Header -->
+    <div class="bg-tec-green shadow-[0_12px_14px_rgba(0,0,0,0.25)] h-16 md:h-24 shrink-0 flex items-center justify-between md:justify-center relative z-40 px-4">
+        <button id="menuToggle" class="md:hidden text-white text-2xl z-50">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        
+        <div class="absolute left-5 hidden md:flex gap-4 items-center">
+            <img src="{{ asset('multimedia/tesi.png') }}" alt="Logo TESI" class="h-12 md:h-16">
+            <img src="{{ asset('multimedia/isclogo.png') }}" alt="Logo ISC" class="h-12 md:h-16">
+        </div>
+        <h1 class="text-white font-bold text-lg md:text-4xl tracking-wider">SISTEMA DE TUTORIAS</h1>
+        <div class="md:hidden w-8"></div>
+    </div>
+
+    <!-- Subheader -->
+    <div class="bg-tec-green shadow-[0_12px_14px_rgba(0,0,0,0.25)] h-10 md:h-12 shrink-0 flex items-center justify-center relative z-20">
+        <h2 class="text-white font-bold text-base md:text-2xl tracking-wide">ALUMNO</h2>
+    </div>
+
+    <!-- Main Container -->
+    <div class="flex flex-1 overflow-hidden relative">
+        
+        <div id="overlay" class="hidden fixed inset-0 bg-black/50 z-30 md:hidden"></div>
+        
+        <!-- Sidebar -->
+        <div id="sidebar" class="bg-sidebar-dark w-64 flex flex-col gap-1.5 md:gap-2 shadow-[4px_0_10px_rgba(0,0,0,0.3)]
+            fixed md:absolute top-0 left-0 h-full z-40 md:z-30
+            transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out
+            p-4 md:p-6 overflow-y-auto">
+            
+            <button id="closeMenu" class="md:hidden self-end text-white text-2xl mb-3">
+                <i class="fa-solid fa-times"></i>
+            </button>
+
+            <!-- Saludo al Alumno -->
+            <div class="text-white mb-4 px-2">
+                <p class="text-sm opacity-80">Hola</p>
+                <p class="font-bold text-lg leading-tight">{{ optional(auth()->user()->alumno)->nombre ?? 'Alumno' }}</p>
+            </div>
+            
+            <a href="{{ route('alumno.dashboard') }}" 
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-home text-base w-4"></i>
+                <span>Inicio</span>
+            </a>
+            
+            <div class="border-t border-white/20 my-1"></div>
+            
+            <!-- Elemento activo - Ficha -->
+            <div class="text-hover-pink px-4 py-2.5 rounded-lg font-bold text-xs md:text-sm flex items-center gap-2 bg-hover-pink/10">
+                <i class="fa-solid fa-id-card text-base w-4"></i>
+                <span>Ficha de Identificación</span>
+            </div>
+            
+            <a href="{{ route('alumno.habilidades') }}" 
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-clipboard-list text-base w-4"></i>
+                <span>Encuesta sobre habilidades</span>
+            </a>
+            
+            <a href="{{ route('alumno.solicitudes.lista') }}" 
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-comments text-base w-4"></i>
+                <span>Ver mis solicitudes de asesoria</span>
+            </a>
+
+            <div class="mt-8">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="w-full bg-red-600 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Cerrar Sesión</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="flex-1 p-4 md:p-10 flex justify-center items-start overflow-y-auto md:ml-64">
+            <div class="bg-tec-green-dark/90 backdrop-blur-md rounded-xl md:rounded-2xl p-6 md:p-10 w-full max-w-6xl shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+                
+                <h2 class="text-white text-xl md:text-3xl font-bold mb-8 text-center border-b-2 border-white/30 pb-4">
+                    FICHA DE IDENTIFICACIÓN DEL TUTORADO
+                </h2>
+
+                <form method="POST" action="{{ route('alumno.ficha.guardar') }}" class="space-y-8">
+                    @csrf
+                    
+                    <!-- Datos Generales -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2">Nombre Completo:</label>
+                            <input type="text" name="alumno_nombre" value="{{ $alumno->nombre_completo }}" readonly
+                                class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">
+                            <input type="hidden" name="alumno_id" value="{{ $alumno->id_alumno }}">
+                        </div>
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2">Carrera:</label>
+                            <input type="text" name="carrera" value="{{ $alumno->carrera->carrera ?? 'No asignada' }}" readonly
+                                class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2">Número de matrícula:</label>
+                            <input type="text" name="matricula" value="{{ $alumno->matricula }}" readonly
+                                class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2">Semestre:</label>
+                            <input type="text" name="semestre" value="{{ optional($alumno->grupo->semestre)->semestre }}" readonly
+                                class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2">Fecha:</label>
+                            <input type="date" id="fecha" name="fecha" readonly
+                                class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2">Correo Electrónico:</label>
+                            <input type="email" name="correo_electronico" value="{{ $alumno->user?->email }}" readonly
+                                class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">
+                        </div>
+                    </div>
+
+                    <!-- Estado Psicofisiológico -->
+                    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
+                        <h3 class="text-tec-green text-xl font-bold mb-4 border-b border-white/10 pb-2">Estado Psicofisiológico</h3>
+                        <div class="overflow-x-auto custom-scrollbar">
+                            <table class="w-full text-white text-sm min-w-[800px]">
+                                <thead>
+                                    <tr class="bg-white/10">
+                                        <th class="p-3 text-left rounded-tl-lg">Indicadores</th>
+                                        <th class="p-3 text-center">Frecuente</th>
+                                        <th class="p-3 text-center">Muy Frecuente</th>
+                                        <th class="p-3 text-center">Nunca</th>
+                                        <th class="p-3 text-center">Antes</th>
+                                        <th class="p-3 text-center rounded-tr-lg">A veces</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-white/10">
+                                    @php
+                                        $indicadores = [
+                                            ['label' => 'Manos y/o pies hinchados', 'name' => 'manos_pies', 'key' => 'indicador_psicofisiologico_1'],
+                                            ['label' => 'Dolores en el vientre', 'name' => 'dolores_vientre', 'key' => 'indicador_psicofisiologico_2'],
+                                            ['label' => 'Dolores de cabeza y/o vómitos', 'name' => 'dolores_cabeza', 'key' => 'indicador_psicofisiologico_3'],
+                                            ['label' => 'Pérdida del equilibrio', 'name' => 'equilibrio', 'key' => 'indicador_psicofisiologico_4'],
+                                            ['label' => 'Fatiga y agotamiento', 'name' => 'fatiga', 'key' => 'indicador_psicofisiologico_5'],
+                                            ['label' => 'Pérdida de vista u oído', 'name' => 'vista_oido', 'key' => 'indicador_psicofisiologico_6'],
+                                            ['label' => 'Dificultades para dormir', 'name' => 'dormir', 'key' => 'indicador_psicofisiologico_7'],
+                                            ['label' => 'Pesadillas o terrores nocturnos', 'name' => 'pesadillas', 'key' => 'indicador_psicofisiologico_8'],
+                                            ['label' => 'Incontinencia (orina/heces)', 'name' => 'incontinencia', 'key' => 'indicador_psicofisiologico_9'],
+                                            ['label' => 'Tartamudeos al explicarse', 'name' => 'tartamudeo', 'key' => 'indicador_psicofisiologico_10'],
+                                            ['label' => 'Miedos intensos ante cosas', 'name' => 'miedo1', 'key' => 'indicador_psicofisiologico_11'],
+                                        ];
+                                    @endphp
+                                    @foreach($indicadores as $ind)
+                                        <tr class="hover:bg-white/5 transition-colors">
+                                            <td class="p-3">{{ $ind['label'] }}</td>
+                                            @foreach(['frecuente', 'muy_frecuente', 'nunca', 'antes', 'a_veces'] as $val)
+                                                <td class="p-3 text-center">
+                                                    <input type="radio" name="{{ $ind['name'] }}" value="{{ $val }}" 
+                                                        {{ isset($ficha_psicofisiologica) && $ficha_psicofisiologica->{$ind['key']} == $val ? 'checked' : '' }}
+                                                        class="accent-tec-green w-4 h-4 cursor-pointer">
+                                                </td>
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Área Familiar -->
+                    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
+                        <h3 class="text-tec-green text-xl font-bold mb-4 border-b border-white/10 pb-2">Área Familiar</h3>
+                        <div class="space-y-4">
+                            @php
+                                $preguntasFamilia = [
+                                    ['label' => '¿Cómo es la relación con tu familia?', 'name' => 'relacion_familia', 'key' => 'indicador_1'],
+                                    ['label' => '¿Existen dificultades?', 'name' => 'dificultades_familia', 'key' => 'indicador_2'],
+                                    ['label' => '¿De qué tipo?', 'name' => 'tipo_dificultades', 'key' => 'indicador_3'],
+                                    ['label' => '¿Qué actitud tienes con tu familia?', 'name' => 'actitud_familia', 'key' => 'indicador_4'],
+                                    ['label' => '¿Cómo te relacionas con tu padre?', 'name' => 'relacion_padre', 'key' => 'indicador_5'],
+                                    ['label' => '¿Cómo te relacionas con tu madre?', 'name' => 'relacion_madre', 'key' => 'indicador_6'],
+                                    ['label' => '¿Qué actitud tienes hacia tu madre?', 'name' => 'actitud_madre', 'key' => 'indicador_7'],
+                                ];
+                            @endphp
+                            @foreach($preguntasFamilia as $preg)
+                                <div>
+                                    <label class="block text-white text-sm font-bold mb-2">{{ $preg['label'] }}</label>
+                                    <textarea name="{{ $preg['name'] }}" rows="2"
+                                        class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">{{ $ficha_area_familiar->{$preg['key']} ?? '' }}</textarea>
+                                </div>
+                            @endforeach
+
+                            <div>
+                                <label class="block text-white text-sm font-bold mb-2">¿Con quién te sientes más ligado afectivamente?</label>
+                                <div class="flex flex-wrap gap-4">
+                                    @foreach(['madre' => 'Madre', 'padre' => 'Padre', 'hermanos' => 'Hermanos', 'otros' => 'Otros'] as $val => $label)
+                                        <label class="flex items-center gap-2 text-white cursor-pointer">
+                                            <input type="checkbox" name="ligado_afectivamente" value="{{ $val }}" 
+                                                {{ (isset($ficha_area_familiar) && $ficha_area_familiar->indicador_8 == $val) ? 'checked' : '' }}
+                                                class="accent-tec-green w-4 h-4 rounded">
+                                            {{ $label }}
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-white text-sm font-bold mb-2">Especifica por qué</label>
+                                <textarea name="ligado_afectivamente_razon" rows="2"
+                                    class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">{{ $ficha_area_familiar->indicador_9 ?? '' }}</textarea>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-white text-sm font-bold mb-2">¿Quién se ocupa más directamente de tu educación?</label>
+                                <textarea name="ocupacion_educacion" rows="2"
+                                    class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">{{ $ficha_area_familiar->indicador_10 ?? '' }}</textarea>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-white text-sm font-bold mb-2">¿Quién ha influido más en tu decisión para estudiar esta carrera?</label>
+                                <textarea name="influencia_carrera" rows="2"
+                                    class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">{{ $ficha_area_familiar->indicador_11 ?? '' }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Área Social -->
+                    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
+                        <h3 class="text-tec-green text-xl font-bold mb-4 border-b border-white/10 pb-2">Área Social</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-white text-sm font-bold mb-2">¿Cómo es tu relación con tus compañeros?</label>
+                                <div class="flex gap-4">
+                                    @foreach(['buena' => 'Buena', 'regular' => 'Regular', 'mala' => 'Mala'] as $val => $label)
+                                        <label class="flex items-center gap-2 text-white cursor-pointer">
+                                            <input type="radio" name="relacion_companeros" value="{{ $val }}" 
+                                                {{ (isset($ficha_area_social) && $ficha_area_social->indicador_1 == $val) ? 'checked' : '' }}
+                                                class="accent-tec-green w-4 h-4">
+                                            {{ $label }}
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-white text-sm font-bold mb-2">¿Por qué?</label>
+                                <textarea name="razon_companeros" rows="2"
+                                    class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">{{ $ficha_area_social->indicador_2 ?? '' }}</textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-white text-sm font-bold mb-2">¿Tienes pareja?</label>
+                                <div class="flex gap-4">
+                                    @foreach(['si' => 'Sí', 'no' => 'No'] as $val => $label)
+                                        <label class="flex items-center gap-2 text-white cursor-pointer">
+                                            <input type="radio" name="tienes_pareja" value="{{ $val }}" 
+                                                {{ (isset($ficha_area_social) && $ficha_area_social->indicador_3 == $val) ? 'checked' : '' }}
+                                                class="accent-tec-green w-4 h-4">
+                                            {{ $label }}
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            @php
+                                $preguntasSocial = [
+                                    ['label' => '¿Cómo es tu relación con tu pareja?', 'name' => 'relacion_pareja', 'key' => 'indicador_4'],
+                                    ['label' => '¿Cómo es tu relación con tus profesores?', 'name' => 'relacion_profesores', 'key' => 'indicador_5'],
+                                    ['label' => '¿Cómo es tu relación con las autoridades académicas?', 'name' => 'relacion_autoridades', 'key' => 'indicador_6'],
+                                    ['label' => '¿Qué haces en tu tiempo libre?', 'name' => 'tiempo_libre', 'key' => 'indicador_7'],
+                                ];
+                            @endphp
+                            @foreach($preguntasSocial as $preg)
+                                <div>
+                                    <label class="block text-white text-sm font-bold mb-2">{{ $preg['label'] }}</label>
+                                    <textarea name="{{ $preg['name'] }}" rows="2"
+                                        class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">{{ $ficha_area_social->{$preg['key']} ?? '' }}</textarea>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Características Personales (Tabla) -->
+                    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
+                        <h3 class="text-tec-green text-xl font-bold mb-4 border-b border-white/10 pb-2">Características Personales</h3>
+                        <div class="overflow-x-auto custom-scrollbar">
+                            <table class="w-full text-white text-sm min-w-[800px]">
+                                <thead>
+                                    <tr class="bg-white/10">
+                                        <th class="p-3 text-left rounded-tl-lg">Auto percepción</th>
+                                        <th class="p-3 text-center">No</th>
+                                        <th class="p-3 text-center">Poco</th>
+                                        <th class="p-3 text-center">Frecuente</th>
+                                        <th class="p-3 text-center">Mucho</th>
+                                        <th class="p-3 text-left rounded-tr-lg">Observaciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-white/10">
+                                    @php
+                                        $caracteristicas = [
+                                            ['label' => 'Puntual', 'name' => 'puntual', 'key' => 'indicador_1', 'obs' => 'observacion_1'],
+                                            ['label' => 'Tímida', 'name' => 'timida', 'key' => 'indicador_2', 'obs' => 'observacion_2'],
+                                            ['label' => 'Alegre', 'name' => 'alegre', 'key' => 'indicador_3', 'obs' => 'observacion_3'],
+                                            ['label' => 'Agresiva', 'name' => 'agresiva', 'key' => 'indicador_4', 'obs' => 'observacion_4'],
+                                            ['label' => 'Abierto/a a las ideas de otros', 'name' => 'abierto', 'key' => 'indicador_5', 'obs' => 'observacion_5'],
+                                            ['label' => 'Reflexivo/a', 'name' => 'reflexivo', 'key' => 'indicador_6', 'obs' => 'observacion_6'],
+                                            ['label' => 'Constante', 'name' => 'constante', 'key' => 'indicador_7', 'obs' => 'observacion_7'],
+                                            ['label' => 'Optimista', 'name' => 'optimista', 'key' => 'indicador_8', 'obs' => 'observacion_8'],
+                                            ['label' => 'Impulsivo/a', 'name' => 'impulsivo', 'key' => 'indicador_9', 'obs' => 'observacion_9'],
+                                            ['label' => 'Silencioso', 'name' => 'silencioso', 'key' => 'indicador_10', 'obs' => 'observacion_10'],
+                                            ['label' => 'Generoso', 'name' => 'generoso', 'key' => 'indicador_11', 'obs' => 'observacion_11'],
+                                            ['label' => 'Inquieto', 'name' => 'inquieto', 'key' => 'indicador_12', 'obs' => 'observacion_12'],
+                                            ['label' => 'Cambios de humor', 'name' => 'cambios_humor', 'key' => 'indicador_13', 'obs' => 'observacion_13'],
+                                            ['label' => 'Dominante', 'name' => 'dominante', 'key' => 'indicador_14', 'obs' => 'observacion_14'],
+                                            ['label' => 'Egoísta', 'name' => 'egoista', 'key' => 'indicador_15', 'obs' => 'observacion_15'],
+                                            ['label' => 'Sumiso', 'name' => 'sumiso', 'key' => 'indicador_16', 'obs' => 'observacion_16'],
+                                            ['label' => 'Confiado en sí mismo', 'name' => 'confiado_en_si', 'key' => 'indicador_17', 'obs' => 'observacion_17'],
+                                            ['label' => 'Imaginativo', 'name' => 'imaginativo', 'key' => 'indicador_18', 'obs' => 'observacion_18'],
+                                            ['label' => 'Con iniciativa propia', 'name' => 'con_iniciativa', 'key' => 'indicador_19', 'obs' => 'observacion_19'],
+                                            ['label' => 'Sociable', 'name' => 'sociable', 'key' => 'indicador_20', 'obs' => 'observacion_20'],
+                                            ['label' => 'Responsable', 'name' => 'responsable', 'key' => 'indicador_21', 'obs' => 'observacion_21'],
+                                            ['label' => 'Perseverante', 'name' => 'perseverante', 'key' => 'indicador_22', 'obs' => 'observacion_22'],
+                                            ['label' => 'Motivado', 'name' => 'motivado', 'key' => 'indicador_23', 'obs' => 'observacion_23'],
+                                            ['label' => 'Activo', 'name' => 'activo', 'key' => 'indicador_24', 'obs' => 'observacion_24'],
+                                            ['label' => 'Independiente', 'name' => 'independiente', 'key' => 'indicador_25', 'obs' => 'observacion_25'],
+                                        ];
+                                    @endphp
+                                    @foreach($caracteristicas as $car)
+                                        <tr class="hover:bg-white/5 transition-colors">
+                                            <td class="p-3">{{ $car['label'] }}</td>
+                                            @foreach(['no', 'poco', 'frecuente', 'mucho'] as $val)
+                                                <td class="p-3 text-center">
+                                                    <input type="radio" name="{{ $car['name'] }}" value="{{ $val }}" 
+                                                        {{ isset($ficha_caracteristicas_personales) && $ficha_caracteristicas_personales->{$car['key']} == $val ? 'checked' : '' }}
+                                                        class="accent-tec-green w-4 h-4 cursor-pointer">
+                                                </td>
+                                            @endforeach
+                                            <td class="p-3">
+                                                <input type="text" name="observaciones_{{ $car['name'] }}" value="{{ $ficha_caracteristicas_personales->{$car['obs']} ?? '' }}"
+                                                    class="w-full bg-white/10 border border-white/20 rounded px-2 py-1 text-white text-sm focus:outline-none focus:border-tec-green">
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Área Psicopedagógica -->
+                    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
+                        <h3 class="text-tec-green text-xl font-bold mb-4 border-b border-white/10 pb-2">Área Psicopedagógica</h3>
+                        <div class="space-y-4">
+                            @php
+                                $preguntasPsico = [
+                                    ['label' => '¿Cómo te gustaría ser?', 'name' => 'como_te_gustaria', 'key' => 'indicador_psicopedagogico_1'],
+                                    ['label' => '¿Qué problemas personales intervienen en tus estudios?', 'name' => 'problemas_estudios', 'key' => 'indicador_psicopedagogico_2'],
+                                    ['label' => '¿Cuál es tu rendimiento escolar?', 'name' => 'rendimiento_escolar', 'key' => 'indicador_psicopedagogico_3'],
+                                    ['label' => 'Menciona las asignaturas que cursas en el semestre actual', 'name' => 'asignaturas_actuales', 'key' => 'indicador_psicopedagogico_4'],
+                                    ['label' => '¿Cuál es tu asignatura preferida? ¿Por qué?', 'name' => 'asignatura_preferida', 'key' => 'indicador_psicopedagogico_5'],
+                                    ['label' => '¿Cuál es tu asignatura con más bajo promedio del semestre anterior? ¿Por qué?', 'name' => 'asignatura_bajo_promedio', 'key' => 'indicador_psicopedagogico_6'],
+                                    ['label' => '¿Por qué escogiste al TESI como opción de estudios?', 'name' => 'motivo_tesi', 'key' => 'indicador_psicopedagogico_7'],
+                                ];
+                            @endphp
+                            @foreach($preguntasPsico as $preg)
+                                <div>
+                                    <label class="block text-white text-sm font-bold mb-2">{{ $preg['label'] }}</label>
+                                    <textarea name="{{ $preg['name'] }}" rows="2"
+                                        class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">{{ $ficha_psicopedagogica->{$preg['key']} ?? '' }}</textarea>
+                                </div>
+                            @endforeach
+
+                            <div>
+                                <label class="block text-white text-sm font-bold mb-2">¿Tienes asignaturas reprobadas?</label>
+                                <div class="flex gap-4">
+                                    @foreach(['si' => 'Sí', 'no' => 'No'] as $val => $label)
+                                        <label class="flex items-center gap-2 text-white cursor-pointer">
+                                            <input type="radio" name="asignaturas_reprobadas" value="{{ $val }}" 
+                                                {{ (isset($ficha_psicopedagogica) && $ficha_psicopedagogica->indicador_psicopedagogico_8 == $val) ? 'checked' : '' }}
+                                                class="accent-tec-green w-4 h-4">
+                                            {{ $label }}
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-white text-sm font-bold mb-2">En caso que si, ¿Cuáles?</label>
+                                <textarea name="cuales_reprobadas" rows="2"
+                                    class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">{{ $ficha_psicopedagogica->indicador_psicopedagogico_9 ?? '' }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Plan de Vida y Carrera -->
+                    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
+                        <h3 class="text-tec-green text-xl font-bold mb-4 border-b border-white/10 pb-2">Plan de Vida y Carrera</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-white text-sm font-bold mb-2">¿Cuáles son tus planes inmediatos?</label>
+                                <textarea name="planes_inmediatos" rows="2"
+                                    class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">{{ $ficha_psicopedagogica->plan_vida_carrera_1 ?? '' }}</textarea>
+                            </div>
+                            <div>
+                                <label class="block text-white text-sm font-bold mb-2">¿Cuáles son tus metas en la vida?</label>
+                                <textarea name="metas_vida" rows="2"
+                                    class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">{{ $ficha_psicopedagogica->plan_vida_carrera_2 ?? '' }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Autodefinición -->
+                    <div class="bg-white/5 p-6 rounded-xl border border-white/10">
+                        <h3 class="text-tec-green text-xl font-bold mb-4 border-b border-white/10 pb-2">Autodefinición</h3>
+                        <div class="space-y-4">
+                            @php
+                                $autodefinicion = [
+                                    ['label' => 'Yo soy...', 'name' => 'yo_soy', 'key' => 'caracteristicas_personales_1'],
+                                    ['label' => 'A mí me gusta que...', 'name' => 'me_gusta', 'key' => 'caracteristicas_personales_2'],
+                                    ['label' => 'Yo aspiro en la vida...', 'name' => 'aspiracion', 'key' => 'caracteristicas_personales_3'],
+                                    ['label' => 'Yo tengo miedo que...', 'name' => 'miedos', 'key' => 'caracteristicas_personales_4'],
+                                    ['label' => 'Pero pienso que podrá lograr...', 'name' => 'logro', 'key' => 'caracteristicas_personales_5'],
+                                ];
+                            @endphp
+                            @foreach($autodefinicion as $item)
+                                <div>
+                                    <label class="block text-white text-sm font-bold mb-2">{{ $item['label'] }}</label>
+                                    <textarea name="{{ $item['name'] }}" rows="2"
+                                        class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-tec-green focus:bg-white/20 transition-all">{{ $ficha_psicopedagogica->{$item['key']} ?? '' }}</textarea>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Botón Enviar -->
+                    <div class="flex justify-center pt-6">
+                        <button type="submit" 
+                            class="bg-tec-green text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg hover:bg-tec-green-dark hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                            <i class="fa-solid fa-save"></i>
+                            <span>Guardar Ficha</span>
+                        </button>
+                    </div>
+
+                </form>
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Menú hamburguesa
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+
+        const closeSidebar = () => {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        };
+
+        closeMenu.addEventListener('click', closeSidebar);
+        overlay.addEventListener('click', closeSidebar);
+
+        const sidebarLinks = sidebar.querySelectorAll('a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 768) {
+                    closeSidebar();
+                }
+            });
+        });
+
+        // Fecha actual
+        document.addEventListener("DOMContentLoaded", function() {
+            const hoy = new Date();
+            const yyyy = hoy.getFullYear();
+            const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+            const dd = String(hoy.getDate()).padStart(2, '0');
+            const fechaActual = `${yyyy}-${mm}-${dd}`;
+            const fechaInput = document.getElementById('fecha');
+            if(fechaInput) {
+                fechaInput.value = fechaActual;
+            }
+        });
+    </script>
+
 </body>
+
 </html>

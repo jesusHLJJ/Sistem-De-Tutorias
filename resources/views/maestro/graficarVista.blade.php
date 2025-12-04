@@ -1,81 +1,265 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gráficos de Indicadores Psicofisiológicos</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Gráficos de Ficha - Sistema de Tutorías</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Agregar jsPDF desde CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        'sidebar-dark': '#2C2C2C',
+                        'hover-pink': '#FF9898',
+                        'tec-green': '#13934A',
+                        'tec-green-dark': '#044C26',
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        #indicadorChart1,
-        #indicadorChart2,
-        #indicadorChart3,
-        #indicadorChart4,
-        #indicadorChart5,
-        #indicadorChart6,
-        #indicadorChart7,
-        #indicadorChart8,
-        #indicadorChart9,
-        #indicadorChart10,
-        #indicadorChart11,
-        #indicadorChart12,
-        #indicadorChart13,
-        #indicadorChart14,
-        #indicadorChart15,
-        #indicadorChart16,
-        #indicadorChart17,
-        #indicadorChart18,
-        #indicadorChart19,
-        #indicadorChart20,
-        #indicadorChart21,
-        #indicadorChart22,
-        #indicadorChart23,
-        #indicadorChart24,
-        #indicadorChart25,
-        #indicadorChart26,
-        #indicadorChart27,
-        #indicadorChart28,
-        #indicadorChart29,
-        #indicadorChart30,
-        #indicadorChart31,
-        #indicadorChart32,
-        #indicadorChart33,
-        #indicadorChart34,
-        #indicadorChart35,
-        #indicadorChart36,
-        #indicadorChart37,
-        #indicadorChart38,
-        #indicadorChart39,
-        #indicadorChart40 {
-            max-width: 300px;
-            /* Ancho máximo del canvas */
-            max-height: 300px;
-            /* Altura máxima del canvas */
+        /* Estilos base para las gráficas */
+        #indicadorChart1, #indicadorChart2, #indicadorChart3, #indicadorChart4, #indicadorChart5,
+        #indicadorChart6, #indicadorChart7, #indicadorChart8, #indicadorChart9, #indicadorChart10,
+        #indicadorChart11, #indicadorChart12, #indicadorChart13, #indicadorChart14, #indicadorChart15,
+        #indicadorChart16, #indicadorChart17, #indicadorChart18, #indicadorChart19, #indicadorChart20,
+        #indicadorChart21, #indicadorChart22, #indicadorChart23, #indicadorChart24, #indicadorChart25,
+        #indicadorChart26, #indicadorChart27, #indicadorChart28, #indicadorChart29, #indicadorChart30,
+        #indicadorChart31, #indicadorChart32, #indicadorChart33, #indicadorChart34, #indicadorChart35,
+        #indicadorChart36, #indicadorChart37, #indicadorChart38, #indicadorChart39, #indicadorChart40,
+        #indicadorChart41, #indicadorChart42, #indicadorChart43, #indicadorChart44, #indicadorChart45,
+        #indicadorChart46, #indicadorChart47, #indicadorChart48, #indicadorChart49, #indicadorChart50,
+        #indicadorChart51, #indicadorChart52, #indicadorChart53, #indicadorChart54, #indicadorChart55,
+        #indicadorChart56, #indicadorChart57, #indicadorChart58, #indicadorChart59, #indicadorChart60 {
+            max-width: 100%;
+            max-height: 250px;
         }
 
+        /* Contenedor de gráfica - Responsivo */
         .chart-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        .chart-container canvas {
-            max-width: 300px;
-            max-height: 300px;
+        .chart-container h3 {
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .chart-container button {
+            background: #13934A;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .chart-container button:hover {
+            background: #0f7a3d;
+            transform: translateY(-2px);
         }
 
         .percentage-list {
-            margin-left: 20px;
+            color: white;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+
+        .percentage-list p {
+            padding: 0.5rem;
+            margin: 0.25rem 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            /* border-left: 3px solid #FF9898; Removed to use dynamic colors */
+        }
+
+        /* Desktop: Layout horizontal */
+        @media (min-width: 768px) {
+            .chart-container {
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+            }
+
+            .chart-container > div:first-child {
+                flex: 0 0 350px;
+            }
+
+            .chart-container h3 {
+                font-size: 1.125rem;
+            }
+
+            .percentage-list {
+                flex: 1;
+                margin-top: 0;
+            }
+
+            #indicadorChart1, #indicadorChart2, #indicadorChart3, #indicadorChart4, #indicadorChart5,
+            #indicadorChart6, #indicadorChart7, #indicadorChart8, #indicadorChart9, #indicadorChart10,
+            #indicadorChart11, #indicadorChart12, #indicadorChart13, #indicadorChart14, #indicadorChart15,
+            #indicadorChart16, #indicadorChart17, #indicadorChart18, #indicadorChart19, #indicadorChart20,
+            #indicadorChart21, #indicadorChart22, #indicadorChart23, #indicadorChart24, #indicadorChart25,
+            #indicadorChart26, #indicadorChart27, #indicadorChart28, #indicadorChart29, #indicadorChart30,
+            #indicadorChart31, #indicadorChart32, #indicadorChart33, #indicadorChart34, #indicadorChart35,
+            #indicadorChart36, #indicadorChart37, #indicadorChart38, #indicadorChart39, #indicadorChart40,
+            #indicadorChart41, #indicadorChart42, #indicadorChart43, #indicadorChart44, #indicadorChart45,
+            #indicadorChart46, #indicadorChart47, #indicadorChart48, #indicadorChart49, #indicadorChart50,
+            #indicadorChart51, #indicadorChart52, #indicadorChart53, #indicadorChart54, #indicadorChart55,
+            #indicadorChart56, #indicadorChart57, #indicadorChart58, #indicadorChart59, #indicadorChart60 {
+                max-width: 350px;
+                max-height: 350px;
+            }
+        }
+
+        /* Móvil: Layout vertical */
+        @media (max-width: 767px) {
+            .chart-container {
+                display: block;
+            }
+
+            /* Contenedor interno para flexbox */
+            .chart-container > div:first-child {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .chart-container h3 {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+
+            .chart-container canvas {
+                margin: 1rem auto 0;
+                display: block;
+                width: 100% !important;
+                height: auto !important;
+            }
+
+            .chart-container button {
+                width: calc(50% - 0.5rem);
+                margin: 0.25rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+                margin: 0.25rem;
+            }
         }
     </style>
 </head>
 
-<body>
-    <h1>Gráficos de ficha de identificacion tutorado</h1>
-    <a href="{{ route('maestro.grupos') }}">← Volver a Mis Grupos</a>
+<body class="font-montserrat bg-cover bg-center bg-fixed min-h-screen md:h-[125vh] md:overflow-hidden flex flex-col bg-[url('{{ asset('multimedia/fondo.jpg') }}')] md:[zoom:80%]">
+
+    <!-- Header -->
+    <div class="bg-tec-green shadow-[0_12px_14px_rgba(0,0,0,0.25)] h-16 md:h-24 shrink-0 flex items-center justify-between md:justify-center relative z-40 px-4">
+        <button id="menuToggle" class="md:hidden text-white text-2xl z-50">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        
+        <div class="absolute left-5 hidden md:flex gap-4 items-center">
+            <img src="{{ asset('multimedia/tesi.png') }}" alt="Logo TESI" class="h-12 md:h-16">
+            <img src="{{ asset('multimedia/isclogo.png') }}" alt="Logo ISC" class="h-12 md:h-16">
+        </div>
+        <h1 class="text-white font-bold text-lg md:text-4xl tracking-wider">SISTEMA DE TUTORIAS</h1>
+        <div class="md:hidden w-8"></div>
+    </div>
+
+    <!-- Subheader -->
+    <div class="bg-tec-green shadow-[0_12px_14px_rgba(0,0,0,0.25)] h-10 md:h-12 shrink-0 flex items-center justify-center relative z-20">
+        <h2 class="text-white font-bold text-base md:text-2xl tracking-wide">GRÁFICOS DE FICHA</h2>
+    </div>
+
+    <!-- Main Container -->
+    <div class="flex flex-1 overflow-hidden relative">
+        
+        <!-- Overlay -->
+        <div id="overlay" class="hidden fixed inset-0 bg-black/50 z-30 md:hidden"></div>
+        
+        <!-- Sidebar -->
+        <div id="sidebar" class="bg-sidebar-dark w-64 flex flex-col gap-1.5 md:gap-2 shadow-[4px_0_10px_rgba(0,0,0,0.3)]
+            fixed md:absolute top-0 left-0 h-full z-40 md:z-30
+            transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out
+            p-4 md:p-6 overflow-y-auto">
+            
+            <button id="closeMenu" class="md:hidden self-end text-white text-2xl mb-3">
+                <i class="fa-solid fa-times"></i>
+            </button>
+            
+            <!-- Grupo (siempre en rosa) -->
+            <div class="text-hover-pink px-4 py-2.5 rounded-lg font-bold text-xs md:text-sm flex items-center gap-2 bg-hover-pink/10">
+                <i class="fa-solid fa-users text-base w-4"></i>
+                <span>Grupo {{ $grupo->clave_grupo }}</span>
+            </div>
+            
+            <div class="border-t border-white/20 my-1"></div>
+            
+            <!-- Graficar Ficha (activo) -->
+            <div class="text-hover-pink px-4 py-2.5 rounded-lg font-bold text-xs md:text-sm flex items-center gap-2 bg-hover-pink/10">
+                <i class="fa-solid fa-chart-column text-base w-4"></i>
+                <span>Graficar Ficha</span>
+            </div>
+            
+            <a href="{{ route('maestro.graficar2', $grupo->clave_grupo) }}" 
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-chart-pie text-base w-4"></i>
+                <span>Graficar Habilidades</span>
+            </a>
+            
+            <a href="{{ route('maestro.pat', $grupo->id_grupo) }}" 
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-clipboard-list text-base w-4"></i>
+                <span>Plan de Acción</span>
+            </a>
+            
+            <a href="{{ route('maestro.semestral.form', $grupo->id_grupo) }}" 
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-file-pen text-base w-4"></i>
+                <span>Llenar Reporte</span>
+            </a>
+            
+            <div class="border-t border-white/20 my-1"></div>
+            
+            <a href="{{ route('maestro.grupos') }}" 
+               class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
+                <i class="fa-solid fa-arrow-left text-base w-4"></i>
+                <span>Volver a Mis Grupos</span>
+            </a>
+        </div>
+
+        <!-- Content Area -->
+        <div class="flex-1 p-4 md:p-8 overflow-y-auto md:ml-64">
+            <div class="bg-tec-green-dark/85 backdrop-blur-md rounded-xl md:rounded-2xl p-4 md:p-8 w-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] mb-8">
+                
+                <h3 class="text-white text-lg sm:text-xl md:text-2xl font-bold mb-4 md:mb-6 text-center border-b-2 border-white/30 pb-3 md:pb-4">
+                    INDICADORES PSICOFISIOLÓGICOS
+                </h3>
 
     <div class="chart-container">
         <div>
@@ -539,7 +723,12 @@
         <div class="percentage-list" id="percentageList40"></div>
     </div>
 
-    <button onclick="generatePDF()">Generar PDF</button>
+    <!-- Botón Generar PDF -->
+    <div class="mt-8 flex justify-center">
+        <button onclick="generatePDF()" class="w-full md:w-auto bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+            <i class="fa-solid fa-file-pdf mr-2"></i>Generar PDF
+        </button>
+    </div>
     <script>
         var ctx1 = document.getElementById('indicadorChart1').getContext('2d');
         var ctx2 = document.getElementById('indicadorChart2').getContext('2d');
@@ -586,201 +775,217 @@
 
 
         var data1 = @json($data->pluck('total'));
-        var labels1 = @json($data->pluck('indicador_psicofisiologico_1'));
+        var labels1 = @json($data->pluck('indicador_psicofisiologico_1')).map(l => l === null ? 'Sin respuesta' : l);
         var total1 = data1.reduce((acc, val) => acc + val, 0);
 
         var data2 = @json($data_1->pluck('total'));
-        var labels2 = @json($data_1->pluck('indicador_psicofisiologico_2'));
+        var labels2 = @json($data_1->pluck('indicador_psicofisiologico_2')).map(l => l === null ? 'Sin respuesta' : l);
         var total2 = data2.reduce((acc, val) => acc + val, 0);
 
         var data3 = @json($data_2->pluck('total'));
-        var labels3 = @json($data_2->pluck('indicador_psicofisiologico_3'));
+        var labels3 = @json($data_2->pluck('indicador_psicofisiologico_3')).map(l => l === null ? 'Sin respuesta' : l);
         var total3 = data3.reduce((acc, val) => acc + val, 0);
 
         var data4 = @json($data_3->pluck('total'));
-        var labels4 = @json($data_3->pluck('indicador_psicofisiologico_4'));
+        var labels4 = @json($data_3->pluck('indicador_psicofisiologico_4')).map(l => l === null ? 'Sin respuesta' : l);
         var total4 = data4.reduce((acc, val) => acc + val, 0);
 
         var data5 = @json($data_4->pluck('total'));
-        var labels5 = @json($data_4->pluck('indicador_psicofisiologico_5'));
+        var labels5 = @json($data_4->pluck('indicador_psicofisiologico_5')).map(l => l === null ? 'Sin respuesta' : l);
         var total5 = data5.reduce((acc, val) => acc + val, 0);
 
 
         var data6 = @json($data_5->pluck('total'));
-        var labels6 = @json($data_5->pluck('indicador_psicofisiologico_6'));
+        var labels6 = @json($data_5->pluck('indicador_psicofisiologico_6')).map(l => l === null ? 'Sin respuesta' : l);
         var total6 = data6.reduce((acc, val) => acc + val, 0);
 
         var data7 = @json($data_6->pluck('total'));
-        var labels7 = @json($data_6->pluck('indicador_psicofisiologico_7'));
+        var labels7 = @json($data_6->pluck('indicador_psicofisiologico_7')).map(l => l === null ? 'Sin respuesta' : l);
         var total7 = data7.reduce((acc, val) => acc + val, 0);
 
         var data8 = @json($data_7->pluck('total'));
-        var labels8 = @json($data_7->pluck('indicador_psicofisiologico_8'));
+        var labels8 = @json($data_7->pluck('indicador_psicofisiologico_8')).map(l => l === null ? 'Sin respuesta' : l);
         var total8 = data8.reduce((acc, val) => acc + val, 0);
 
         var data9 = @json($data_8->pluck('total'));
-        var labels9 = @json($data_8->pluck('indicador_psicofisiologico_9'));
+        var labels9 = @json($data_8->pluck('indicador_psicofisiologico_9')).map(l => l === null ? 'Sin respuesta' : l);
         var total9 = data9.reduce((acc, val) => acc + val, 0);
 
         var data10 = @json($data_9->pluck('total'));
-        var labels10 = @json($data_9->pluck('indicador_psicofisiologico_10'));
+        var labels10 = @json($data_9->pluck('indicador_psicofisiologico_10')).map(l => l === null ? 'Sin respuesta' : l);
         var total10 = data10.reduce((acc, val) => acc + val, 0);
 
         var data11 = @json($data_10->pluck('total'));
-        var labels11 = @json($data_10->pluck('indicador_psicofisiologico_11'));
+        var labels11 = @json($data_10->pluck('indicador_psicofisiologico_11')).map(l => l === null ? 'Sin respuesta' : l);
         var total11 = data11.reduce((acc, val) => acc + val, 0);
 
         var data12 = @json($data_11->pluck('total'));
-        var labels12 = @json($data_11->pluck('indicador_8'));
+        var labels12 = @json($data_11->pluck('indicador_8')).map(l => l === null ? 'Sin respuesta' : l);
         var total12 = data12.reduce((acc, val) => acc + val, 0);
 
         var data13 = @json($data_12->pluck('total'));
-        var labels13 = @json($data_12->pluck('indicador_1'));
+        var labels13 = @json($data_12->pluck('indicador_1')).map(l => l === null ? 'Sin respuesta' : l);
         var total13 = data13.reduce((acc, val) => acc + val, 0);
 
         var data14 = @json($data_13->pluck('total'));
-        var labels14 = @json($data_13->pluck('indicador_3'));
+        var labels14 = @json($data_13->pluck('indicador_3')).map(l => l === null ? 'Sin respuesta' : l);
         var total14 = data14.reduce((acc, val) => acc + val, 0);
 
         //si
 
         // Variables para el indicador 15
         var data15 = @json($data_14->pluck('total'));
-        var labels15 = @json($data_14->pluck('indicador_1'));
+        var labels15 = @json($data_14->pluck('indicador_1')).map(l => l === null ? 'Sin respuesta' : l);
         var total15 = data15.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 16
         var data16 = @json($data_15->pluck('total'));
-        var labels16 = @json($data_15->pluck('indicador_2'));
+        var labels16 = @json($data_15->pluck('indicador_2')).map(l => l === null ? 'Sin respuesta' : l);
         var total16 = data16.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 17
         var data17 = @json($data_16->pluck('total'));
-        var labels17 = @json($data_16->pluck('indicador_3'));
+        var labels17 = @json($data_16->pluck('indicador_3')).map(l => l === null ? 'Sin respuesta' : l);
         var total17 = data17.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 18
         var data18 = @json($data_17->pluck('total'));
-        var labels18 = @json($data_17->pluck('indicador_4'));
+        var labels18 = @json($data_17->pluck('indicador_4')).map(l => l === null ? 'Sin respuesta' : l);
         var total18 = data18.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 19
         var data19 = @json($data_18->pluck('total'));
-        var labels19 = @json($data_18->pluck('indicador_5'));
+        var labels19 = @json($data_18->pluck('indicador_5')).map(l => l === null ? 'Sin respuesta' : l);
         var total19 = data19.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 20
         var data20 = @json($data_19->pluck('total'));
-        var labels20 = @json($data_19->pluck('indicador_6'));
+        var labels20 = @json($data_19->pluck('indicador_6')).map(l => l === null ? 'Sin respuesta' : l);
         var total20 = data20.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 21
         var data21 = @json($data_20->pluck('total'));
-        var labels21 = @json($data_20->pluck('indicador_7'));
+        var labels21 = @json($data_20->pluck('indicador_7')).map(l => l === null ? 'Sin respuesta' : l);
         var total21 = data21.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 22
         var data22 = @json($data_21->pluck('total'));
-        var labels22 = @json($data_21->pluck('indicador_8'));
+        var labels22 = @json($data_21->pluck('indicador_8')).map(l => l === null ? 'Sin respuesta' : l);
         var total22 = data22.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 23
         var data23 = @json($data_22->pluck('total'));
-        var labels23 = @json($data_22->pluck('indicador_9'));
+        var labels23 = @json($data_22->pluck('indicador_9')).map(l => l === null ? 'Sin respuesta' : l);
         var total23 = data23.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 24
         var data24 = @json($data_23->pluck('total'));
-        var labels24 = @json($data_23->pluck('indicador_10'));
+        var labels24 = @json($data_23->pluck('indicador_10')).map(l => l === null ? 'Sin respuesta' : l);
         var total24 = data24.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 25
         var data25 = @json($data_24->pluck('total'));
-        var labels25 = @json($data_24->pluck('indicador_11'));
+        var labels25 = @json($data_24->pluck('indicador_11')).map(l => l === null ? 'Sin respuesta' : l);
         var total25 = data25.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 26
         var data26 = @json($data_25->pluck('total'));
-        var labels26 = @json($data_25->pluck('indicador_12'));
+        var labels26 = @json($data_25->pluck('indicador_12')).map(l => l === null ? 'Sin respuesta' : l);
         var total26 = data26.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 27
         var data27 = @json($data_26->pluck('total'));
-        var labels27 = @json($data_26->pluck('indicador_13'));
+        var labels27 = @json($data_26->pluck('indicador_13')).map(l => l === null ? 'Sin respuesta' : l);
         var total27 = data27.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 28
         var data28 = @json($data_27->pluck('total'));
-        var labels28 = @json($data_27->pluck('indicador_14'));
+        var labels28 = @json($data_27->pluck('indicador_14')).map(l => l === null ? 'Sin respuesta' : l);
         var total28 = data28.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 29
         var data29 = @json($data_28->pluck('total'));
-        var labels29 = @json($data_28->pluck('indicador_15'));
+        var labels29 = @json($data_28->pluck('indicador_15')).map(l => l === null ? 'Sin respuesta' : l);
         var total29 = data29.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 30
         var data30 = @json($data_29->pluck('total'));
-        var labels30 = @json($data_29->pluck('indicador_16'));
+        var labels30 = @json($data_29->pluck('indicador_16')).map(l => l === null ? 'Sin respuesta' : l);
         var total30 = data30.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 31
         var data31 = @json($data_30->pluck('total'));
-        var labels31 = @json($data_30->pluck('indicador_17'));
+        var labels31 = @json($data_30->pluck('indicador_17')).map(l => l === null ? 'Sin respuesta' : l);
         var total31 = data31.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 32
         var data32 = @json($data_31->pluck('total'));
-        var labels32 = @json($data_31->pluck('indicador_18'));
+        var labels32 = @json($data_31->pluck('indicador_18')).map(l => l === null ? 'Sin respuesta' : l);
         var total32 = data32.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 33
         var data33 = @json($data_32->pluck('total'));
-        var labels33 = @json($data_32->pluck('indicador_19'));
+        var labels33 = @json($data_32->pluck('indicador_19')).map(l => l === null ? 'Sin respuesta' : l);
         var total33 = data33.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 34
         var data34 = @json($data_33->pluck('total'));
-        var labels34 = @json($data_33->pluck('indicador_20'));
+        var labels34 = @json($data_33->pluck('indicador_20')).map(l => l === null ? 'Sin respuesta' : l);
         var total34 = data34.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 35
         var data35 = @json($data_34->pluck('total'));
-        var labels35 = @json($data_34->pluck('indicador_21'));
+        var labels35 = @json($data_34->pluck('indicador_21')).map(l => l === null ? 'Sin respuesta' : l);
         var total35 = data35.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 36
         var data36 = @json($data_35->pluck('total'));
-        var labels36 = @json($data_35->pluck('indicador_22'));
+        var labels36 = @json($data_35->pluck('indicador_22')).map(l => l === null ? 'Sin respuesta' : l);
         var total36 = data36.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 37
         var data37 = @json($data_36->pluck('total'));
-        var labels37 = @json($data_36->pluck('indicador_23'));
+        var labels37 = @json($data_36->pluck('indicador_23')).map(l => l === null ? 'Sin respuesta' : l);
         var total37 = data37.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 38
         var data38 = @json($data_37->pluck('total'));
-        var labels38 = @json($data_37->pluck('indicador_24'));
+        var labels38 = @json($data_37->pluck('indicador_24')).map(l => l === null ? 'Sin respuesta' : l);
         var total38 = data38.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 39
         var data39 = @json($data_38->pluck('total'));
-        var labels39 = @json($data_38->pluck('indicador_25'));
+        var labels39 = @json($data_38->pluck('indicador_25')).map(l => l === null ? 'Sin respuesta' : l);
         var total39 = data39.reduce((acc, val) => acc + val, 0);
 
         // Variables para el indicador 40
         var data40 = @json($data_39->pluck('total'));
-        var labels40 = @json($data_39->pluck('indicador_psicopedagogico_8'));
+        var labels40 = @json($data_39->pluck('indicador_psicopedagogico_8')).map(l => l === null ? 'Sin respuesta' : l);
         var total40 = data40.reduce((acc, val) => acc + val, 0);
 
 
         // Función para calcular y mostrar porcentajes junto a la gráfica
+        var chartColors = [
+            'rgba(19, 147, 74, 1)',      // Verde TEC
+            'rgba(255, 152, 152, 1)',    // Rosa hover
+            'rgba(54, 162, 235, 1)',     // Azul
+            'rgba(255, 159, 64, 1)',     // Naranja
+            'rgba(153, 102, 255, 1)',    // Púrpura
+            'rgba(255, 206, 86, 1)'      // Amarillo
+        ];
+
         function mostrarPorcentajes(data, labels, total, elementId) {
             var percentageHTML = '';
             for (var i = 0; i < data.length; i++) {
                 var percentage = ((data[i] / total) * 100).toFixed(2);
-                percentageHTML += `<p>${labels[i]}: ${data[i]} estudiantes (${percentage}%)</p>`;
+                var label = labels[i] ? (labels[i].charAt(0).toUpperCase() + labels[i].slice(1)) : 'Sin respuesta'; // Capitalizar primera letra
+                var color = chartColors[i % chartColors.length]; // Obtener color correspondiente
+                
+                percentageHTML += `
+                    <div style="display: flex; align-items: center; margin: 0.25rem 0; background: rgba(255, 255, 255, 0.05); padding: 0.5rem; border-radius: 6px;">
+                        <span style="display: inline-block; width: 12px; height: 12px; background-color: ${color}; margin-right: 10px; border-radius: 2px; flex-shrink: 0;"></span>
+                        <span>${label}: ${data[i]} estudiantes (${percentage}%)</span>
+                    </div>`;
             }
             document.getElementById(elementId).innerHTML = percentageHTML;
         }
@@ -836,26 +1041,31 @@
                     label: 'Número de estudiantes (Indicador 1)',
                     data: @json($data->pluck('total')), // Cantidad de estudiantes con ese valor en indicador 1
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -869,7 +1079,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -879,31 +1103,36 @@
         var config2 = {
             type: 'bar', // Tipo inicial del gráfico
             data: {
-                labels: @json($data_1->pluck('indicador_psicofisiologico_2')), // Valores únicos del indicador 2
+                labels: {!! json_encode($data_1->pluck('indicador_psicofisiologico_2')) !!}, // Valores únicos del indicador 2
                 datasets: [{
                     label: 'Número de estudiantes (Indicador 2)',
-                    data: @json($data_1->pluck('total')), // Cantidad de estudiantes con ese valor en indicador 2
+                    data: {!! json_encode($data_1->pluck('total')) !!}, // Cantidad de estudiantes con ese valor en indicador 2
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -917,7 +1146,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -932,26 +1175,31 @@
                     label: 'Número de estudiantes (Indicador 3)',
                     data: @json($data_2->pluck('total')), // Cantidad de estudiantes con ese valor en indicador 2
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -965,7 +1213,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -980,26 +1242,31 @@
                     label: 'Número de estudiantes (Indicador 4)',
                     data: @json($data_3->pluck('total')), // Cantidad de estudiantes con ese valor en indicador 4
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1013,7 +1280,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1028,26 +1309,31 @@
                     label: 'Número de estudiantes (Indicador 5)',
                     data: @json($data_4->pluck('total')), // Cantidad de estudiantes con ese valor en indicador 5
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1061,7 +1347,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1076,26 +1376,31 @@
                     label: 'Número de estudiantes (Indicador 6)',
                     data: @json($data_5->pluck('total')), // Cantidad de estudiantes con ese valor en indicador 6
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1109,7 +1414,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1124,26 +1443,31 @@
                     label: 'Número de estudiantes (Indicador 7)',
                     data: @json($data_6->pluck('total')), // Cantidad de estudiantes con ese valor en indicador 7
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1157,7 +1481,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1172,26 +1510,31 @@
                     label: 'Número de estudiantes (Indicador 8)',
                     data: @json($data_7->pluck('total')), // Cantidad de estudiantes con ese valor en indicador 8
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1205,7 +1548,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1220,26 +1577,31 @@
                     label: 'Número de estudiantes (Indicador 9)',
                     data: @json($data_8->pluck('total')), // Cantidad de estudiantes con ese valor en indicador 9
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1253,7 +1615,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1268,26 +1644,31 @@
                     label: 'Número de estudiantes (Indicador 10)',
                     data: @json($data_9->pluck('total')), // Cantidad de estudiantes con ese valor en indicador 10
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1301,7 +1682,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1315,26 +1710,31 @@
                     label: 'Número de estudiantes (Indicador 11)',
                     data: @json($data_10->pluck('total')), // Cantidad de estudiantes con ese valor en indicador 11
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1348,7 +1748,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1365,26 +1779,31 @@
                     label: 'Número de estudiantes (Indicador 12)',
                     data: @json($data_11->pluck('total')), // Cantidad de estudiantes con ese valor en indicador 12
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1398,7 +1817,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1413,26 +1846,31 @@
                     label: 'Número de estudiantes (Indicador 13)',
                     data: @json($data_12->pluck('total')), // Cantidad de estudiantes con ese valor en indicador 13
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1446,7 +1884,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1462,26 +1914,31 @@
                     label: 'Número de estudiantes (Indicador 14)',
                     data: @json($data_13->pluck('total')), // Cantidad de estudiantes con ese valor en indicador 14
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1495,7 +1952,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1509,26 +1980,31 @@
                     label: 'Número de estudiantes (Indicador 15)',
                     data: @json($data_14->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1542,7 +2018,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1556,26 +2046,31 @@
                     label: 'Número de estudiantes (Indicador 16)',
                     data: @json($data_15->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1589,7 +2084,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1602,26 +2111,31 @@
                     label: 'Número de estudiantes (Indicador 17)',
                     data: @json($data_16->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1635,7 +2149,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1648,26 +2176,31 @@
                     label: 'Número de estudiantes (Indicador 18)',
                     data: @json($data_17->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1681,7 +2214,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1694,26 +2241,31 @@
                     label: 'Número de estudiantes (Indicador 19)',
                     data: @json($data_18->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1727,7 +2279,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1740,26 +2306,31 @@
                     label: 'Número de estudiantes (Indicador 20)',
                     data: @json($data_19->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1773,7 +2344,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1786,26 +2371,31 @@
                     label: 'Número de estudiantes (Indicador 21)',
                     data: @json($data_20->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1819,7 +2409,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1832,26 +2436,31 @@
                     label: 'Número de estudiantes (Indicador 22)',
                     data: @json($data_21->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1865,7 +2474,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1878,26 +2501,31 @@
                     label: 'Número de estudiantes (Indicador 23)',
                     data: @json($data_22->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1911,7 +2539,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1924,26 +2566,31 @@
                     label: 'Número de estudiantes (Indicador 24)',
                     data: @json($data_23->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -1957,7 +2604,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -1970,26 +2631,31 @@
                     label: 'Número de estudiantes (Indicador 25)',
                     data: @json($data_24->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2003,7 +2669,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2016,26 +2696,31 @@
                     label: 'Número de estudiantes (Indicador 26)',
                     data: @json($data_25->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2049,7 +2734,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2062,26 +2761,31 @@
                     label: 'Número de estudiantes (Indicador 27)',
                     data: @json($data_26->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2095,7 +2799,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2108,26 +2826,31 @@
                     label: 'Número de estudiantes (Indicador 28)',
                     data: @json($data_27->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2141,7 +2864,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2154,26 +2891,31 @@
                     label: 'Número de estudiantes (Indicador 29)',
                     data: @json($data_28->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2187,7 +2929,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2200,26 +2956,31 @@
                     label: 'Número de estudiantes (Indicador 30)',
                     data: @json($data_29->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2233,7 +2994,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2246,26 +3021,31 @@
                     label: 'Número de estudiantes (Indicador 31)',
                     data: @json($data_30->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2279,7 +3059,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2292,26 +3086,31 @@
                     label: 'Número de estudiantes (Indicador 32)',
                     data: @json($data_31->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2325,7 +3124,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2338,26 +3151,31 @@
                     label: 'Número de estudiantes (Indicador 33)',
                     data: @json($data_32->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2371,7 +3189,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2384,26 +3216,31 @@
                     label: 'Número de estudiantes (Indicador 34)',
                     data: @json($data_33->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2417,7 +3254,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2430,26 +3281,31 @@
                     label: 'Número de estudiantes (Indicador 35)',
                     data: @json($data_34->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2463,7 +3319,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2476,26 +3346,31 @@
                     label: 'Número de estudiantes (Indicador 36)',
                     data: @json($data_35->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2509,7 +3384,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2522,26 +3411,31 @@
                     label: 'Número de estudiantes (Indicador 37)',
                     data: @json($data_36->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2555,7 +3449,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2568,26 +3476,31 @@
                     label: 'Número de estudiantes (Indicador 38)',
                     data: @json($data_37->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2601,7 +3514,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2614,26 +3541,31 @@
                     label: 'Número de estudiantes (Indicador 39)',
                     data: @json($data_38->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2647,7 +3579,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2660,26 +3606,31 @@
                     label: 'Número de estudiantes (Indicador 40)',
                     data: @json($data_39->pluck('total')),
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(19, 147, 74, 0.8)',      // Verde TEC
+                        'rgba(255, 152, 152, 0.8)',    // Rosa hover
+                        'rgba(54, 162, 235, 0.8)',     // Azul
+                        'rgba(255, 159, 64, 0.8)',     // Naranja
+                        'rgba(153, 102, 255, 0.8)',    // Púrpura
+                        'rgba(255, 206, 86, 0.8)'      // Amarillo
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(19, 147, 74, 1)',
+                        'rgba(255, 152, 152, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(255, 206, 86, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -2693,7 +3644,21 @@
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
                     }
                 }
             }
@@ -2914,200 +3879,201 @@
 
             // Obtener los datos y las etiquetas
             var data1 = @json($data->pluck('total'));
-            var labels1 = @json($data->pluck('indicador_psicofisiologico_1'));
+            var labels1 = @json($data->pluck('indicador_psicofisiologico_1')).map(l => l === null ? 'Sin respuesta' : l);
             var total1 = data1.reduce((acc, val) => acc + val, 0);
 
             var data2 = @json($data_1->pluck('total'));
-            var labels2 = @json($data_1->pluck('indicador_psicofisiologico_2'));
+            var labels2 = @json($data_1->pluck('indicador_psicofisiologico_2')).map(l => l === null ? 'Sin respuesta' : l);
             var total2 = data2.reduce((acc, val) => acc + val, 0);
 
             var data3 = @json($data_2->pluck('total'));
-            var labels3 = @json($data_2->pluck('indicador_psicofisiologico_3'));
+            var labels3 = @json($data_2->pluck('indicador_psicofisiologico_3')).map(l => l === null ? 'Sin respuesta' : l);
             var total3 = data3.reduce((acc, val) => acc + val, 0);
 
             var data4 = @json($data_3->pluck('total'));
-            var labels4 = @json($data_3->pluck('indicador_psicofisiologico_4'));
+            var labels4 = @json($data_3->pluck('indicador_psicofisiologico_4')).map(l => l === null ? 'Sin respuesta' : l);
             var total4 = data4.reduce((acc, val) => acc + val, 0);
 
             var data5 = @json($data_4->pluck('total'));
-            var labels5 = @json($data_4->pluck('indicador_psicofisiologico_5'));
+            var labels5 = @json($data_4->pluck('indicador_psicofisiologico_5')).map(l => l === null ? 'Sin respuesta' : l);
             var total5 = data5.reduce((acc, val) => acc + val, 0);
 
 
             var data6 = @json($data_5->pluck('total'));
-            var labels6 = @json($data_5->pluck('indicador_psicofisiologico_6'));
+            var labels6 = @json($data_5->pluck('indicador_psicofisiologico_6')).map(l => l === null ? 'Sin respuesta' : l);
             var total6 = data6.reduce((acc, val) => acc + val, 0);
 
             var data7 = @json($data_6->pluck('total'));
-            var labels7 = @json($data_6->pluck('indicador_psicofisiologico_7'));
+            var labels7 = @json($data_6->pluck('indicador_psicofisiologico_7')).map(l => l === null ? 'Sin respuesta' : l);
             var total7 = data7.reduce((acc, val) => acc + val, 0);
 
             var data8 = @json($data_7->pluck('total'));
-            var labels8 = @json($data_7->pluck('indicador_psicofisiologico_8'));
+            var labels8 = @json($data_7->pluck('indicador_psicofisiologico_8')).map(l => l === null ? 'Sin respuesta' : l);
             var total8 = data8.reduce((acc, val) => acc + val, 0);
 
             var data9 = @json($data_8->pluck('total'));
-            var labels9 = @json($data_8->pluck('indicador_psicofisiologico_9'));
+            var labels9 = @json($data_8->pluck('indicador_psicofisiologico_9')).map(l => l === null ? 'Sin respuesta' : l);
             var total9 = data9.reduce((acc, val) => acc + val, 0);
 
             var data10 = @json($data_9->pluck('total'));
-            var labels10 = @json($data_9->pluck('indicador_psicofisiologico_10'));
+            var labels10 = @json($data_9->pluck('indicador_psicofisiologico_10')).map(l => l === null ? 'Sin respuesta' : l);
             var total10 = data10.reduce((acc, val) => acc + val, 0);
 
             var data11 = @json($data_10->pluck('total'));
-            var labels11 = @json($data_10->pluck('indicador_psicofisiologico_11'));
+            var labels11 = @json($data_10->pluck('indicador_psicofisiologico_11')).map(l => l === null ? 'Sin respuesta' : l);
             var total11 = data11.reduce((acc, val) => acc + val, 0);
 
             var data12 = @json($data_11->pluck('total'));
-            var labels12 = @json($data_11->pluck('indicador_8'));
+            var labels12 = @json($data_11->pluck('indicador_8')).map(l => l === null ? 'Sin respuesta' : l);
             var total12 = data12.reduce((acc, val) => acc + val, 0);
 
             var data13 = @json($data_12->pluck('total'));
-            var labels13 = @json($data_12->pluck('indicador_1'));
+            var labels13 = @json($data_12->pluck('indicador_1')).map(l => l === null ? 'Sin respuesta' : l);
             var total13 = data13.reduce((acc, val) => acc + val, 0);
 
             var data14 = @json($data_13->pluck('total'));
-            var labels14 = @json($data_13->pluck('indicador_3'));
+            var labels14 = @json($data_13->pluck('indicador_3')).map(l => l === null ? 'Sin respuesta' : l);
             var total14 = data14.reduce((acc, val) => acc + val, 0);
 
             //si
 
             // Variables para el indicador 15
             var data15 = @json($data_14->pluck('total'));
-            var labels15 = @json($data_14->pluck('indicador_1'));
+            var labels15 = @json($data_14->pluck('indicador_1')).map(l => l === null ? 'Sin respuesta' : l);
             var total15 = data15.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 16
             var data16 = @json($data_15->pluck('total'));
-            var labels16 = @json($data_15->pluck('indicador_2'));
+            var labels16 = @json($data_15->pluck('indicador_2')).map(l => l === null ? 'Sin respuesta' : l);
             var total16 = data16.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 17
             var data17 = @json($data_16->pluck('total'));
-            var labels17 = @json($data_16->pluck('indicador_3'));
+            var labels17 = @json($data_16->pluck('indicador_3')).map(l => l === null ? 'Sin respuesta' : l);
             var total17 = data17.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 18
             var data18 = @json($data_17->pluck('total'));
-            var labels18 = @json($data_17->pluck('indicador_4'));
+            var labels18 = @json($data_17->pluck('indicador_4')).map(l => l === null ? 'Sin respuesta' : l);
             var total18 = data18.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 19
             var data19 = @json($data_18->pluck('total'));
-            var labels19 = @json($data_18->pluck('indicador_5'));
+            var labels19 = @json($data_18->pluck('indicador_5')).map(l => l === null ? 'Sin respuesta' : l);
             var total19 = data19.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 20
             var data20 = @json($data_19->pluck('total'));
-            var labels20 = @json($data_19->pluck('indicador_6'));
+            var labels20 = @json($data_19->pluck('indicador_6')).map(l => l === null ? 'Sin respuesta' : l);
             var total20 = data20.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 21
             var data21 = @json($data_20->pluck('total'));
-            var labels21 = @json($data_20->pluck('indicador_7'));
+            var labels21 = @json($data_20->pluck('indicador_7')).map(l => l === null ? 'Sin respuesta' : l);
             var total21 = data21.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 22
             var data22 = @json($data_21->pluck('total'));
-            var labels22 = @json($data_21->pluck('indicador_8'));
+            var labels22 = @json($data_21->pluck('indicador_8')).map(l => l === null ? 'Sin respuesta' : l);
             var total22 = data22.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 23
             var data23 = @json($data_22->pluck('total'));
-            var labels23 = @json($data_22->pluck('indicador_9'));
+            var labels23 = @json($data_22->pluck('indicador_9')).map(l => l === null ? 'Sin respuesta' : l);
             var total23 = data23.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 24
             var data24 = @json($data_23->pluck('total'));
-            var labels24 = @json($data_23->pluck('indicador_10'));
+            var labels24 = @json($data_23->pluck('indicador_10')).map(l => l === null ? 'Sin respuesta' : l);
             var total24 = data24.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 25
             var data25 = @json($data_24->pluck('total'));
-            var labels25 = @json($data_24->pluck('indicador_11'));
+            var labels25 = @json($data_24->pluck('indicador_11')).map(l => l === null ? 'Sin respuesta' : l);
             var total25 = data25.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 26
             var data26 = @json($data_25->pluck('total'));
-            var labels26 = @json($data_25->pluck('indicador_12'));
+            var labels26 = @json($data_25->pluck('indicador_12')).map(l => l === null ? 'Sin respuesta' : l);
             var total26 = data26.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 27
             var data27 = @json($data_26->pluck('total'));
-            var labels27 = @json($data_26->pluck('indicador_13'));
+            var labels27 = @json($data_26->pluck('indicador_13')).map(l => l === null ? 'Sin respuesta' : l);
             var total27 = data27.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 28
             var data28 = @json($data_27->pluck('total'));
-            var labels28 = @json($data_27->pluck('indicador_14'));
+            var labels28 = @json($data_27->pluck('indicador_14')).map(l => l === null ? 'Sin respuesta' : l);
             var total28 = data28.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 29
             var data29 = @json($data_28->pluck('total'));
-            var labels29 = @json($data_28->pluck('indicador_15'));
+            var labels29 = @json($data_28->pluck('indicador_15')).map(l => l === null ? 'Sin respuesta' : l);
             var total29 = data29.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 30
             var data30 = @json($data_29->pluck('total'));
-            var labels30 = @json($data_29->pluck('indicador_16'));
+            var labels30 = @json($data_29->pluck('indicador_16')).map(l => l === null ? 'Sin respuesta' : l);
             var total30 = data30.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 31
             var data31 = @json($data_30->pluck('total'));
-            var labels31 = @json($data_30->pluck('indicador_17'));
+            var labels31 = @json($data_30->pluck('indicador_17')).map(l => l === null ? 'Sin respuesta' : l);
             var total31 = data31.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 32
             var data32 = @json($data_31->pluck('total'));
-            var labels32 = @json($data_31->pluck('indicador_18'));
+            var labels32 = @json($data_31->pluck('indicador_18')).map(l => l === null ? 'Sin respuesta' : l);
             var total32 = data32.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 33
             var data33 = @json($data_32->pluck('total'));
-            var labels33 = @json($data_32->pluck('indicador_19'));
+            var labels33 = @json($data_32->pluck('indicador_19')).map(l => l === null ? 'Sin respuesta' : l);
             var total33 = data33.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 34
             var data34 = @json($data_33->pluck('total'));
-            var labels34 = @json($data_33->pluck('indicador_20'));
+            var labels34 = @json($data_33->pluck('indicador_20')).map(l => l === null ? 'Sin respuesta' : l);
             var total34 = data34.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 35
             var data35 = @json($data_34->pluck('total'));
-            var labels35 = @json($data_34->pluck('indicador_21'));
+            var labels35 = @json($data_34->pluck('indicador_21')).map(l => l === null ? 'Sin respuesta' : l);
             var total35 = data35.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 36
             var data36 = @json($data_35->pluck('total'));
-            var labels36 = @json($data_35->pluck('indicador_22'));
+            var labels36 = @json($data_35->pluck('indicador_22')).map(l => l === null ? 'Sin respuesta' : l);
             var total36 = data36.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 37
             var data37 = @json($data_36->pluck('total'));
-            var labels37 = @json($data_36->pluck('indicador_23'));
+            var labels37 = @json($data_36->pluck('indicador_23')).map(l => l === null ? 'Sin respuesta' : l);
             var total37 = data37.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 38
             var data38 = @json($data_37->pluck('total'));
-            var labels38 = @json($data_37->pluck('indicador_24'));
+            var labels38 = @json($data_37->pluck('indicador_24')).map(l => l === null ? 'Sin respuesta' : l);
             var total38 = data38.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 39
             var data39 = @json($data_38->pluck('total'));
-            var labels39 = @json($data_38->pluck('indicador_25'));
+            var labels39 = @json($data_38->pluck('indicador_25')).map(l => l === null ? 'Sin respuesta' : l);
             var total39 = data39.reduce((acc, val) => acc + val, 0);
 
             // Variables para el indicador 40
             var data40 = @json($data_39->pluck('total'));
-            var labels40 = @json($data_39->pluck('indicador_psicopedagogico_8'));
+            var labels40 = @json($data_39->pluck('indicador_psicopedagogico_8')).map(l => l === null ? 'Sin respuesta' : l);
             var total40 = data40.reduce((acc, val) => acc + val, 0);
             // Función para calcular los porcentajes
             function mostrarPorcentajes(data, labels, total) {
                 var percentageText = '';
                 for (var i = 0; i < data.length; i++) {
                     var percentage = ((data[i] / total) * 100).toFixed(2);
+                    var label = labels[i].charAt(0).toUpperCase() + labels[i].slice(1); // Capitalizar primera letra
                     percentageText +=
-                        `- ${labels[i]}: ${data[i]} estudiantes (${percentage}%)\n`; // Agregar salto de línea y lista
+                        `- ${label}: ${data[i]} estudiantes (${percentage}%)\n`; // Agregar salto de línea y lista
                 }
                 return percentageText;
             }
@@ -3203,7 +4169,9 @@
 
 
             // Añadir el título y los porcentajes al PDF
-            doc.text('Porcentajes de estudiantes por indicador:', 10, 10);
+            doc.setFont(undefined, 'bold');
+            doc.text('Porcentajes de estudiantes por indicador:', 105, 10, { align: 'center' });
+            doc.setFont(undefined, 'normal');
             let yPosition = 20; // Starting Y position for the first chart
 
             // Array of texts and chart images
@@ -3371,24 +4339,64 @@
             ];
 
             //
-            percentages.forEach((item) => {
+            percentages.forEach((item, index) => {
                 if (yPosition > doc.internal.pageSize.height - 100) { // Si está cerca del final de la página
                     doc.addPage(); // Añadir una nueva página
                     yPosition = 20; // Reiniciar la posición Y en la nueva página
                 }
 
                 doc.text(item.text, 10, yPosition);
-                yPosition += 40;
+                yPosition += 10; // Espacio entre texto e imagen
 
-                doc.addImage(item.image, 'PNG', 10, yPosition, 80, 100);
-                yPosition += 110;
+                // Fondo oscuro para todas las gráficas
+                if (index <= 40) {
+                    doc.setFillColor(31, 41, 55); // Color de fondo oscuro (bg-gray-800)
+                    doc.rect(10, yPosition, 190, 100, 'F'); // Dibujar rectángulo relleno (Ancho aumentado a 190)
+                }
+
+                doc.addImage(item.image, 'PNG', 10, yPosition, 190, 100); // Imagen más ancha (190)
+                yPosition += 110; // Espacio para la siguiente sección
             });
             // Guardar el PDF
             doc.save('grafica_y_porcentajes.pdf');
         }
     </script>
 
-    <a href="{{ route('maestro.grupos') }}">← Volver a Mis Grupos</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript para el menú hamburguesa -->
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+
+        const closeSidebar = () => {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        };
+
+        closeMenu.addEventListener('click', closeSidebar);
+        overlay.addEventListener('click', closeSidebar);
+
+        const sidebarLinks = sidebar.querySelectorAll('a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 768) {
+                    closeSidebar();
+                }
+            });
+        });
+    </script>
 
 </body>
 

@@ -17,6 +17,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <h1>PLAN DE ACCIÓN TUTORÍAL</h1>
+
+    @if ($errors->any())
+        <div style="background-color: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 10px; border: 1px solid #f5c6cb; border-radius: 5px;">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('maestro.pat_modificar', $grupo->id_grupo) }}" method="POST">
         @csrf
 

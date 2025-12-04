@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             SemestresSeeder::class,
             TurnosSeeder::class,
             UsersSeeder::class,
+            ProblematicaSeeder::class,
             
         ]);
     }
