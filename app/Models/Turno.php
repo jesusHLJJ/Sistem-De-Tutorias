@@ -14,4 +14,9 @@ class Turno extends Model
         'turno',
         'clave_turno'
     ];
+
+    public function grupos()
+    {
+        return $this->hasMany(Grupo::class, 'id_turno');
+    }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AlumnosController;
 use App\Http\Controllers\Admin\GruposController;
+use App\Http\Controllers\Admin\MateriasController;
 use App\Http\Controllers\Admin\ProfesoresController;
 use App\Http\Controllers\Admin\SalonesController;
 use App\Http\Controllers\Alumno\AlumnoController;
@@ -58,6 +59,13 @@ Route::prefix('admin')
         Route::get('/salones/edit/{salon}', [SalonesController::class, 'edit'])->name('salones.edit');
         Route::put('/salones/update/{salon}', [SalonesController::class, 'update'])->name('salones.update');
         Route::delete('/salones/destroy/{salon}', [SalonesController::class, 'destroy'])->name('salones.destroy');
+
+        Route::get('/materias', [MateriasController::class, 'show'])->name('materias.dashboard');
+        Route::get('/materias/api', [MateriasController::class, 'api'])->name('materias.api');
+        Route::post('/materias', [MateriasController::class, 'store'])->name('materias.store');
+        Route::get('/materias/edit/{grupo}', [MateriasController::class, 'edit'])->name('materias.edit');
+        Route::put('/materias/update/{grupo}', [MateriasController::class, 'update'])->name('materias.update');
+        Route::delete('/materias/destroy/{grupo}', [MateriasController::class, 'destroy'])->name('materias.destroy');
 
         Route::get('/alumnos', [AlumnosController::class, 'show'])->name('alumnos.dashboard');
         Route::post('/alumnos', [AlumnosController::class, 'store'])->name('alumnos.store');

@@ -50,14 +50,20 @@ class Grupo extends Model
 
     public function periodo()
     {
-        return $this->belongsTo(Periodos::class,'id_periodo','id_periodo');
+        return $this->belongsTo(Periodos::class, 'id_periodo', 'id_periodo');
     }
     public function turno()
     {
         return $this->belongsTo(Turno::class, 'id_turno');
     }
-        public function salon()
+    public function salon()
     {
         return $this->belongsTo(Salon::class, 'id_salon');
+    }
+
+    public function materias()
+    {
+        return $this->belongsToMany(Materia::class, 'grupo_materia', 'id_grupo', 'id_materia')
+            ->withTimestamps();
     }
 }

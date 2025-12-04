@@ -21,6 +21,8 @@ return new class extends Migration
 
             // Composite primary key
             $table->primary(['id_grupo', 'id_materia']);
+
+            $table->timestamps();
         });
     }
 

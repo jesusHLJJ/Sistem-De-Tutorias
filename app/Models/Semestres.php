@@ -16,4 +16,9 @@ class Semestres extends Model
         'semestre',
         'clave_semestre',
     ];
+
+    public function grupos()
+    {
+        return $this->hasMany(Grupo::class, 'id_semestre');
+    }
 }

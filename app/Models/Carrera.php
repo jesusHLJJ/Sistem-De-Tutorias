@@ -15,17 +15,23 @@ class Carrera extends Model
 
     protected $fillable = ['carrera']; // Ajusta esto según los campos de tu tabla
 
-public function jefecarrera()
-{
-    return $this->belongsTo(JefesCarrera::class, 'id_carrera', 'id_carrera');
+    public function jefecarrera()
+    {
+        return $this->belongsTo(JefesCarrera::class, 'id_carrera', 'id_carrera');
+    }
+
+    public function profesores()
+    {
+        return $this->hasMany(Profesor::class, 'id_carrera');
+    }
+
+    public function grupos()
+    {
+        return $this->hasMany(Profesor::class, 'id_carrera');
+    }
+
+    public function alumnos()
+    {
+        return $this->hasMany(Alumno::class, 'id_carrera');
+    }
 }
-
-
-
-
-
-}
-
-
-
-
