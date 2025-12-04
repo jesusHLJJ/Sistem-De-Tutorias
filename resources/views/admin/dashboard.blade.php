@@ -26,32 +26,25 @@
     </script>
 </head>
 
-<<<<<<< HEAD <body
-    class="bg-cover bg-center min-h-screen flex items-center justify-center relative bg-[url('{{ asset('multimedia/fondo.jpg') }}')]">
-
+<body
+    class="bg-cover bg-center min-h-screen md:min-h-[125vh] flex items-center justify-center relative bg-[url('{{ asset('multimedia/fondo.jpg') }}')] md:[zoom:80%]">
 
     <div
         class="absolute top-0 left-0 w-full h-24 bg-[#13934A] shadow-[0_12px_14px_rgba(0,0,0,0.25)] z-20 flex items-center justify-start lg:justify-center pl-4 md:pl-4 lg:pl-0 gap-4">
 
-        =======
-
-        <body
-            class="bg-cover bg-center min-h-screen md:min-h-[125vh] flex items-center justify-center relative bg-[url('{{ asset('multimedia/fondo.jpg') }}')] md:[zoom:80%]">
-            >>>>>>> 88a4b93bbdecb69a7d472466c35db6cd4f2a069c
-
-            <div class="hidden md:flex md:relative lg:absolute lg:left-4 top-0 h-full items-center gap-4">
-                <img src="{{ asset('multimedia/tesi.png') }}" alt="Logo TESI" class="h-16">
-                <img src="{{ asset('multimedia/isclogo.png') }}" alt="Logo ISC" class="h-16">
-            </div>
+        <div class="hidden md:flex md:relative lg:absolute lg:left-4 top-0 h-full items-center gap-4">
+            <img src="{{ asset('multimedia/tesi.png') }}" alt="Logo TESI" class="h-16">
+            <img src="{{ asset('multimedia/isclogo.png') }}" alt="Logo ISC" class="h-16">
+        </div>
 
 
-            <img src="{{ asset('multimedia/tesi.png') }}" alt="Logo TESI" class="md:hidden h-8 mr-2">
+        <img src="{{ asset('multimedia/tesi.png') }}" alt="Logo TESI" class="md:hidden h-8 mr-2">
 
 
-            <h1
-                class="text-white font-montserrat font-bold text-[16px] md:text-[35px] tracking-wider text-left lg:text-center leading-none">
-                SISTEMA DE TUTORIAS
-            </h1>
+        <h1
+            class="text-white font-montserrat font-bold text-[16px] md:text-[35px] tracking-wider text-left lg:text-center leading-none">
+            SISTEMA DE TUTORIAS
+        </h1>
     </div>
 
 
@@ -97,7 +90,19 @@
                     class="text-white font-montserrat font-bold text-base sm:text-lg tracking-wide group-hover:text-[#A3E635] transition-colors">GRUPOS</span>
             </a>
 
-            <a href="{{ route('admin.materias.dashboard') }}" class="btn btn-primary">MATERIAS</a>
+            <a href="{{ route('admin.materias.dashboard') }}"
+                class="group bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl p-4 sm:p-6 flex flex-col items-center justify-center gap-3 sm:gap-4 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer h-40 sm:h-44 md:h-48">
+                <div
+                    class="bg-white text-[#13934A] p-3 sm:p-4 rounded-full shadow-lg group-hover:bg-[#13934A] group-hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+                    </svg>
+                </div>
+                <span
+                    class="text-white font-montserrat font-bold text-base sm:text-lg tracking-wide group-hover:text-[#A3E635] transition-colors">MATERIAS</span>
+            </a>
 
             <!-- Botón ALUMNOS -->
             <a href="{{ route('admin.alumnos.dashboard') }}"
@@ -126,6 +131,6 @@
 
     </div>
 
-    </body>
+</body>
 
 </html>
