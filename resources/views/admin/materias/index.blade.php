@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>GESTIÓN DE GRUPOS</title>
+    <title>ADMINISTRAR MATERIAS</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
@@ -25,6 +25,9 @@
     </script>
 
     <style>
+        .btn { display: inline-flex; align-items: center; justify-content: center; }
+        body { margin: 0; }
+        a { text-decoration: none; }
         .btn { display: inline-flex; align-items: center; justify-content: center; }
         body { margin: 0; }
         a { text-decoration: none; }
@@ -59,7 +62,7 @@
 
         <div class="bg-[#13934A] w-full h-12 flex items-center justify-center border-t border-white/20 shadow-[0_12px_14px_rgba(0,0,0,0.25)]" style="box-shadow: 0 12px 14px rgba(0,0,0,0.25);">
             <h2 class="text-white font-montserrat font-bold text-[16px] md:text-[24px] tracking-wide">
-                PANEL DE GRUPOS
+                ADMINISTRAR MATERIAS
             </h2>
         </div>
     </header>
@@ -69,8 +72,8 @@
         <div class="bg-[#044C26]/90 w-full rounded-xl shadow-2xl p-6 md:p-8 backdrop-blur-sm">
 
             <div class="flex flex-wrap justify-between items-center mb-6 border-b border-white/20 pb-4 gap-4">
-                <a href="{{ route('admin.dashboard') }}" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg font-montserrat font-bold transition flex items-center gap-2 no-underline">
-                    <i class="fa-solid fa-arrow-left"></i> Volver al Inicio
+                <a href="{{ route('admin.materias.dashboard') }}" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg font-montserrat font-bold transition flex items-center gap-2 no-underline">
+                    <i class="fa-solid fa-arrow-left"></i> Volver
                 </a>
 
                 <form action="{{ route('logout') }}" method="POST">
@@ -112,7 +115,7 @@
             @endif
 
             <div class="mb-3 sm:mb-4">
-                <h3 class="text-white font-montserrat font-bold text-lg sm:text-xl md:text-2xl">Buscar Grupos</h3>
+                <h3 class="text-white font-montserrat font-bold text-lg sm:text-xl md:text-2xl">Buscar Materias</h3>
             </div>
 
             <!-- Barra de Búsqueda con Filtros -->
@@ -124,6 +127,7 @@
                             <i class="fa-solid fa-filter"></i> Buscar por:
                         </label>
                         <select id="searchFilter" class="w-full px-3 sm:px-4 py-2 rounded-lg border border-gray-300 bg-white font-montserrat text-xs sm:text-sm focus:ring-2 focus:ring-[#13934A] focus:border-transparent outline-none">
+                            <option value="nombre">Nombre</option>
                             <option value="clave">Clave</option>
                             <option value="carrera">Carrera</option>
                         </select>
@@ -146,26 +150,18 @@
 
                 <!-- Contador de resultados -->
                 <div class="mt-2 sm:mt-3 text-white font-montserrat text-xs sm:text-sm">
-                    <span id="resultCount">Mostrando <strong>{{ count($grupos) }}</strong> de <strong>{{ count($grupos) }}</strong> grupos</span>
+                    <span id="resultCount">Mostrando <strong>{{ count($materias) }}</strong> de <strong>{{ count($materias) }}</strong> materias</span>
                 </div>
             </div>
 
             <div class="flex flex-wrap justify-between items-center mb-4 sm:mb-6 gap-3">
-                <h3 class="text-white font-montserrat font-bold text-lg sm:text-xl md:text-2xl">Listado de Grupos</h3>
+                <h3 class="text-white font-montserrat font-bold text-lg sm:text-xl md:text-2xl">Listado de Materias</h3>
                 
-                <div class="flex flex-wrap gap-2 sm:gap-3">
-                    <button type="button" class="bg-[#3B82F6] hover:bg-[#2563EB] text-white font-bold py-2 px-3 sm:px-4 md:px-6 rounded-lg shadow-lg transform hover:-translate-y-1 transition duration-200 flex items-center gap-2 border-none text-xs sm:text-sm md:text-base" 
-                            data-bs-toggle="modal" data-bs-target="#registroSalonModal">
-                        <i class="fa-solid fa-door-open text-base sm:text-lg md:text-xl"></i>
-                        <span class="hidden sm:inline">Registrar Salón</span><span class="sm:hidden">Salón</span>
-                    </button>
-                    
-                    <button type="button" class="bg-[#A3E635] hover:bg-[#84cc16] text-[#044C26] font-bold py-2 px-3 sm:px-4 md:px-6 rounded-lg shadow-lg transform hover:-translate-y-1 transition duration-200 flex items-center gap-2 border-none text-xs sm:text-sm md:text-base" 
-                            data-bs-toggle="modal" data-bs-target="#registroModal">
-                        <i class="fa-solid fa-circle-plus text-base sm:text-lg md:text-xl"></i>
-                        <span class="hidden sm:inline">Nuevo Grupo</span><span class="sm:hidden">Nuevo</span>
-                    </button>
-                </div>
+                <button type="button" class="bg-[#A3E635] hover:bg-[#84cc16] text-[#044C26] font-bold py-2 px-3 sm:px-4 md:px-6 rounded-lg shadow-lg transform hover:-translate-y-1 transition duration-200 flex items-center gap-2 border-none text-xs sm:text-sm md:text-base" 
+                        data-bs-toggle="modal" data-bs-target="#createMateriaModal">
+                    <i class="fa-solid fa-circle-plus text-base sm:text-lg md:text-xl"></i>
+                    <span class="hidden sm:inline">Registrar Materia</span><span class="sm:hidden">Registrar</span>
+                </button>
             </div>
 
             <div class="overflow-x-auto rounded-lg shadow-lg">
@@ -173,54 +169,52 @@
                     <thead class="bg-[#0A8644] text-white font-montserrat uppercase text-xs sm:text-sm">
                         <tr>
                             <th class="py-3 px-3 sm:py-4 sm:px-6">ID</th>
+                            <th class="py-3 px-3 sm:py-4 sm:px-6">Nombre</th>
                             <th class="py-3 px-3 sm:py-4 sm:px-6">Clave</th>
                             <th class="py-3 px-3 sm:py-4 sm:px-6">Carrera</th>
-                            <th class="py-3 px-3 sm:py-4 sm:px-6">Profesor</th>
-                            <th class="py-3 px-3 sm:py-4 sm:px-6">Periodo</th>
-                            <th class="py-3 px-3 sm:py-4 sm:px-6">Salón</th>
+                            <th class="py-3 px-3 sm:py-4 sm:px-6 text-center">Hrs. Teóricas</th>
+                            <th class="py-3 px-3 sm:py-4 sm:px-6 text-center">Hrs. Prácticas</th>
+                            <th class="py-3 px-3 sm:py-4 sm:px-6 text-center">Créditos</th>
                             <th class="py-3 px-3 sm:py-4 sm:px-6 text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="text-white font-montserrat text-xs sm:text-sm">
-                        @foreach ($grupos as $grupo)
-                            <tr class="bg-white/10 hover:bg-white/20 border-b border-white/10 transition-colors grupo-row"
-                                data-clave="{{ strtolower($grupo->clave_grupo) }}"
-                                data-carrera="{{ strtolower($grupo->carrera->carrera ?? '') }}">
-                                <td class="py-2 px-3 sm:py-3 sm:px-6 font-bold">{{ $grupo->id_grupo }}</td>
+                        @foreach ($materias as $materia)
+                            <tr class="bg-white/10 hover:bg-white/20 border-b border-white/10 transition-colors materia-row"
+                                data-nombre="{{ strtolower($materia->nombre) }}"
+                                data-clave="{{ strtolower($materia->clave_materia) }}"
+                                data-carrera="{{ strtolower($materia->carrera->carrera ?? '') }}">
+                                <td class="py-2 px-3 sm:py-3 sm:px-6 font-bold">{{ $materia->id_materia }}</td>
+                                <td class="py-2 px-3 sm:py-3 sm:px-6">{{ $materia->nombre }}</td>
                                 <td class="py-2 px-3 sm:py-3 sm:px-6">
                                     <span class="bg-blue-600/80 text-white py-1 px-2 rounded text-xs font-bold">
-                                        {{ $grupo->clave_grupo }}
+                                        {{ $materia->clave_materia }}
                                     </span>
                                 </td>
-                                <td class="py-2 px-3 sm:py-3 sm:px-6">{{ $grupo->carrera->carrera ?? 'Sin Carrera' }}</td>
-                                <td class="py-2 px-3 sm:py-3 sm:px-6">{{ $grupo->profesor->nombre_completo ?? 'Sin Profesor' }}</td>
-                                <td class="py-2 px-3 sm:py-3 sm:px-6">{{ $grupo->periodo->periodo ?? 'Sin Periodo' }}</td>
-                                <td class="py-2 px-3 sm:py-3 sm:px-6">{{ $grupo->salon->clave_salon ?? 'S/A' }}</td>
-                                
+                                <td class="py-2 px-3 sm:py-3 sm:px-6">{{ $materia->carrera->carrera ?? 'Sin Carrera' }}</td>
+                                <td class="py-2 px-3 sm:py-3 sm:px-6 text-center">{{ $materia->HRS_TEORICAS }}</td>
+                                <td class="py-2 px-3 sm:py-3 sm:px-6 text-center">{{ $materia->HRS_PRACTICAS }}</td>
+                                <td class="py-2 px-3 sm:py-3 sm:px-6 text-center">{{ $materia->creditos }}</td>
                                 <td class="py-2 px-3 sm:py-3 sm:px-6 text-center">
                                     <div class="flex item-center justify-center gap-1 sm:gap-2">
-                                        <a href="#" class="bg-yellow-500 hover:bg-yellow-600 text-white w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition shadow-md no-underline text-xs sm:text-sm"
-                                           data-bs-toggle="modal" 
-                                           data-bs-target="#editaModal" 
-                                           data-id="{{ $grupo->id_grupo }}"
-                                           data-clave_grupo="{{ $grupo->clave_grupo }}" 
-                                           data-carrera="{{ $grupo->id_carrera }}"
-                                           data-profesor="{{ $grupo->id_profesor }}"
-                                           data-periodo="{{ $grupo->periodo->periodo ?? '' }}" 
-                                           data-salon="{{ $grupo->id_salon }}"
-                                           data-semestre="{{ $grupo->id_semestre }}" 
-                                           data-turno="{{ $grupo->id_turno }}"
+                                        <button class="bg-yellow-500 hover:bg-yellow-600 text-white w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition shadow-md no-underline text-xs sm:text-sm btn-edit-materia"
+                                           data-id="{{ $materia->id_materia }}"
+                                           data-nombre="{{ $materia->nombre }}"
+                                           data-clave="{{ $materia->clave_materia }}"
+                                           data-carrera="{{ $materia->id_carrera }}"
+                                           data-semestre="{{ $materia->id_semestre }}"
+                                           data-teoricas="{{ $materia->HRS_TEORICAS }}"
+                                           data-practicas="{{ $materia->HRS_PRACTICAS }}"
+                                           data-creditos="{{ $materia->creditos }}"
                                            title="Editar">
-                                            <i class="fa-solid fa-user-pen"></i>
-                                        </a>
-
-                                        <a href="#" class="bg-red-500 hover:bg-red-600 text-white w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition shadow-md no-underline text-xs sm:text-sm"
-                                           data-bs-toggle="modal" 
-                                           data-bs-target="#deleteModal" 
-                                           data-id="{{ $grupo->id_grupo }}"
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                        <button class="bg-red-500 hover:bg-red-600 text-white w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition shadow-md no-underline text-xs sm:text-sm btn-delete-materia"
+                                           data-id="{{ $materia->id_materia }}"
+                                           data-nombre="{{ $materia->nombre }}"
                                            title="Eliminar">
                                             <i class="fa-solid fa-trash"></i>
-                                        </a>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -228,46 +222,44 @@
                     </tbody>
                 </table>
                 
-                @if ($grupos->isEmpty())
+                @if ($materias->isEmpty())
                     <div class="p-8 text-center text-white font-montserrat border border-white/10 rounded-b-lg bg-white/5">
-                        <i class="fa-solid fa-users-slash text-4xl mb-3 opacity-50"></i>
-                        <p>No hay grupos registrados.</p>
+                        <i class="fa-solid fa-book-open text-4xl mb-3 opacity-50"></i>
+                        <p>No hay materias registradas.</p>
                     </div>
                 @endif
 
                 <!-- Mensaje cuando no hay resultados de búsqueda -->
                 <div id="noResults" class="p-8 text-center text-white font-montserrat border border-white/10 rounded-b-lg bg-white/5 hidden">
                     <i class="fa-solid fa-magnifying-glass text-4xl mb-3 opacity-50"></i>
-                    <p>No se encontraron grupos que coincidan con tu búsqueda.</p>
+                    <p>No se encontraron materias que coincidan con tu búsqueda.</p>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('js/Admin/Grupo.js') }}"></script>
-    <script src="{{ asset('js/Admin/Salon.js') }}"></script>
-
-    <!-- Script de búsqueda -->
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
             const searchFilter = document.getElementById('searchFilter');
             const clearButton = document.getElementById('clearSearch');
-            const grupoRows = document.querySelectorAll('.grupo-row');
+            const materiaRows = document.querySelectorAll('.materia-row');
             const resultCount = document.getElementById('resultCount');
             const noResults = document.getElementById('noResults');
-            const totalGrupos = grupoRows.length;
+            const totalMaterias = materiaRows.length;
 
-            function filterGrupos() {
+            function filterMaterias() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
                 const filterType = searchFilter.value;
                 let visibleCount = 0;
 
-                grupoRows.forEach(row => {
+                materiaRows.forEach(row => {
                     const searchValue = row.getAttribute(`data-${filterType}`);
                     
-                    if (searchValue.includes(searchTerm)) {
+                    if (searchValue && searchValue.includes(searchTerm)) {
                         row.style.display = '';
                         visibleCount++;
                     } else {
@@ -276,35 +268,91 @@
                 });
 
                 // Actualizar contador
-                resultCount.innerHTML = `Mostrando <strong>${visibleCount}</strong> de <strong>${totalGrupos}</strong> grupos`;
+                if (resultCount) {
+                    resultCount.innerHTML = `Mostrando <strong>${visibleCount}</strong> de <strong>${totalMaterias}</strong> materias`;
+                }
 
                 // Mostrar mensaje si no hay resultados
-                if (visibleCount === 0 && searchTerm !== '') {
-                    noResults.classList.remove('hidden');
-                } else {
-                    noResults.classList.add('hidden');
+                if (noResults) {
+                    if (visibleCount === 0 && searchTerm !== '') {
+                        noResults.classList.remove('hidden');
+                    } else {
+                        noResults.classList.add('hidden');
+                    }
                 }
             }
 
             // Event listeners
-            searchInput.addEventListener('input', filterGrupos);
-            searchFilter.addEventListener('change', filterGrupos);
+            searchInput.addEventListener('input', filterMaterias);
+            searchFilter.addEventListener('change', filterMaterias);
             
-            clearButton.addEventListener('click', function() {
-                searchInput.value = '';
-                searchFilter.value = 'clave';
-                filterGrupos();
+            if (clearButton) {
+                clearButton.addEventListener('click', function() {
+                    searchInput.value = '';
+                    searchFilter.value = 'nombre';
+                    filterMaterias();
+                });
+            }
+        });
+    </script>
+    @include('admin.materias.create_modal')
+    @include('admin.materias.edit_modal')
+    @include('admin.materias.delete_modal')
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ... (existing search script) ...
+
+            // Lógica para Editar Materia
+            const editButtons = document.querySelectorAll('.btn-edit-materia');
+            editButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const nombre = this.getAttribute('data-nombre');
+                    const clave = this.getAttribute('data-clave');
+                    const carrera = this.getAttribute('data-carrera');
+                    const semestre = this.getAttribute('data-semestre');
+                    const teoricas = this.getAttribute('data-teoricas');
+                    const practicas = this.getAttribute('data-practicas');
+                    const creditos = this.getAttribute('data-creditos');
+
+                    // Llenar el formulario
+                    document.getElementById('edit_nombre').value = nombre;
+                    document.getElementById('edit_clave_materia').value = clave;
+                    document.getElementById('edit_id_carrera').value = carrera;
+                    document.getElementById('edit_id_semestre').value = semestre;
+                    document.getElementById('edit_HRS_TEORICAS').value = teoricas;
+                    document.getElementById('edit_HRS_PRACTICAS').value = practicas;
+                    document.getElementById('edit_creditos').value = creditos;
+
+                    // Actualizar acción del formulario
+                    const form = document.getElementById('editMateriaForm');
+                    form.action = `/admin/materias/update/${id}`;
+
+                    // Mostrar modal
+                    const modal = new bootstrap.Modal(document.getElementById('editMateriaModal'));
+                    modal.show();
+                });
+            });
+
+            // Lógica para Eliminar Materia
+            const deleteButtons = document.querySelectorAll('.btn-delete-materia');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const nombre = this.getAttribute('data-nombre');
+
+                    document.getElementById('delete_nombre_materia').textContent = nombre;
+
+                    // Actualizar acción del formulario
+                    const form = document.getElementById('deleteMateriaForm');
+                    form.action = `/admin/materias/delete/${id}`;
+
+                    // Mostrar modal
+                    const modal = new bootstrap.Modal(document.getElementById('deleteMateriaModal'));
+                    modal.show();
+                });
             });
         });
     </script>
-
-    @include('admin.grupos.registros')
-    @include('admin.grupos.edit')
-    @include('admin.grupos.delete')
-    
-    @include('admin.grupos.registros_salon')
-    @include('admin.grupos.edit_salon')
-    @include('admin.grupos.delete_salon')
-
-</body>
 </html>

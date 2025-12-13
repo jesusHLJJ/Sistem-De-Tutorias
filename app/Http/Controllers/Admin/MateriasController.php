@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Materias\EditMateriaRequest;
 use App\Http\Requests\Admin\Materias\StoreMateriaRequest;
+use App\Models\Carrera;
 use App\Models\Grupo;
 use App\Models\Materias;
+use App\Models\Semestres;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -15,11 +17,9 @@ class MateriasController extends Controller
 {
     public function show()
     {
-        // Obtener grupos con el conteo de materias relacionadas
-        $grupos = Grupo::withCount('materias')->get();
+        // Obtener grupos con el conteo de materias relacionadas y la relación de materias cargada
+        $grupos = Grupo::with('materias', 'carrera')->withCount('materias')->get();
         $materias = Materias::all();
-
-        //dd($grupos, $materias);
 
         return view('admin.materias.dashboard', compact(
             'grupos',
@@ -27,20 +27,12 @@ class MateriasController extends Controller
         ));
     }
 
-    public function api()
+    public function index()
     {
-        $query = Grupo::select([
-            'grupos.*',
-            DB::raw('(SELECT COUNT(*) FROM grupo_materia WHERE grupo_materia.id_grupo = grupos.id_grupo) as materias_count')
-        ]);
-
-        return DataTables::eloquent($query)
-            ->addIndexColumn()
-            ->addColumn('materias_count', function ($grupo) {
-                // Verificación adicional para asegurar el conteo
-                return $grupo->materias_count ?? $grupo->materias()->count();
-            })
-            ->toJson();
+        $materias = Materias::with('carrera')->get();
+        $carreras = Carrera::all();
+        $semestres = Semestres::all();
+        return view('admin.materias.index', compact('materias', 'carreras', 'semestres'));
     }
 
     public function getGruposData(Request $request)
@@ -76,6 +68,69 @@ class MateriasController extends Controller
         }
     }
 
+    public function storeMateria(Request $request)
+    {
+        $request->validate([
+            'id_carrera' => 'required|exists:carreras,id_carrera',
+            'id_semestre' => 'required|exists:semestres,id_semestre',
+            'nombre' => 'required|string|max:255',
+            'clave_materia' => 'required|string|max:50|unique:materias,clave_materia',
+            'HRS_TEORICAS' => 'required|integer|min:0',
+            'HRS_PRACTICAS' => 'required|integer|min:0',
+            'creditos' => 'required|integer|min:0',
+        ]);
+
+        try {
+            Materias::create($request->all());
+
+            return redirect()->route('admin.materias.index')
+                ->with('success', 'Materia registrada exitosamente');
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->withErrors(['error' => 'Error al registrar materia: ' . $e->getMessage()]);
+        }
+    }
+
+    public function updateMateria(Request $request, $id)
+    {
+        $request->validate([
+            'id_carrera' => 'required|exists:carreras,id_carrera',
+            'id_semestre' => 'required|exists:semestres,id_semestre',
+            'nombre' => 'required|string|max:255',
+            'clave_materia' => 'required|string|max:50|unique:materias,clave_materia,' . $id . ',id_materia',
+            'HRS_TEORICAS' => 'required|integer|min:0',
+            'HRS_PRACTICAS' => 'required|integer|min:0',
+            'creditos' => 'required|integer|min:0',
+        ]);
+
+        try {
+            $materia = Materias::findOrFail($id);
+            $materia->update($request->all());
+
+            return redirect()->route('admin.materias.index')
+                ->with('success', 'Materia actualizada exitosamente');
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->withErrors(['error' => 'Error al actualizar materia: ' . $e->getMessage()]);
+        }
+    }
+
+    public function destroyMateria($id)
+    {
+        try {
+            $materia = Materias::findOrFail($id);
+            $materia->delete();
+
+            return redirect()->route('admin.materias.index')
+                ->with('success', 'Materia eliminada exitosamente');
+        } catch (\Exception $e) {
+            return back()
+                ->withErrors(['error' => 'Error al eliminar materia: ' . $e->getMessage()]);
+        }
+    }
+
     public function edit($clave_grupo)
     {
         // Cambia findOrFail($clave_grupo) por where('clave_grupo', $clave_grupo)->firstOrFail()
@@ -105,9 +160,7 @@ class MateriasController extends Controller
         $grupo = Grupo::where('clave_grupo', $clave_grupo)->firstOrFail();
         $grupo->materias()->detach();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Todas las materias han sido desasignadas del grupo ' . $grupo->clave_grupo
-        ]);
+        return redirect()->route('admin.materias.dashboard')
+            ->with('success', 'Todas las materias han sido desasignadas del grupo ' . $grupo->clave_grupo);
     }
 }

@@ -1,15 +1,15 @@
 <div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="registroModalLabel">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="registroModalLabel">Agregar Grupo</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-2xl rounded-2xl" style="background-color: white;">
+            <div class="modal-header bg-[#13934A] text-white">
+                <h1 class="modal-title fs-5 font-montserrat font-bold" id="registroModalLabel">Agregar Grupo</h1>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form action="{{ route('admin.grupos.store') }}" method="POST">
+            <div class="modal-body font-montserrat">
+                <form action="{{ route('admin.grupos.store') }}" method="POST" id="createGrupoForm">
                     @csrf
-                    <div class="contenido">
-                        <label for="carrera">Carrera:</label>
+                    <div class="contenido mb-3">
+                        <label for="carrera" class="form-label font-bold text-[#044C26]">Carrera:</label>
                         <select name="carrera" id="carrera_registro" class="form-control">
                             <option value="">Seleccione una Carrera:</option>
                             @foreach ($carreras as $carrera)
@@ -18,8 +18,8 @@
                         </select>
                     </div>
 
-                    <div class="contenido">
-                        <label for="semestre">Semestre:</label>
+                    <div class="contenido mb-3">
+                        <label for="semestre" class="form-label font-bold text-[#044C26]">Semestre:</label>
                         <select name="semestre" id="semestre_registro" class="form-control">
                             <option value="">Seleccione un Semestre:</option>
                             @foreach ($semestres as $semestre)
@@ -28,8 +28,8 @@
                         </select>
                     </div>
 
-                    <div class="contenido">
-                        <label for="turno">Turno:</label>
+                    <div class="contenido mb-3">
+                        <label for="turno" class="form-label font-bold text-[#044C26]">Turno:</label>
                         <select name="turno" id="turno_registro" class="form-control">
                             <option value="">Seleccione un Turno:</option>
                             @foreach ($turnos as $turno)
@@ -38,13 +38,13 @@
                         </select>
                     </div>
 
-                    <div class="contenido">
-                        <label for="clave_grupo">Clave de Grupo:</label>
+                    <div class="contenido mb-3">
+                        <label for="clave_grupo" class="form-label font-bold text-[#044C26]">Clave de Grupo:</label>
                         <input type="text" name="clave_grupo" id="clave_grupo_registro" class="form-control">
                     </div>
 
-                    <div class="contenido">
-                        <label for="profesor">Profesor:</label>
+                    <div class="contenido mb-3">
+                        <label for="profesor" class="form-label font-bold text-[#044C26]">Profesor:</label>
                         <select name="profesor" id="profesor_registro" class="form-control">
                             <option value="">Seleccione un Profesor:</option>
                             @foreach ($profesores as $profesor)
@@ -53,13 +53,13 @@
                         </select>
                     </div>
 
-                    <div class="contenido">
-                        <label for="periodo">Periodo:</label>
+                    <div class="contenido mb-3">
+                        <label for="periodo" class="form-label font-bold text-[#044C26]">Periodo:</label>
                         <input type="text" name="periodo" id="periodo_registro" class="form-control">
                     </div>
 
-                    <div class="contenido">
-                        <label for="salon">Salon:</label>
+                    <div class="contenido mb-3">
+                        <label for="salon" class="form-label font-bold text-[#044C26]">Salon:</label>
                         <select name="salon" id="salon_registro" class="form-control">
                             <option value="">Seleccione un Salon:</option>
                             @foreach ($salones as $salon)
@@ -67,12 +67,11 @@
                             @endforeach
                         </select>
                     </div>
-
-                    <div class="contenido mt-4">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-success">Agregar</button>
-                    </div>
                 </form>
+            </div>
+            <div class="modal-footer border-t-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="createGrupoForm" class="bg-[#13934A] hover:bg-[#0e6b35] text-white font-bold py-2 px-4 rounded transition">Agregar</button>
             </div>
         </div>
     </div>

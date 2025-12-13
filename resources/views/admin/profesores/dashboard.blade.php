@@ -28,6 +28,16 @@
         .btn { display: inline-flex; align-items: center; justify-content: center; }
         body { margin: 0; }
         a { text-decoration: none; }
+        .modal-backdrop { 
+            background-color: rgba(0, 0, 0, 0.5) !important; 
+            width: 125% !important; 
+            height: 125% !important; 
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            z-index: 1040 !important;
+        }
+        .modal-content { overflow: hidden; }
     </style>
 </head>
 

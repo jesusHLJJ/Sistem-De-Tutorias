@@ -16,11 +16,21 @@ class Materias extends Model
     protected $fillable = [
         'id_materia',
         'nombre',
+        'id_carrera',
+        'id_semestre',
+        'clave_materia',
+        'HRS_TEORICAS',
+        'HRS_PRACTICAS',
+        'creditos'
     ];
+
+    public function carrera()
+    {
+        return $this->belongsTo(Carrera::class, 'id_carrera', 'id_carrera');
+    }
 
     public function grupos()
     {
-        return $this->belongsToMany(Grupo::class, 'grupo_materia', 'id_materia', 'id_grupo')
-            ->withTimestamps();
+        return $this->belongsToMany(Grupo::class, 'grupo_materia', 'id_materia', 'id_grupo');
     }
 }

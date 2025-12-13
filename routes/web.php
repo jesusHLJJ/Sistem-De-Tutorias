@@ -65,10 +65,14 @@ Route::prefix('admin')
         Route::delete('/salones/destroy/{salon}', [SalonesController::class, 'destroy'])->name('salones.destroy');
 
         Route::get('/materias', [MateriasController::class, 'show'])->name('materias.dashboard');
+        Route::get('/materias/administrar', [MateriasController::class, 'index'])->name('materias.index');
+        Route::post('/materias/create', [MateriasController::class, 'storeMateria'])->name('materias.create');
+        Route::put('/materias/update/{id}', [MateriasController::class, 'updateMateria'])->name('materias.update_materia');
+        Route::delete('/materias/delete/{id}', [MateriasController::class, 'destroyMateria'])->name('materias.destroy_materia');
         Route::get('/materias/api', [MateriasController::class, 'api'])->name('materias.api');
         Route::post('/materias', [MateriasController::class, 'store'])->name('materias.store');
         Route::get('/materias/edit/{grupo}', [MateriasController::class, 'edit'])->name('materias.edit');
-        Route::put('/materias/update/{grupo}', [MateriasController::class, 'update'])->name('materias.update');
+        Route::put('/materias/assignments/update/{grupo}', [MateriasController::class, 'update'])->name('materias.update');
         Route::delete('/materias/destroy/{grupo}', [MateriasController::class, 'destroy'])->name('materias.destroy');
 
         Route::get('/alumnos', [AlumnosController::class, 'show'])->name('alumnos.dashboard');

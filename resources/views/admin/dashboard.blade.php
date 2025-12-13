@@ -101,7 +101,7 @@
                     </svg>
                 </div>
                 <span
-                    class="text-white font-montserrat font-bold text-base sm:text-lg tracking-wide group-hover:text-[#A3E635] transition-colors">MATERIAS</span>
+                    class="text-white font-montserrat font-bold text-base sm:text-lg tracking-wide group-hover:text-[#A3E635] transition-colors text-center">ASIGNAR/CREAR MATERIAS</span>
             </a>
 
             <!-- Botón ALUMNOS -->

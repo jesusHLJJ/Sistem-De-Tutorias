@@ -63,7 +63,6 @@ class Grupo extends Model
 
     public function materias()
     {
-        return $this->belongsToMany(Materias::class, 'grupo_materia', 'id_grupo', 'id_materia')
-            ->withTimestamps();
+        return $this->belongsToMany(Materias::class, 'grupo_materia', 'id_grupo', 'id_materia');
     }
 }

@@ -1,136 +1,176 @@
-let dataTable;
-let dataTableIsInitialized = false;
+document.addEventListener('DOMContentLoaded', function () {
+    // ==========================================
+    // Lógica de Búsqueda y Filtrado
+    // ==========================================
+    const searchInput = document.getElementById('searchInput');
+    const searchFilter = document.getElementById('searchFilter');
+    const clearButton = document.getElementById('clearSearch');
+    const materiaRows = document.querySelectorAll('.materia-row');
+    const resultCount = document.getElementById('resultCount');
+    const noResults = document.getElementById('noResults');
 
-const dataTableOptions = {
-    processing: true,
-    serverSide: true,
-    ajax: {
-        url: API_URL,
-        type: "GET",
-    },
-    columns: [
-        {
-            data: "DT_RowIndex",
-            name: "DT_RowIndex",
-            orderable: false,
-            searchable: false,
-        },
-        {
-            data: "clave_grupo",
-            name: "clave_grupo",
-        },
-        {
-            data: "materias_count",
-            name: "materias_count",
-            render: function (data) {
-                return data > 0 ? data : "0";
-            },
-        },
-        {
-            data: null,
-            render: function (data, type, row) {
-                return renderActionButtons(row);
-            },
-            orderable: false,
-            searchable: false,
-        },
-    ],
-};
+    // Verificar si existen elementos antes de ejecutar lógica
+    if (searchInput && materiaRows.length > 0) {
+        const totalGrupos = materiaRows.length;
 
-// Renderizado de botones en DataTables
-function renderActionButtons(row) {
-    // Obtener array de IDs de materias
-    const materiasIds = row.materias
-        ? row.materias.map((m) => m.id_materia)
-        : [];
+        function filterMaterias() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const filterType = searchFilter.value;
+            let visibleCount = 0;
 
-    return `
-        <button class="btn btn-sm btn-warning btn-edit"
-                data-clave_grupo="${row.clave_grupo}"
-                data-grupo-id="${row.id_grupo}"
-                data-grupo-clave="${row.clave_grupo}"
-                data-materias='${JSON.stringify(materiasIds)}'
-                data-materias-count="${row.materias_count || 0}">
-            <i class="fa-solid fa-user-pen"></i>
-        </button>
-        <button class="btn btn-sm btn-danger btn-delete"
-                data-clave_grupo="${row.clave_grupo}"
-                data-materias-count="${row.materias_count || 0}">
-            <i class="fa-solid fa-trash"></i>
-        </button>
-    `;
-}
+            materiaRows.forEach(row => {
+                const searchValue = row.getAttribute(`data-${filterType}`);
 
-const initDataTable = async () => {
-    if (dataTableIsInitialized) {
-        dataTable.destroy();
+                if (searchValue && searchValue.includes(searchTerm)) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Actualizar contador
+            if (resultCount) {
+                resultCount.innerHTML = `Mostrando <strong>${visibleCount}</strong> de <strong>${totalGrupos}</strong> grupos`;
+            }
+
+            // Mostrar mensaje si no hay resultados
+            if (noResults) {
+                if (visibleCount === 0 && searchTerm !== '') {
+                    noResults.classList.remove('hidden');
+                } else {
+                    noResults.classList.add('hidden');
+                }
+            }
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', filterMaterias);
+        searchFilter.addEventListener('change', filterMaterias);
+
+        if (clearButton) {
+            clearButton.addEventListener('click', function () {
+                searchInput.value = '';
+                searchFilter.value = 'clave'; // Valor por defecto
+                filterMaterias();
+            });
+        }
     }
+});
 
-    dataTable = $("#datatable_Materias").DataTable(dataTableOptions);
-    dataTableIsInitialized = true;
-};
+// ==========================================
+// Lógica de Modales (jQuery + Select2)
+// ==========================================
+$(document).ready(function () {
 
-function setupModalEvents() {
-    // Cachea los elementos del DOM
-    const $editaModal = $("#editaModal");
-    const $deleteModal = $("#deleteModal");
-
-    $(document).on("click", ".btn-edit", function () {
-        const button = $(this);
-        const form = $editaModal.find("form");
-
-        // Prepara todos los datos primero
-        const formData = {
-            action: `/admin/materias/update/${button.data("clave_grupo")}`,
-            values: {
-                "#grupo_registro": button.data("grupo-id"),
-                "#grupo_clave_display": button.data("grupo-clave"),
-            },
-            materias: button.data("materias") || [],
-        };
-
-        // Aplica todos los cambios de una vez
-        requestAnimationFrame(() => {
-            form.attr("action", formData.action);
-
-            // Asigna valores simples
-            for (const selector in formData.values) {
-                $editaModal.find(selector).val(formData.values[selector]);
-            }
-
-            // Maneja las materias (selección múltiple)
-            $("#materia_registro").val(null).trigger("change");
-            if (formData.materias.length > 0) {
-                $("#materia_registro").val(formData.materias).trigger("change");
-            }
-
-            $editaModal.modal("show");
-        });
+    // Inicializar Select2 para Crear
+    $('#materia_create').select2({
+        placeholder: "Seleccione hasta 6 materias",
+        maximumSelectionLength: 6,
+        width: '100%',
+        dropdownParent: $('#registroModal')
     });
 
-    $(document).on("click", ".btn-delete", function () {
-        const button = $(this);
-        const form = $deleteModal.find("form");
-
-        requestAnimationFrame(() => {
-            form.attr(
-                "action",
-                `/admin/materias/destroy/${button.data("clave_grupo")}`
-            );
-
-            // Actualiza la UI en un solo paso
-            $deleteModal.find("#delete_clave").text(button.data("clave_grupo"));
-            $deleteModal
-                .find("#delete_count")
-                .text(button.data("materias-count") || 0);
-
-            $deleteModal.modal("show");
-        });
+    // Inicializar Select2 para Editar
+    $('#materia_edit').select2({
+        placeholder: "Seleccione hasta 6 materias",
+        maximumSelectionLength: 6,
+        width: '100%',
+        dropdownParent: $('#editaModal')
     });
-}
 
-// Inicialización
-window.addEventListener("load", async () => {
-    await initDataTable();
-    setupModalEvents();
+    // Resetear Select2 al cerrar modales
+    $('#registroModal').on('hidden.bs.modal', function () {
+        $('#materia_create').val(null).trigger('change');
+        $('#grupo_registro').val(''); // Resetear select de grupo también
+    });
+
+    $('#editaModal').on('hidden.bs.modal', function () {
+        $('#materia_edit').val(null).trigger('change');
+    });
+
+    // Manejar clic en botón Editar
+    $(document).on('click', '.btn-edit', function () {
+        const button = $(this);
+        const grupoId = button.data('id');
+        const grupoClave = button.data('clave');
+        const carreraId = button.data('carrera-id'); // Obtener ID de carrera
+        const materias = button.data('materias'); // jQuery parsea JSON automáticamente
+
+        // Llenar el formulario
+        $('#grupo_clave_display').val(grupoClave);
+        $('#grupo_id').val(grupoId);
+
+        // Actualizar acción del formulario
+        $('#editForm').attr('action', '/admin/materias/assignments/update/' + grupoClave);
+
+        // Filtrar opciones del select
+        const select = $('#materia_edit');
+
+        // 1. Resetear selección
+        select.val(null).trigger('change');
+
+        // 2. Iterar sobre todas las opciones
+        select.find('option').each(function () {
+            const option = $(this);
+            const materiaCarrera = option.data('carrera');
+
+            // Si la carrera coincide o es una opción vacía/genérica (si hubiera), mostrar
+            // Nota: Select2 oculta opciones con 'disabled', así que usaremos eso
+            if (materiaCarrera == carreraId) {
+                option.prop('disabled', false);
+            } else {
+                option.prop('disabled', true);
+            }
+        });
+
+        // 3. Re-inicializar o actualizar Select2 para que refleje los cambios
+        // Select2 automáticamente detecta cambios en 'disabled' si se destruye y recrea, 
+        // o a veces solo con trigger('change.select2') si está configurado.
+        // Pero para ocultar visualmente las deshabilitadas, es mejor recrearlo o usar CSS.
+        // Select2 por defecto muestra las deshabilitadas en gris. Si queremos ocultarlas:
+        // Una opción es detach() las que no sirven.
+
+        // Enfoque alternativo: Detach y re-append
+        // Guardar todas las opciones originales si no se ha hecho
+        if (!select.data('all-options')) {
+            select.data('all-options', select.find('option').clone());
+        }
+
+        // Restaurar todas primero
+        select.empty().append(select.data('all-options').clone());
+
+        // Filtrar removiendo las que no coinciden
+        select.find('option').each(function () {
+            const option = $(this);
+            const materiaCarrera = option.data('carrera');
+            if (materiaCarrera != carreraId) {
+                option.remove();
+            }
+        });
+
+        // Pre-seleccionar materias (solo las que quedaron y coinciden)
+        if (materias) {
+            // Filtrar materias seleccionadas para asegurar que solo se seleccionen las válidas (aunque el backend ya debería haberlo hecho)
+            select.val(materias).trigger('change');
+        }
+
+        $('#editaModal').modal('show');
+    });
+
+    // Manejar clic en botón Eliminar
+    $(document).on('click', '.btn-delete', function () {
+        const button = $(this);
+        const clave = button.data('clave');
+        const count = button.data('count');
+
+        // Actualizar acción del formulario
+        $('#deleteForm').attr('action', '/admin/materias/destroy/' + clave);
+
+        // Actualizar textos informativos
+        $('#delete_clave').text(clave);
+        $('#delete_count').text(count);
+
+        $('#deleteModal').modal('show');
+    });
 });

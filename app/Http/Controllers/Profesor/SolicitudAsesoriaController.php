@@ -29,8 +29,8 @@ class SolicitudAsesoriaController extends Controller
         $solicitudes = solicitudasesoria::where('id_alumno', $alumno->id_alumno)->get();
     
         // Obtener los profesores y materias
-        $profesores = Profesor::where('id_carrera', $alumno->id_carrera)->get();
-        $materias = Materias::all();
+        $profesores = $grupo && $grupo->profesor ? collect([$grupo->profesor]) : collect();
+        $materias = $grupo ? $grupo->materias : collect();
     
         // Retornar los datos a la vista
         return view('alumno.SolicitudAsesoria', compact(
@@ -86,8 +86,8 @@ return redirect()->route('alumno.solicitudes.lista', $solicitud->id_alumno)
         $semestre = $alumno->grupo?->semestre; // Relación: belongsTo(Semestres::class)
     
         // Obtener los profesores y materias, según lo que ya tienes en el método index
-        $profesores = Profesor::where('id_carrera', $alumno->id_carrera)->get();
-        $materias = Materias::all();
+        $profesores = $grupo && $grupo->profesor ? collect([$grupo->profesor]) : collect();
+        $materias = $grupo ? $grupo->materias : collect();
     
         // Pasar todos estos datos a la vista
         return view('alumno.SolicitudAsesoria', compact(
@@ -141,8 +141,8 @@ return redirect()->route('alumno.solicitudes.lista', $solicitud->id_alumno)
         $semestre = $alumno->grupo?->semestre; // Relación: belongsTo(Semestres::class)
     
         // Obtener los profesores y materias, según lo que ya tienes en el método index
-        $profesores = Profesor::where('id_carrera', $alumno->id_carrera)->get();
-        $materias = Materias::all();
+        $profesores = $grupo && $grupo->profesor ? collect([$grupo->profesor]) : collect();
+        $materias = $grupo ? $grupo->materias : collect();
     
         // Pasar todos estos datos a la vista
         return view('maestro.SolicitudAsesoria', compact(
