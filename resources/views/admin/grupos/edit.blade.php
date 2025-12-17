@@ -46,11 +46,11 @@
                     </div>
 
                     <div class="contenido mb-3">
-                        <label for="profesor" class="form-label font-bold text-[#044C26]">Profesor:</label>
+                        <label for="profesor" class="form-label font-bold text-[#044C26]">Tutor:</label>
                         <select name="profesor" id="profesor_edit" class="form-control">
-                            <option value="">Seleccione un Profesor:</option>
+                            <option value="">Seleccione un Tutor:</option>
                             @foreach ($profesores as $profesor)
-                                <option value="{{ $profesor->id_profesor }}">{{ $profesor->nombre_completo }}</option>
+                                <option value="{{ $profesor->id_profesor }}" data-carrera="{{ $profesor->id_carrera }}">{{ $profesor->nombre_completo }}</option>
                             @endforeach
                         </select>
                     </div>

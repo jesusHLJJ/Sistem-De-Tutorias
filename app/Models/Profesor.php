@@ -31,12 +31,22 @@ class Profesor extends Model
         return $this->belongsTo(Carrera::class, 'id_carrera', 'id_carrera');
     }
 
-     public function getNombreCompletoAttribute()
+    public function getNombreCompletoAttribute()
     {
         return trim(implode(' ', [
             $this->nombre,
             $this->ap_paterno,
             $this->ap_materno
         ]));
+    }
+
+    public function gruposAsignados()
+    {
+        return $this->belongsToMany(Grupo::class, 'grupo_profesor', 'id_profesor', 'id_grupo');
+    }
+
+    public function getEsTutorAttribute()
+    {
+        return $this->grupos()->exists();
     }
 }

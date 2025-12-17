@@ -21,13 +21,53 @@ document.addEventListener("DOMContentLoaded", function () {
             form.action = `/admin/grupos/update/${id}`;
 
             // Actualizar los campos del modal
-            document.getElementById("carrera_edit").value = carrera;
+            const carreraSelect = document.getElementById("carrera_edit");
+            carreraSelect.value = carrera;
             document.getElementById("semestre_edit").value = semestre;
             document.getElementById("turno_edit").value = turno;
             document.getElementById("clave_grupo_edit").value = clave_grupo;
-            document.getElementById("profesor_edit").value = profesor;
             document.getElementById("periodo_edit").value = periodo;
             document.getElementById("salon_edit").value = salon;
+
+            // Función para filtrar profesores
+            function filterProfesores(selectedCarrera) {
+                const profesorSelect = document.getElementById("profesor_edit");
+                const options = profesorSelect.querySelectorAll("option");
+
+                options.forEach(option => {
+                    // Si es la opción por defecto (value=""), siempre mostrarla
+                    if (option.value === "") {
+                        option.style.display = "";
+                        return;
+                    }
+
+                    const profesorCarrera = option.getAttribute("data-carrera");
+                    if (profesorCarrera == selectedCarrera) {
+                        option.style.display = "";
+                    } else {
+                        option.style.display = "none";
+                    }
+                });
+            }
+
+            // Filtrar inicialmente
+            filterProfesores(carrera);
+
+            // Establecer el valor del profesor después de filtrar
+            // Si el profesor actual no pertenece a la carrera (ej. cambio de carrera), se seleccionará la opción vacía
+            const profesorSelect = document.getElementById("profesor_edit");
+            profesorSelect.value = profesor;
+
+            // Si el valor no se pudo establecer (porque la opción está oculta), resetear a vacío
+            if (profesorSelect.value != profesor) {
+                profesorSelect.value = "";
+            }
+
+            // Event listener para cambio de carrera en el modal
+            carreraSelect.addEventListener("change", function () {
+                filterProfesores(this.value);
+                document.getElementById("profesor_edit").value = ""; // Resetear selección al cambiar carrera
+            });
         });
     }
 

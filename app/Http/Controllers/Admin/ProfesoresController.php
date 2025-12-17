@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\EditProfesorRequest;
 use App\Http\Requests\Admin\StoreProfesorRequest;
 use App\Models\Carrera;
+use App\Models\Grupo;
 use App\Models\Profesor;
 use App\Models\Role;
 use App\Models\User;
@@ -148,5 +149,51 @@ class ProfesoresController extends Controller
         });
 
         return back()->with('success', 'Profesor eliminado exitosamente');
+    }
+
+    public function assignGroups()
+    {
+        // Obtener grupos con el conteo de profesores asignados (adicionales) y la relación cargada
+        $grupos = Grupo::with('profesores', 'carrera', 'profesor') // 'profesor' es el Tutor
+            ->withCount('profesores')
+            ->get();
+        
+        $profesores = Profesor::all();
+
+        return view('admin.profesores.assign_groups', compact(
+            'grupos',
+            'profesores'
+        ));
+    }
+
+    public function editAssignments($clave_grupo)
+    {
+        $grupo = Grupo::with('profesores', 'carrera', 'profesor')->where('clave_grupo', $clave_grupo)->firstOrFail();
+        
+        // Obtener profesores de la misma carrera para filtrar
+        // Opcional: Si se desea filtrar por carrera como en Materias
+        $profesores = Profesor::where('id_carrera', $grupo->id_carrera)->get();
+
+        return response()->json([
+            'profesores_asignados' => $grupo->profesores->pluck('id_profesor')->toArray(),
+            'tutor' => $grupo->profesor, // El tutor asignado
+            'profesores_disponibles' => $profesores
+        ]);
+    }
+
+    public function updateAssignments(Request $request, $clave_grupo)
+    {
+        $request->validate([
+            'profesores' => 'array|max:5', // Máximo 5 profesores adicionales
+            'profesores.*' => 'exists:profesores,id_profesor'
+        ]);
+
+        $grupo = Grupo::where('clave_grupo', $clave_grupo)->firstOrFail();
+        
+        // Sincronizar los profesores adicionales (tabla pivote)
+        $grupo->profesores()->sync($request->profesores);
+
+        return redirect()->route('admin.profesores.assign_groups')
+            ->with('success', 'Profesores asignados correctamente al grupo ' . $grupo->clave_grupo);
     }
 }

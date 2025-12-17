@@ -28,8 +28,10 @@ class SolicitudAsesoriaController extends Controller
         // Obtener todas las solicitudes del alumno
         $solicitudes = solicitudasesoria::where('id_alumno', $alumno->id_alumno)->get();
     
-        // Obtener los profesores y materias
-        $profesores = $grupo && $grupo->profesor ? collect([$grupo->profesor]) : collect();
+        // Obtener los profesores (Tutor + asignados) y materias
+        $tutor = $grupo && $grupo->profesor ? collect([$grupo->profesor]) : collect();
+        $profesoresAsignados = $grupo ? $grupo->profesores : collect();
+        $profesores = $tutor->merge($profesoresAsignados)->unique('id_profesor');
         $materias = $grupo ? $grupo->materias : collect();
     
         // Retornar los datos a la vista
@@ -85,8 +87,10 @@ return redirect()->route('alumno.solicitudes.lista', $solicitud->id_alumno)
         $carrera = $alumno->carrera;   // Relación: belongsTo(Carrera::class)
         $semestre = $alumno->grupo?->semestre; // Relación: belongsTo(Semestres::class)
     
-        // Obtener los profesores y materias, según lo que ya tienes en el método index
-        $profesores = $grupo && $grupo->profesor ? collect([$grupo->profesor]) : collect();
+        // Obtener los profesores (Tutor + asignados) y materias
+        $tutor = $grupo && $grupo->profesor ? collect([$grupo->profesor]) : collect();
+        $profesoresAsignados = $grupo ? $grupo->profesores : collect();
+        $profesores = $tutor->merge($profesoresAsignados)->unique('id_profesor');
         $materias = $grupo ? $grupo->materias : collect();
     
         // Pasar todos estos datos a la vista
@@ -140,8 +144,10 @@ return redirect()->route('alumno.solicitudes.lista', $solicitud->id_alumno)
         $carrera = $alumno->carrera;   // Relación: belongsTo(Carrera::class)
         $semestre = $alumno->grupo?->semestre; // Relación: belongsTo(Semestres::class)
     
-        // Obtener los profesores y materias, según lo que ya tienes en el método index
-        $profesores = $grupo && $grupo->profesor ? collect([$grupo->profesor]) : collect();
+        // Obtener los profesores (Tutor + asignados) y materias
+        $tutor = $grupo && $grupo->profesor ? collect([$grupo->profesor]) : collect();
+        $profesoresAsignados = $grupo ? $grupo->profesores : collect();
+        $profesores = $tutor->merge($profesoresAsignados)->unique('id_profesor');
         $materias = $grupo ? $grupo->materias : collect();
     
         // Pasar todos estos datos a la vista

@@ -18,9 +18,8 @@ class solicitudasesoria extends Model
         'id_alumno',
         'fecha',
         'medio_didactico_recurso',
-        'temas_tratar_descripcion'
-
-
+        'temas_tratar_descripcion',
+        'id_estatus'
     ];
 
     public function materia()
@@ -34,6 +33,11 @@ class solicitudasesoria extends Model
     public function alumno()
     {
         return $this->belongsTo(Alumno::class, 'id_alumno', 'id_alumno');
+    }
+
+    public function estatus()
+    {
+        return $this->belongsTo(EstatusAsesoria::class, 'id_estatus', 'id_estatus');
     }
     
 }

@@ -651,11 +651,8 @@ public function reporteAsesorias()
         $user = Auth::user();
         $profesor = $user->profesor;
 
-        $grupos = $profesor->grupos->pluck('id_grupo');
-        $alumnos = \App\Models\Alumno::whereIn('id_grupo', $grupos)->pluck('id_alumno');
-
         $asesorias = \App\Models\SolicitudAsesoria::with(['alumno.grupo', 'materia'])
-                        ->whereIn('id_alumno', $alumnos)
+                        ->where('id_profesor', $profesor->id_profesor)
                         ->get();
 
         $mes = now()->locale('es')->translatedFormat('F');
@@ -680,6 +677,21 @@ public function reporteAsesorias()
         $periodo = '2024-2025/2';
 
         return view('maestro.reporteTutoria', compact('profesor', 'registros', 'mesNombre', 'periodo'));
+    }
+
+    public function cambiarEstatus(Request $request, $id)
+    {
+        $solicitud = \App\Models\SolicitudAsesoria::findOrFail($id);
+        
+        // Validar que la solicitud pertenezca al profesor (seguridad)
+        if ($solicitud->id_profesor != Auth::user()->profesor->id_profesor) {
+            return redirect()->back()->with('error', 'No tienes permiso para modificar esta solicitud.');
+        }
+
+        $solicitud->id_estatus = $request->input('estatus');
+        $solicitud->save();
+
+        return redirect()->back()->with('success', 'Estatus actualizado correctamente.');
     }
 }
 

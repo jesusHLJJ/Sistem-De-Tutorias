@@ -51,6 +51,9 @@ Route::prefix('admin')
         Route::get('/profesores/edit/{profesor}', [ProfesoresController::class, 'edit'])->name('profesores.edit');
         Route::put('/profesores/update/{profesor}', [ProfesoresController::class, 'update'])->name('profesores.update');
         Route::delete('/profesores/destroy/{profesor}', [ProfesoresController::class, 'destroy'])->name('profesores.destroy');
+        Route::get('/profesores/assign-groups', [ProfesoresController::class, 'assignGroups'])->name('profesores.assign_groups');
+        Route::get('/profesores/assignments/edit/{grupo}', [ProfesoresController::class, 'editAssignments'])->name('profesores.assignments.edit');
+        Route::put('/profesores/assignments/update/{grupo}', [ProfesoresController::class, 'updateAssignments'])->name('profesores.assignments.update');
 
         Route::get('/grupos', [GruposController::class, 'show'])->name('grupos.dashboard');
         Route::post('/grupos', [GruposController::class, 'store'])->name('grupos.store');
@@ -128,10 +131,13 @@ Route::prefix('maestro')
             ->name('maestro.solicitud.ver');
 
         Route::get('/reporte-asesorias', [MaestroController::class, 'reporteAsesorias'])
-            ->name('maestro.reporte.asesorias');
+            ->name('reporte.asesorias');
 
         Route::get('/maestro/reporte-tutoria', [MaestroController::class, 'reporteMensualTutoria'])
             ->name('maestro.reporte.tutoria');
+
+        Route::put('/solicitud/{id}/estatus', [MaestroController::class, 'cambiarEstatus'])
+            ->name('solicitud.estatus');
 
 
         Route::get('/maestro/tutoria', [MensualTutoriaController::class, 'index'])

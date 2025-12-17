@@ -144,11 +144,17 @@
             <div class="flex flex-wrap justify-between items-center mb-4 sm:mb-6 gap-3">
                 <h3 class="text-white font-montserrat font-bold text-lg sm:text-xl md:text-2xl">Listado de Profesores</h3>
                 
-                <button type="button" class="bg-[#A3E635] hover:bg-[#84cc16] text-[#044C26] font-bold py-2 px-4 sm:px-6 rounded-lg shadow-lg transform hover:-translate-y-1 transition duration-200 flex items-center gap-2 border-none text-sm sm:text-base" 
-                        data-bs-toggle="modal" data-bs-target="#registroModal">
-                    <i class="fa-solid fa-circle-plus text-lg sm:text-xl"></i>
-                    <span class="hidden xs:inline">Nuevo Registro</span><span class="xs:hidden">Nuevo</span>
-                </button>
+                <div class="flex gap-2">
+                    <a href="{{ route('admin.profesores.assign_groups') }}" class="bg-[#13934A] hover:bg-[#0e6b35] text-white font-bold py-2 px-4 sm:px-6 rounded-lg shadow-lg transform hover:-translate-y-1 transition duration-200 flex items-center gap-2 no-underline text-sm sm:text-base">
+                        <i class="fa-solid fa-users-gear text-lg sm:text-xl"></i>
+                        <span class="hidden xs:inline">Asignar a Grupos</span><span class="xs:hidden">Asignar</span>
+                    </a>
+                    <button type="button" class="bg-[#A3E635] hover:bg-[#84cc16] text-[#044C26] font-bold py-2 px-4 sm:px-6 rounded-lg shadow-lg transform hover:-translate-y-1 transition duration-200 flex items-center gap-2 border-none text-sm sm:text-base" 
+                            data-bs-toggle="modal" data-bs-target="#registroModal">
+                        <i class="fa-solid fa-circle-plus text-lg sm:text-xl"></i>
+                        <span class="hidden xs:inline">Nuevo Registro</span><span class="xs:hidden">Nuevo</span>
+                    </button>
+                </div>
             </div>
 
             <div class="overflow-x-auto rounded-lg shadow-lg">

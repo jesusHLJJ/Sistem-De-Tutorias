@@ -68,6 +68,7 @@
                 <i class="fa-solid fa-times"></i>
             </button>
             
+            @if(Auth::user()->profesor->es_tutor)
             <a href="{{ route('maestro.grupos') }}" 
                class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
                 <i class="fa-solid fa-users text-base w-4"></i>
@@ -80,13 +81,15 @@
                 <i class="fa-solid fa-book text-base w-4"></i>
                 <span>Mensual Tutoría</span>
             </div>
+            @endif
             
-            <a href="{{ route('maestro.maestro.reporte.asesorias') }}" 
+            <a href="{{ route('maestro.reporte.asesorias') }}" 
                class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
                 <i class="fa-solid fa-chart-line text-base w-4"></i>
                 <span>Reporte de Asesorías</span>
             </a>
             
+            @if(Auth::user()->profesor->es_tutor)
             <a href="{{ route('maestro.maestro.tutoria.registro') }}" 
                class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
                 <i class="fa-solid fa-pen-to-square text-base w-4"></i>
@@ -94,6 +97,7 @@
             </a>
             
             <div class="border-t border-white/20 my-1"></div>
+            @endif
             
             <a href="{{ route('maestro.dashboard') }}" 
                class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">

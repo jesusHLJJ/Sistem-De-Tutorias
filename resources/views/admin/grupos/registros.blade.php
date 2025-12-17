@@ -44,9 +44,9 @@
                     </div>
 
                     <div class="contenido mb-3">
-                        <label for="profesor" class="form-label font-bold text-[#044C26]">Profesor:</label>
+                        <label for="profesor" class="form-label font-bold text-[#044C26]">Tutor:</label>
                         <select name="profesor" id="profesor_registro" class="form-control">
-                            <option value="">Seleccione un Profesor:</option>
+                            <option value="">Seleccione un Tutor:</option>
                             @foreach ($profesores as $profesor)
                                 <option value="{{ $profesor->id_profesor }}">{{ $profesor->nombre_completo }}</option>
                             @endforeach

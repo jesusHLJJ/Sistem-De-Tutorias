@@ -65,4 +65,9 @@ class Grupo extends Model
     {
         return $this->belongsToMany(Materias::class, 'grupo_materia', 'id_grupo', 'id_materia');
     }
+
+    public function profesores()
+    {
+        return $this->belongsToMany(Profesor::class, 'grupo_profesor', 'id_grupo', 'id_profesor');
+    }
 }

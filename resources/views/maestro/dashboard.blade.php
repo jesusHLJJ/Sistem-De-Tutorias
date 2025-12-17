@@ -69,6 +69,9 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 w-full justify-center">
 
             <!--  MIS GRUPOS -->
+            <!--  MIS GRUPOS (Solo si es Tutor) -->
+            <!--  MIS GRUPOS (Solo si es Tutor) -->
+            @if($maestro->es_tutor)
             <a href="{{ route('maestro.grupos') }}" 
                class="group bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl p-4 sm:p-6 flex flex-col items-center justify-center gap-3 sm:gap-4 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer h-40 sm:h-44 md:h-48 md:col-start-2">
                 <div class="bg-white text-[#13934A] p-3 sm:p-4 rounded-full shadow-lg group-hover:bg-[#13934A] group-hover:text-white transition-colors">
@@ -77,6 +80,16 @@
                 </div>
                 <span class="text-white font-montserrat font-bold text-base sm:text-lg tracking-wide group-hover:text-[#A3E635] transition-colors">MIS GRUPOS</span>
             </a>
+            @else
+            <!-- REPORTE DE ASESORÍAS (Solo si NO es Tutor) -->
+            <a href="{{ route('maestro.reporte.asesorias') }}" 
+               class="group bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl p-4 sm:p-6 flex flex-col items-center justify-center gap-3 sm:gap-4 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer h-40 sm:h-44 md:h-48 md:col-start-2">
+                <div class="bg-white text-[#13934A] p-3 sm:p-4 rounded-full shadow-lg group-hover:bg-[#13934A] group-hover:text-white transition-colors">
+                    <i class="fa-solid fa-chart-line text-2xl sm:text-3xl"></i>
+                </div>
+                <span class="text-white font-montserrat font-bold text-base sm:text-lg tracking-wide group-hover:text-[#A3E635] transition-colors">REPORTE ASESORÍAS</span>
+            </a>
+            @endif
 
         </div>
 

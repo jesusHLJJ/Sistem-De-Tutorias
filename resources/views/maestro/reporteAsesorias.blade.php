@@ -69,6 +69,7 @@
                 <i class="fa-solid fa-times"></i>
             </button>
             
+            @if(Auth::user()->profesor->es_tutor)
             <a href="{{ route('maestro.grupos') }}" 
                class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
                 <i class="fa-solid fa-users text-base w-4"></i>
@@ -82,12 +83,14 @@
                 <i class="fa-solid fa-book text-base w-4"></i>
                 <span>Mensual Tutoría</span>
             </a>
+            @endif
             
             <div class="text-hover-pink px-4 py-2.5 rounded-lg font-bold text-xs md:text-sm flex items-center gap-2 bg-hover-pink/10">
                 <i class="fa-solid fa-chart-line text-base w-4"></i>
                 <span>Reporte de Asesorías</span>
             </div>
             
+            @if(Auth::user()->profesor->es_tutor)
             <a href="{{ route('maestro.maestro.tutoria.registro') }}" 
                class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
                 <i class="fa-solid fa-pen-to-square text-base w-4"></i>
@@ -95,6 +98,7 @@
             </a>
             
             <div class="border-t border-white/20 my-1"></div>
+            @endif
             
             <a href="{{ route('maestro.dashboard') }}" 
                class="text-white no-underline px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-xs md:text-sm flex items-center gap-2 hover:text-hover-pink hover:bg-hover-pink/10 hover:translate-x-1">
@@ -178,6 +182,18 @@
                                         <span class="text-white text-sm">{{ $asesoria->medio_didactico_recurso }}</span>
                                     </div>
                                 </div>
+                                
+                                <div class="mt-2 pt-2 border-t border-white/20 flex justify-between items-center">
+                                    <span class="text-white/70 text-xs font-semibold">ESTATUS:</span>
+                                    <form action="{{ route('maestro.solicitud.estatus', $asesoria->id_solicitud) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="estatus" value="{{ $asesoria->id_estatus == 0 ? 1 : 0 }}">
+                                        <button type="submit" class="px-3 py-1 rounded-full text-xs font-bold transition-colors {{ $asesoria->id_estatus == 1 ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-yellow-500 text-white hover:bg-yellow-600' }}">
+                                            {{ $asesoria->id_estatus == 1 ? 'Atendida' : 'Pendiente' }}
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     @endforeach
@@ -195,6 +211,7 @@
                                 <th class="border border-white/30 px-3 py-2 text-white font-bold text-sm">Materia</th>
                                 <th class="border border-white/30 px-3 py-2 text-white font-bold text-sm">No. de asesorías</th>
                                 <th class="border border-white/30 px-3 py-2 text-white font-bold text-sm">Recurso didáctico</th>
+                                <th class="border border-white/30 px-3 py-2 text-white font-bold text-sm">Estatus</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -207,6 +224,16 @@
                                     <td class="border border-white/30 px-3 py-2 text-white text-sm">{{ $asesoria->materia->nombre }}</td>
                                     <td class="border border-white/30 px-3 py-2 text-white text-center text-sm">1</td>
                                     <td class="border border-white/30 px-3 py-2 text-white text-sm">{{ $asesoria->medio_didactico_recurso }}</td>
+                                    <td class="border border-white/30 px-3 py-2 text-white text-center">
+                                        <form action="{{ route('maestro.solicitud.estatus', $asesoria->id_solicitud) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="estatus" value="{{ $asesoria->id_estatus == 0 ? 1 : 0 }}">
+                                            <button type="submit" class="px-3 py-1 rounded-full text-xs font-bold transition-colors {{ $asesoria->id_estatus == 1 ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-yellow-500 text-white hover:bg-yellow-600' }}">
+                                                {{ $asesoria->id_estatus == 1 ? 'Atendida' : 'Pendiente' }}
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
