@@ -55,7 +55,17 @@
 
                     <div class="contenido mb-3">
                         <label for="periodo" class="form-label font-bold text-[#044C26]">Periodo:</label>
-                        <input type="text" name="periodo" id="periodo_registro" class="form-control">
+                        <div class="input-group">
+                            <select name="periodo" id="periodo_registro" class="form-control">
+                                <option value="">Seleccione un Periodo:</option>
+                                @foreach ($periodos as $periodo)
+                                    <option value="{{ $periodo->id_periodo }}">{{ $periodo->periodo }}</option>
+                                @endforeach
+                            </select>
+                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#createPeriodoModal">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="contenido mb-3">

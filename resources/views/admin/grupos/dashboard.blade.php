@@ -305,6 +305,7 @@
     @include('admin.grupos.registros_salon')
     @include('admin.grupos.edit_salon')
     @include('admin.grupos.delete_salon')
+    @include('admin.grupos.create_periodo')
 
 </body>
 </html>

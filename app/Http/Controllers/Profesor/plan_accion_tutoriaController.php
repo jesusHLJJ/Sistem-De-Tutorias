@@ -78,6 +78,15 @@ class plan_accion_tutoriaController extends Controller
         $agregar->ploblematica_identificada    =  $datos_formulario->problematica_identificada;
         $agregar->objetivos    =  $datos_formulario->objetivos;
         $agregar->acciones_implementar =  $datos_formulario->acciones_a_implementar;
+        
+        // Default values for legacy required columns
+        $agregar->act_1 = 'N/A';
+        $agregar->act_2 = 'N/A';
+        $agregar->act_3 = 'N/A';
+        $agregar->act_4 = 'N/A';
+        $agregar->act_5 = 'N/A';
+        $agregar->evaluacion_final = 'Pendiente';
+
         $agregar->save();
         return redirect()->route('maestro.pat', $id_grupo);
     }
@@ -100,15 +109,18 @@ class plan_accion_tutoriaController extends Controller
 
         $grupo = Grupo::find($id_grupo);
         $modificar = plan_accion_tutoria::where('id_profesor', $grupo->id_profesor)
-                                       ->where('id_periodo', $grupo->id_periodo)
-                                       ->where('id_semestre', $grupo->id_semestre)
-                                       ->first();
-        $modificar->no_matricula_grupo = $datos_formulario->cant_alumnos;
-        $modificar->hombres =  $datos_formulario->cant_alumnos_hombres;
-        $modificar->mujeres =  $datos_formulario->cant_alumnos_mujeres;
-        $modificar->ploblematica_identificada    =  $datos_formulario->problematica_identificada;
-        $modificar->objetivos    =  $datos_formulario->objetivos;
-        $modificar->acciones_implementar =  $datos_formulario->acciones_a_implementar;
+                                        ->where('id_periodo', $grupo->id_periodo)
+                                        ->where('id_semestre', $grupo->id_semestre)
+                                        ->first();
+
+        // Update main fields
+        $modificar->ploblematica_identificada = $datos_formulario->problematica_identificada;
+        $modificar->objetivos = $datos_formulario->objetivos;
+        $modificar->acciones_implementar = $datos_formulario->acciones_a_implementar;
+        $modificar->hombres = $datos_formulario->cant_alumnos_hombres;
+        $modificar->mujeres = $datos_formulario->cant_alumnos_mujeres;
+        $modificar->no_matricula_grupo = $datos_formulario->cant_alumnos_hombres + $datos_formulario->cant_alumnos_mujeres; 
+
         $modificar->save();
         return redirect()->route('maestro.pat', $id_grupo);
     }

@@ -57,17 +57,13 @@ class GruposController extends Controller
         }
 
         DB::transaction(function () use ($request) {
-            $periodo = Periodos::create([
-                'periodo' => htmlspecialchars(trim($request->periodo), ENT_QUOTES, 'UTF-8')
-            ]);
-
             $grupo = Grupo::create([
                 'id_carrera' => $request->carrera,
                 'id_semestre' => $request->semestre,
                 'id_turno' => $request->turno,
                 'clave_grupo' => htmlspecialchars(trim($request->clave_grupo), ENT_QUOTES, 'UTF-8'),
                 'id_profesor' => $request->profesor,
-                'id_periodo' => $periodo->id_periodo,
+                'id_periodo' => $request->periodo,
                 'id_salon' => $request->salon,
             ]);
 

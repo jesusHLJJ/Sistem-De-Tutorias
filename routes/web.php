@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\GruposController;
 use App\Http\Controllers\Admin\MateriasController;
 use App\Http\Controllers\Admin\ProfesoresController;
 use App\Http\Controllers\Admin\SalonesController;
+use App\Http\Controllers\Admin\PeriodosController;
 use App\Http\Controllers\Alumno\AlumnoController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -66,6 +67,8 @@ Route::prefix('admin')
         Route::get('/salones/edit/{salon}', [SalonesController::class, 'edit'])->name('salones.edit');
         Route::put('/salones/update/{salon}', [SalonesController::class, 'update'])->name('salones.update');
         Route::delete('/salones/destroy/{salon}', [SalonesController::class, 'destroy'])->name('salones.destroy');
+
+        Route::post('/periodos', [PeriodosController::class, 'store'])->name('periodos.store');
 
         Route::get('/materias', [MateriasController::class, 'show'])->name('materias.dashboard');
         Route::get('/materias/administrar', [MateriasController::class, 'index'])->name('materias.index');

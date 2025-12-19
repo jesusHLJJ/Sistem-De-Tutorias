@@ -27,7 +27,7 @@ class StoreGrupoRequest extends FormRequest
             'turno' => 'required|exists:turnos,id_turno',
             'clave_grupo' => 'required|unique:grupos,clave_grupo',
             'profesor' => 'required|exists:profesores,id_profesor',
-            'periodo' => 'required',
+            'periodo' => 'required|exists:periodos,id_periodo',
             'salon' => 'required|exists:salones,id_salon',
         ];
 

@@ -122,7 +122,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('maestro.pat_guardar', $grupo->id_grupo) }}" method="POST">
+                <form id="patForm" action="{{ route('maestro.pat_guardar', $grupo->id_grupo) }}" method="POST" novalidate>
                     @csrf
 
                     <!-- Vista Desktop (Tabla) -->
@@ -156,13 +156,13 @@
                                 </td>
                                 <td class="border-2 border-white/30 p-3">
                                     <span class="font-semibold">M:</span> 
-                                    <input type="text" name="cant_alumnos_hombres" readonly value="{{ $grupo->hombres }}" 
-                                           class="bg-white/10 border border-white/30 rounded px-2 py-1 w-16 text-center">
+                                    <input type="number" name="cant_alumnos_hombres" value="{{ $grupo->hombres }}" 
+                                           class="bg-white/10 border border-white/30 rounded px-2 py-1 w-16 text-center focus:outline-none focus:ring-2 focus:ring-hover-pink">
                                 </td>
                                 <td class="border-2 border-white/30 p-3">
                                     <span class="font-semibold">F:</span> 
-                                    <input type="text" name="cant_alumnos_mujeres" readonly value="{{ $grupo->mujeres }}" 
-                                           class="bg-white/10 border border-white/30 rounded px-2 py-1 w-16 text-center">
+                                    <input type="number" name="cant_alumnos_mujeres" value="{{ $grupo->mujeres }}" 
+                                           class="bg-white/10 border border-white/30 rounded px-2 py-1 w-16 text-center focus:outline-none focus:ring-2 focus:ring-hover-pink">
                                 </td>
                                 <td class="border-2 border-white/30 p-3">
                                     <span class="font-semibold">SEMESTRE:</span> {{ $grupo->semestre->semestre }}
@@ -173,7 +173,7 @@
                             </tr>
                             <tr>
                                 <td colspan="7" class="border-2 border-white/30 p-3">
-                                    <textarea rows="4" name="problematica_identificada" 
+                                    <textarea rows="4" name="problematica_identificada" required
                                               class="w-full bg-white/10 border border-white/30 rounded p-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-hover-pink"
                                               placeholder="Describe la problemática identificada en el grupo..."></textarea>
                                 </td>
@@ -183,7 +183,7 @@
                             </tr>
                             <tr>
                                 <td colspan="7" class="border-2 border-white/30 p-3">
-                                    <textarea rows="4" name="objetivos" 
+                                    <textarea rows="4" name="objetivos" required
                                               class="w-full bg-white/10 border border-white/30 rounded p-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-hover-pink"
                                               placeholder="Define los objetivos del plan de acción..."></textarea>
                                 </td>
@@ -193,7 +193,7 @@
                             </tr>
                             <tr>
                                 <td colspan="7" class="border-2 border-white/30 p-3">
-                                    <textarea rows="4" name="acciones_a_implementar" 
+                                    <textarea rows="4" name="acciones_a_implementar" required
                                               class="w-full bg-white/10 border border-white/30 rounded p-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-hover-pink"
                                               placeholder="Especifica las acciones a implementar..."></textarea>
                                 </td>
@@ -237,13 +237,13 @@
                                     </div>
                                     <div>
                                         <label class="block text-white/70 text-xs font-semibold mb-1">M:</label>
-                                        <input type="text" name="cant_alumnos_hombres" readonly value="{{ $grupo->hombres }}" 
-                                               class="w-full bg-white/10 border border-white/30 rounded px-2 py-2 text-center text-white">
+                                        <input type="number" name="cant_alumnos_hombres" value="{{ $grupo->hombres }}" 
+                                               class="w-full bg-white/10 border border-white/30 rounded px-2 py-2 text-center text-white focus:outline-none focus:ring-2 focus:ring-hover-pink">
                                     </div>
                                     <div>
                                         <label class="block text-white/70 text-xs font-semibold mb-1">F:</label>
-                                        <input type="text" name="cant_alumnos_mujeres" readonly value="{{ $grupo->mujeres }}" 
-                                               class="w-full bg-white/10 border border-white/30 rounded px-2 py-2 text-center text-white">
+                                        <input type="number" name="cant_alumnos_mujeres" value="{{ $grupo->mujeres }}" 
+                                               class="w-full bg-white/10 border border-white/30 rounded px-2 py-2 text-center text-white focus:outline-none focus:ring-2 focus:ring-hover-pink">
                                     </div>
                                 </div>
                                 
@@ -260,7 +260,7 @@
                                 PROBLEMÁTICA IDENTIFICADA
                             </div>
                             <div class="p-4">
-                                <textarea rows="5" name="problematica_identificada" 
+                                <textarea rows="5" name="problematica_identificada" required
                                           class="w-full bg-white/10 border border-white/30 rounded p-3 text-white text-base placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-hover-pink"
                                           placeholder="Describe la problemática identificada en el grupo..."></textarea>
                             </div>
@@ -272,7 +272,7 @@
                                 OBJETIVOS
                             </div>
                             <div class="p-4">
-                                <textarea rows="5" name="objetivos" 
+                                <textarea rows="5" name="objetivos" required
                                           class="w-full bg-white/10 border border-white/30 rounded p-3 text-white text-base placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-hover-pink"
                                           placeholder="Define los objetivos del plan de acción..."></textarea>
                             </div>
@@ -284,7 +284,7 @@
                                 ACCIONES A IMPLEMENTAR
                             </div>
                             <div class="p-4">
-                                <textarea rows="5" name="acciones_a_implementar" 
+                                <textarea rows="5" name="acciones_a_implementar" required
                                           class="w-full bg-white/10 border border-white/30 rounded p-3 text-white text-base placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-hover-pink"
                                           placeholder="Especifica las acciones a implementar..."></textarea>
                             </div>
@@ -299,6 +299,38 @@
                         </button>
                     </div>
                 </form>
+
+                <script>
+                    document.getElementById('patForm').addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        const inputs = this.querySelectorAll('input, select, textarea');
+                        
+                        // Validar campos visibles
+                        let isValid = true;
+                        inputs.forEach(input => {
+                            if (input.offsetParent !== null && input.hasAttribute('required') && !input.value.trim()) {
+                                isValid = false;
+                                input.classList.add('border-red-500');
+                            } else {
+                                input.classList.remove('border-red-500');
+                            }
+                        });
+
+                        if (!isValid) {
+                            alert('Por favor complete todos los campos requeridos.');
+                            return;
+                        }
+
+                        // Deshabilitar ocultos
+                        inputs.forEach(input => {
+                            if (input.offsetParent === null && input.name !== '_token') {
+                                input.disabled = true;
+                            }
+                        });
+                        
+                        this.submit();
+                    });
+                </script>
 
             </div>
         </div>
